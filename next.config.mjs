@@ -22,6 +22,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'adminaj.totemmassmedia.com',
+      },
+      {
+        protocol: 'https',
         hostname: '*.aprendiendojuntos.ec',
       },
     ],
