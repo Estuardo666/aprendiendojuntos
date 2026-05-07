@@ -7,6 +7,31 @@ import { AboutTeamSection } from '@/components/organisms/AboutTeamSection'
 import { AboutValuesSection } from '@/components/organisms/AboutValuesSection'
 import { getEquipo } from '@/lib/api/equipo'
 import { getPaginaNosotros } from '@/lib/api/nosotros'
+import type { WPMiembroEquipo } from '@/lib/types/equipo.types'
+import type { WPPaginaNosotrosFields } from '@/lib/types/nosotros.types'
+
+const FALLBACK_NOSOTROS: WPPaginaNosotrosFields = {
+  heroTitulo: 'Conoce Aprendiendo Juntos',
+  heroSubtitulo: 'Acompanamos el desarrollo infantil con una mirada humana, clinica y educativa.',
+  heroImagenes: [],
+  historiaTitulo: 'Nuestra historia',
+  historiaCuerpo:
+    'Trabajamos junto a ninos, familias y docentes para construir procesos de acompanamiento claros, cercanos y sostenibles.',
+  historiaImagenes: [],
+  propositoCuerpo: 'Crear espacios de evaluacion, intervencion y orientacion centrados en el potencial de cada persona.',
+  misionCuerpo: 'Ofrecer acompanamiento interdisciplinario con criterio tecnico y calidez humana.',
+  visionCuerpo: 'Ser un referente local en desarrollo infantil, neurodiversidad y trabajo con familias.',
+  valoresTitulo: 'Nuestros valores',
+  valoresIntro: 'Trabajo colaborativo, respeto y compromiso con cada proceso.',
+  valores: [],
+  diferencialTitulo: 'Lo que nos diferencia',
+  diferencialItems: [],
+  ctaTitulo: 'Hablemos',
+  ctaCuerpo: 'Si quieres conocer mas sobre nuestro enfoque, estamos listos para ayudarte.',
+  ctaBotonTexto: 'Contactanos',
+}
+
+const FALLBACK_EQUIPO: WPMiembroEquipo[] = []
 
 export const metadata: Metadata = {
   title: 'Nosotros | Centro Aprendiendo Juntos',
@@ -14,10 +39,12 @@ export const metadata: Metadata = {
 }
 
 export default async function NosotrosPage() {
-  const [nosotros, equipo] = await Promise.all([
-    getPaginaNosotros(),
-    getEquipo(),
+  const [nosotrosData, equipoData] = await Promise.all([
+    getPaginaNosotros().catch(() => null),
+    getEquipo().catch(() => null),
   ])
+  const nosotros = nosotrosData ?? FALLBACK_NOSOTROS
+  const equipo = equipoData ?? FALLBACK_EQUIPO
   const imagenesHistoria = [...(nosotros.historiaImagenes ?? []), ...(nosotros.heroImagenes ?? [])]
     .map((item) => item.imagen)
     .filter((img): img is NonNullable<typeof img> => Boolean(img?.sourceUrl))
