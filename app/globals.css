@@ -79,8 +79,15 @@ h1, h2, h3, h4, h5, h6 {
 
   /* Pretitulo: badge acua pequeño para encabezados de sección */
   .pretitulo {
-      @apply mb-4 inline-flex rounded-full bg-brand-acua px-4 py-2
+      @apply mb-4 inline-flex rounded-full bg-brand-acua px-2.5 py-2 md:px-4
         font-body text-[0.95rem] font-medium leading-none text-brand-azul;
+  }
+
+  @media (max-width: 767px) {
+    .pretitulo {
+      padding-left: 0.6rem;
+      padding-right: 0.6rem;
+    }
   }
 
   /* Ocultar scrollbar manteniendo funcionalidad de scroll */

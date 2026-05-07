@@ -71,12 +71,12 @@ export function FloatingDolphin() {
   const bubbleText = bubbleSequence.find(item => item.id === activeBubble)?.text
 
   return (
-    <div className="pointer-events-none fixed bottom-0 right-0 z-[70]">
+    <div className="pointer-events-none fixed bottom-[-2px] right-[-2px] z-[70] sm:bottom-0 sm:right-0">
       <motion.div
         initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 28, y: 32, scale: 0.84, rotate: 8 }}
         animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
         transition={{ ...introTransition, delay: 2 }}
-        className="relative h-[124px] w-[108px] sm:h-[168px] sm:w-[146px]"
+        className="relative flex h-[124px] w-[108px] items-end sm:h-[168px] sm:w-[146px]"
       >
         <AnimatePresence mode="wait">
           {bubbleText && (
@@ -121,7 +121,7 @@ export function FloatingDolphin() {
           <img
             src="/delfinweb.png"
             alt="Delfín Aprendiendo Juntos"
-            className="h-full w-full object-contain select-none"
+            className="h-full w-full object-contain object-bottom select-none"
             draggable="false"
           />
         </motion.div>

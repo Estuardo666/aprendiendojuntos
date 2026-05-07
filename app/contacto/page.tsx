@@ -197,7 +197,7 @@ export default async function ContactoPage() {
 
   return (
     <>
-      <main className="overflow-hidden pt-[5.75rem] md:pt-[2rem]">
+      <main className="overflow-hidden px-0 pt-[4.5rem] md:pt-[2rem]">
         <div id="ubicacion">
           <ContactoSplitStage
             pretitulo={contacto.hero.pretitulo}

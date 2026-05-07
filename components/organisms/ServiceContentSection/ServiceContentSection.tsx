@@ -30,7 +30,7 @@ export function ServiceContentSection({
         <div className="lg:grid lg:grid-cols-[40%_60%] lg:gap-[3.75rem] lg:items-start">
 
           {/* Columna izquierda: pretitulo, heading, imagen */}
-          <div>
+          <div className="text-center lg:text-left">
             {pretitulo && (
               <span className="pretitulo">{pretitulo}</span>
             )}
@@ -38,7 +38,7 @@ export function ServiceContentSection({
               as="h2"
               variant="h2"
               animate={true}
-              className="mt-4 max-w-[30rem] text-[clamp(2.45rem,4.8vw,3em)] leading-[0.92] text-brand-azul"
+              className="mx-auto mt-4 max-w-[30rem] text-[clamp(2.45rem,4.8vw,3em)] leading-[0.92] text-brand-azul lg:mx-0"
             >
               {heading}
             </Heading>
@@ -49,7 +49,7 @@ export function ServiceContentSection({
                 initial={{ clipPath: 'inset(16% 0% 0% 0%)' }}
                 animate={{ clipPath: imageInView ? 'inset(0% 0% 0% 0%)' : 'inset(16% 0% 0% 0%)' }}
                 transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1] }}
-                className="relative mt-8 aspect-[4/5] w-[88%] overflow-hidden rounded-[2.25rem]"
+                className="relative mx-auto mt-8 aspect-[4/5] w-[88%] overflow-hidden rounded-[2.25rem] lg:mx-0"
               >
                 <motion.div
                   initial={{ scale: 1.12 }}
@@ -69,31 +69,31 @@ export function ServiceContentSection({
           </div>
 
           {/* Columna derecha: HTML de WordPress con estilos tipográficos */}
-          <div className="mt-10 lg:mt-0 lg:pt-14">
+          <div className="mt-10 text-center lg:mt-0 lg:pt-14 lg:text-left">
             <div
               className="
-                prose prose-lg max-w-none text-justify
-                prose-headings:font-heading prose-headings:text-brand-texto
+                prose prose-lg max-w-none text-center md:text-justify
+                prose-headings:text-center md:prose-headings:text-left prose-headings:font-heading prose-headings:text-brand-texto
                 prose-headings:font-semibold prose-headings:tracking-[-0.04em]
                 prose-headings:mt-10 prose-headings:mb-4 prose-headings:leading-[1.08]
                 prose-h2:text-[1.9rem]
-                prose-p:mb-5 prose-p:font-body prose-p:text-[1.19rem]
+                prose-p:mb-5 prose-p:text-center md:prose-p:text-left prose-p:font-body prose-p:text-[1.19rem]
                 prose-p:font-medium prose-p:leading-[1.5] prose-p:text-brand-texto
-                prose-ul:list-none prose-ul:pl-0 prose-ul:space-y-1 prose-ul:text-left
-                prose-li:relative prose-li:pl-[1.05rem] prose-li:font-body
-                prose-li:text-left prose-li:text-[1.1rem] prose-li:leading-[1.28]
+                prose-ul:list-none prose-ul:pl-0 prose-ul:space-y-1 prose-ul:text-center md:prose-ul:text-left
+                prose-li:relative prose-li:pl-0 md:prose-li:pl-[1.05rem] prose-li:font-body
+                prose-li:text-center md:prose-li:text-left prose-li:text-[1.1rem] prose-li:leading-[1.28]
                 prose-li:text-brand-texto prose-li:font-medium
-                [&_li]:before:absolute [&_li]:before:left-0 [&_li]:before:top-[0.02rem]
+                [&_li]:before:hidden md:[&_li]:before:absolute md:[&_li]:before:left-0 md:[&_li]:before:top-[0.02rem]
                 [&_li]:before:content-['•'] [&_li]:before:text-brand-azul
                 [&_li]:before:text-[1.12rem] [&_li]:before:leading-none
-                prose-ol:pl-4 prose-ol:space-y-3
+                prose-ol:pl-0 prose-ol:text-center md:prose-ol:pl-4 md:prose-ol:text-left prose-ol:space-y-3
                 prose-strong:font-semibold prose-strong:text-[#0557a4]
               "
               dangerouslySetInnerHTML={{ __html: descripcionLarga }}
             />
 
             {ctaLabel && ctaHref && (
-              <div className="mt-8">
+              <div className="mt-8 text-center lg:text-left">
                 <Button
                   variant="primary"
                   size="md"
@@ -104,7 +104,7 @@ export function ServiceContentSection({
                   gradientEnd="#F9B50B"
                   fillColor="bg-brand-azul"
                   hoverTextColor="text-white"
-                  className="min-w-[170px] justify-center rounded-full px-4 text-[15.4px]"
+                  className="min-w-[170px] justify-center rounded-full !min-h-[46px] !px-6 !py-3 font-body text-[0.98rem] font-semibold tracking-[-0.03em] md:text-[15.4px]"
                 >
                   {ctaLabel}
                 </Button>

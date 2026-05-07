@@ -199,7 +199,7 @@ function ProcessCard({
                   iconName="ArrowRightIcon"
                   iconAnimation="slide"
                   href={ctaHref ?? '#'}
-                  className="w-full justify-center rounded-full"
+                  className="w-full justify-center rounded-full !min-h-[46px] !px-6 !py-3 font-body text-[0.98rem] font-semibold tracking-[-0.03em]"
                 >
                   {ctaLabel ?? 'Agendar cita'}
                 </Button>

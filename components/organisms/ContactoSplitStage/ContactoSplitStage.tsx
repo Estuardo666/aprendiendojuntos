@@ -161,15 +161,15 @@ export function ContactoSplitStage({
   }, [latitude, longitude])
 
   return (
-    <section className="bg-brand-crema px-6 py-10 md:px-10 md:py-12 lg:px-16 lg:py-16">
-      <div className="mx-auto grid w-[80vw] max-w-none gap-6 lg:grid-cols-[50%_50%] lg:gap-8">
+    <section className="bg-brand-crema px-3 py-4 md:px-10 md:py-12 lg:px-16 lg:py-16">
+      <div className="mx-auto grid w-full max-w-none gap-4 md:gap-6 lg:w-[80vw] lg:grid-cols-[50%_50%] lg:gap-8">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="rounded-[2.5rem] border border-brand-azul/8 bg-white p-8 md:p-10"
+          className="rounded-[2.5rem] border border-brand-azul/8 bg-white p-5 text-center md:p-10 lg:text-left"
         >
-          <span className="inline-flex rounded-full bg-brand-acua/70 px-4 py-2 text-sm font-medium text-brand-azul">
+          <span className="inline-flex rounded-full bg-brand-acua/70 px-[0.6rem] py-2 text-sm font-medium text-brand-azul md:px-4">
             {pretitulo}
           </span>
 
@@ -177,30 +177,30 @@ export function ContactoSplitStage({
             as="h1"
             variant="display"
             color="azul"
-            className="mt-5 max-w-[16ch] text-[3em] leading-[0.92] tracking-[-0.06em]"
+            className="mx-auto mt-5 max-w-[16ch] text-[3em] leading-[0.92] tracking-[-0.06em] lg:mx-0"
           >
             {titulo}
           </Heading>
 
-          <Text variant="lead" className="mt-6 w-full max-w-none text-brand-texto/88 leading-[1.34]">
+          <Text variant="lead" className="mx-auto mt-6 w-full max-w-none text-brand-texto/88 leading-[1.34] lg:mx-0">
             {descripcion}
           </Text>
 
-          <div className="mt-10 space-y-8">
+          <div className="mt-8 space-y-7 md:mt-10 md:space-y-8">
             {infoSections.map((section) => (
-              <div key={section.pretitulo}>
+              <div key={section.pretitulo} className="flex flex-col items-center lg:items-start">
                 <span className="inline-flex rounded-full bg-[#0056a4] px-3.5 py-[0.42rem] text-[clamp(0.86rem,1.45vw,0.90rem)] font-medium leading-none text-brand-blanco">
                   {section.pretitulo}
                 </span>
 
                 <div
                   className={section.pretitulo.toLowerCase().includes('tel')
-                    ? 'mt-4 grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2'
+                    ? 'mt-4 grid grid-cols-1 justify-items-center gap-x-6 gap-y-4 md:grid-cols-2 lg:justify-items-stretch'
                     : 'mt-4 space-y-4'}
                 >
                   {section.items.map((item, index) => {
                     const rowContent = (
-                      <div className="flex items-start gap-3.5">
+                      <div className="flex items-start justify-center gap-3.5 lg:justify-start">
                         <span className="relative mt-1 flex h-7 w-7 shrink-0 items-center justify-center md:h-8 md:w-8">
                           <Image
                             src={item.iconoSrc}
@@ -211,7 +211,7 @@ export function ContactoSplitStage({
                           />
                         </span>
 
-                        <div className="min-w-0">
+                        <div className="min-w-0 text-center lg:text-left">
                           <Text
                             as="span"
                             className="block text-[1rem] font-medium leading-[1.15] text-brand-texto"
@@ -255,7 +255,7 @@ export function ContactoSplitStage({
                 {socialPretitulo}
               </span>
 
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-4 flex flex-wrap justify-center gap-3 lg:justify-start">
                 {socialLinks.map((social) => (
                   <a
                     key={`${social.plataforma}-${social.href}`}
@@ -264,9 +264,14 @@ export function ContactoSplitStage({
                     rel="noopener noreferrer"
                     aria-label={social.nombre}
                     title={social.nombre}
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-brand-celeste text-white transition-all duration-200 hover:-translate-y-1 hover:bg-brand-azul"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-celeste text-white transition-all duration-200 hover:-translate-y-1 hover:bg-brand-azul md:h-12 md:w-12"
                   >
-                    <Icon name={socialIconMap[social.plataforma]} size="lg" color="blanco" className="h-6 w-6" />
+                    <Icon
+                      name={socialIconMap[social.plataforma]}
+                      size="sm"
+                      color="blanco"
+                      className="h-4.5 w-4.5 [&_svg]:[stroke-width:1.2] md:h-6 md:w-6 md:[&_svg]:[stroke-width:1.5]"
+                    />
                   </a>
                 ))}
               </div>
@@ -279,9 +284,9 @@ export function ContactoSplitStage({
           animate="visible"
           variants={fadeUp}
           transition={{ delay: 0.18 }}
-          className="relative min-h-[420px] overflow-hidden rounded-[2.5rem] border border-brand-azul/8 bg-white md:min-h-[520px]"
+          className="relative min-h-[360px] overflow-hidden rounded-[2.5rem] border border-brand-azul/8 bg-white md:min-h-[520px]"
         >
-          <div className="relative h-full min-h-[394px] overflow-hidden rounded-[2rem] bg-white md:min-h-[494px]">
+          <div className="relative h-full min-h-[334px] overflow-hidden rounded-[2rem] bg-white md:min-h-[494px]">
             <div ref={mapRef} className="absolute inset-0 h-full w-full" />
 
             {!mapReady && (

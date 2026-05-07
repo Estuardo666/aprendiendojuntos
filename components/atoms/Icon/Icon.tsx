@@ -24,7 +24,7 @@ export function Icon({ name, size = 'md', color = 'inherit', className }: IconPr
   return (
     <span
       className={cn(
-        'inline-flex items-center justify-center',
+        'inline-flex items-center justify-center [&_svg]:h-full [&_svg]:w-full [&_svg]:stroke-current',
         sizeClasses[size],
         colorClasses[color],
         className,

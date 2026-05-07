@@ -83,21 +83,21 @@ export function AboutStorySection({
     <section ref={sectionRef} className="px-5 pb-20 pt-10 md:px-8 md:pb-24 md:pt-14">
       <div className="mx-auto w-full max-w-[1260px]">
         <div className="grid gap-9 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:gap-10 lg:gap-14">
-          <div>
+          <div className="text-center md:text-left">
             <span className="pretitulo">{pretitulo}</span>
 
             <Heading
               as="h2"
               variant="h2"
               animate={true}
-              className="mt-2 max-w-full text-[clamp(2.45rem,4.8vw,3em)] font-bold leading-[0.92] tracking-[-0.06em] text-brand-azul"
+              className="mx-auto mt-2 max-w-full text-[clamp(2.45rem,4.8vw,3em)] font-bold leading-[0.92] tracking-[-0.06em] text-brand-azul md:mx-0"
             >
               {titulo}
             </Heading>
 
             <Text
               variant="body"
-              className="mt-4 max-w-full whitespace-pre-line text-[clamp(1.02rem,1.35vw,1.18rem)] leading-[1.24] text-brand-texto text-justify"
+              className="mt-4 max-w-full whitespace-pre-line text-[clamp(1.02rem,1.35vw,1.18rem)] leading-[1.24] text-brand-texto text-center md:text-justify"
             >
               {cleanParagraph}
             </Text>
@@ -157,7 +157,7 @@ export function AboutStorySection({
                     >
                       <Text
                         variant="body"
-                        className="px-5 pb-5 pt-0 text-[clamp(0.95rem,1.21vw,1.08rem)] leading-[1.22] text-brand-texto md:px-6"
+                        className="px-5 pb-5 pt-0 text-[clamp(0.95rem,1.21vw,1.08rem)] leading-[1.22] text-brand-texto text-center md:px-6 md:text-left"
                       >
                         {cleanRichText(item.contenido)}
                       </Text>

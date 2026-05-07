@@ -29,6 +29,59 @@ const panelTransition = {
   ease: [0.22, 1, 0.36, 1],
 } as const
 
+const mobileMenuTransition = {
+  type: 'spring',
+  stiffness: 230,
+  damping: 24,
+  mass: 0.92,
+} as const
+
+const mobileMenuVariants = {
+  closed: {
+    opacity: 0,
+    y: -18,
+    scale: 0.96,
+    filter: 'blur(10px)',
+    clipPath: 'inset(0% 0% 100% 0% round 30px)',
+    transition: {
+      ...mobileMenuTransition,
+      when: 'afterChildren',
+      staggerChildren: 0.04,
+      staggerDirection: -1,
+    },
+  },
+  open: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: 'blur(0px)',
+    clipPath: 'inset(0% 0% 0% 0% round 30px)',
+    transition: {
+      ...mobileMenuTransition,
+      when: 'beforeChildren',
+      staggerChildren: 0.055,
+      delayChildren: 0.04,
+    },
+  },
+} as const
+
+const mobileMenuItemVariants = {
+  closed: {
+    opacity: 0,
+    y: -10,
+    scale: 0.985,
+  },
+  open: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.34,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+} as const
+
 function isRouteActive(pathname: string, href: string) {
   if (href.startsWith('#')) {
     return false
@@ -91,11 +144,29 @@ export function Navbar({ links, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: Navbar
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-3 md:top-5 md:px-0">
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.button
+            type="button"
+            aria-label="Cerrar menú"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            onClick={() => {
+              setIsMobileMenuOpen(false)
+              setOpenMobileMenu(null)
+            }}
+            className="pointer-events-auto fixed inset-0 bg-brand-azul/10 backdrop-blur-[8px] md:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       <motion.nav
         initial={false}
         animate={{ scale: isCompact ? 0.9 : 1, y: isCompact ? -2 : 0 }}
         transition={shellTransition}
-        className="pointer-events-auto relative w-auto md:w-[80vw] origin-top"
+        className="pointer-events-auto relative z-10 w-[95vw] md:w-[80vw] origin-top"
       >
         <div className="rounded-[30px] border border-white/10 bg-white/70 px-2 py-3 text-brand-azul backdrop-blur-xl md:px-3 md:py-3.5">
           <div className="flex items-center justify-between gap-2 md:gap-4">
@@ -259,11 +330,11 @@ export function Navbar({ links, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: Navbar
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.98 }}
-              transition={panelTransition}
-              className="mt-3 rounded-[30px] border border-white/10 bg-brand-azul px-4 py-4 md:hidden"
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={mobileMenuVariants}
+              className="mt-3 overflow-hidden rounded-[30px] border border-brand-azul/10 bg-white px-4 py-4 backdrop-blur-2xl md:hidden"
             >
               <ul className="space-y-2">
                 {links.map(link => {
@@ -272,13 +343,24 @@ export function Navbar({ links, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: Navbar
                   const isActive = isRouteActive(pathname, link.href) || hasActiveSubmenu(pathname, link)
 
                   return (
-                    <li key={link.href} className="rounded-[24px] bg-white/5 px-2 py-1.5">
+                    <motion.li
+                      key={link.href}
+                      variants={mobileMenuItemVariants}
+                      className={cn(
+                        'rounded-[24px] px-2 py-1.5 transition-colors duration-200',
+                        isExpanded || isActive
+                          ? 'bg-brand-celeste/8'
+                          : 'bg-brand-azul/[0.035]',
+                      )}
+                    >
                       <div className="flex items-center gap-2">
                         <Link
                           href={link.href}
                           className={cn(
-                            'flex-1 rounded-full px-4 py-3 font-body text-[0.98rem] font-medium tracking-[-0.03em] transition-colors duration-200',
-                            isActive ? 'text-brand-sunrise' : 'text-white',
+                            'flex-1 rounded-full px-4 py-3 font-heading text-[1.18rem] font-bold tracking-[-0.03em] transition-[background-color,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-celeste/45',
+                            isActive
+                              ? 'bg-brand-celeste text-white'
+                              : 'text-brand-azul hover:bg-brand-azul/6 hover:text-brand-azul',
                           )}
                         >
                           {link.label}
@@ -288,7 +370,12 @@ export function Navbar({ links, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: Navbar
                           <button
                             type="button"
                             onClick={() => setOpenMobileMenu(current => (current === link.href ? null : link.href))}
-                            className="inline-flex h-11 w-11 items-center justify-center rounded-full text-white"
+                            className={cn(
+                              'inline-flex h-11 w-11 items-center justify-center rounded-full transition-[background-color,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-celeste/45',
+                              isExpanded
+                                ? 'bg-brand-celeste text-white'
+                                : 'text-brand-azul hover:bg-brand-azul/6 hover:text-brand-azul',
+                            )}
                             aria-expanded={isExpanded}
                             aria-label={`Mostrar submenú de ${link.label}`}
                           >
@@ -308,7 +395,7 @@ export function Navbar({ links, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: Navbar
                             transition={panelTransition}
                             className="overflow-hidden"
                           >
-                            <ul className="space-y-1 px-2 pb-2 pt-1">
+                            <ul className="mt-1 space-y-1 rounded-[20px] bg-brand-azul/[0.035] px-2 pb-2 pt-2">
                               {link.submenu.map(item => {
                                 const isSubmenuActive = isRouteActive(pathname, item.href)
 
@@ -317,13 +404,13 @@ export function Navbar({ links, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: Navbar
                                     <Link
                                       href={item.href}
                                       className={cn(
-                                        'block rounded-[20px] px-4 py-3 transition-colors duration-200',
+                                        'block rounded-[20px] px-4 py-3 font-body text-[1.05rem] font-medium transition-[background-color,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-celeste/45',
                                         isSubmenuActive
-                                          ? 'text-brand-sunrise'
-                                          : 'text-white/88 hover:text-brand-sunrise',
+                                          ? 'bg-brand-celeste text-white'
+                                          : 'text-brand-azul hover:bg-brand-azul/6 hover:text-brand-azul',
                                       )}
                                     >
-                                      <span className="block font-body text-[0.95rem] font-medium leading-none">
+                                      <span className="block leading-none">
                                         {item.label}
                                       </span>
                                     </Link>
@@ -334,17 +421,14 @@ export function Navbar({ links, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: Navbar
                           </motion.div>
                         )}
                       </AnimatePresence>
-                    </li>
+                    </motion.li>
                   )
                 })}
               </ul>
 
               {ctaLabel && ctaHref && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={panelTransition}
+                  variants={mobileMenuItemVariants}
                   className="mt-4 space-y-2"
                 >
                   <Button

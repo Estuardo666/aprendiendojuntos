@@ -42,23 +42,23 @@ export function ProgramaDescripcionSection({
           {/* Columna izquierda: HTML rico de WordPress */}
           <div
             style={{ marginTop: '-2em' }}
-            className="pr-0 md:pr-[7rem]
-              prose prose-lg max-w-none text-justify
-              prose-headings:font-heading prose-headings:text-brand-azul
+            className="pr-0 text-center md:pr-[7rem] md:text-left
+              prose prose-lg max-w-none text-center md:text-justify
+              prose-headings:text-center md:prose-headings:text-left prose-headings:font-heading prose-headings:text-brand-azul
               prose-headings:font-bold prose-headings:tracking-[-0.03em]
               prose-headings:mt-10 prose-headings:mb-4 prose-headings:leading-[1.08]
               prose-h2:text-[1.9rem]
               prose-h3:text-[1.55rem] 
-              prose-p:mb-5 prose-p:font-body prose-p:text-[1.19rem]
+              prose-p:mb-5 prose-p:text-center md:prose-p:text-left prose-p:font-body prose-p:text-[1.19rem]
               prose-p:font-medium prose-p:leading-[1.5] prose-p:text-brand-texto
-              prose-ul:list-none prose-ul:pl-0 prose-ul:space-y-1 prose-ul:text-left
-              prose-li:relative prose-li:pl-[1.05rem] prose-li:font-body
-              prose-li:text-left prose-li:text-[1.1rem] prose-li:leading-[1.28]
+              prose-ul:list-none prose-ul:pl-0 prose-ul:space-y-1 prose-ul:text-center md:prose-ul:text-left
+              prose-li:relative prose-li:pl-0 md:prose-li:pl-[1.05rem] prose-li:font-body
+              prose-li:text-center md:prose-li:text-left prose-li:text-[1.1rem] prose-li:leading-[1.28]
               prose-li:text-brand-texto prose-li:font-medium
-              [&_li]:before:absolute [&_li]:before:left-0 [&_li]:before:top-[0.02rem]
+              [&_li]:before:hidden md:[&_li]:before:absolute md:[&_li]:before:left-0 md:[&_li]:before:top-[0.02rem]
               [&_li]:before:content-['•'] [&_li]:before:text-brand-azul
               [&_li]:before:text-[1.12rem] [&_li]:before:leading-none
-              prose-ol:pl-4 prose-ol:space-y-3
+              prose-ol:pl-0 prose-ol:text-center md:prose-ol:pl-4 md:prose-ol:text-left prose-ol:space-y-3
               prose-strong:font-semibold prose-strong:text-[#0557a4]
             "
             dangerouslySetInnerHTML={{ __html: descripcion }}
@@ -98,14 +98,14 @@ export function ProgramaDescripcionSection({
                 {beneficios && beneficios.length > 0 && (
                   <ul className="space-y-3">
                     {beneficios.map((item, i) => (
-                      <li key={i} className="flex items-start gap-3">
+                      <li key={i} className="flex items-start justify-center gap-3 md:justify-start">
                         <span className="mt-[2px] inline-flex h-[1.4rem] w-[1.4rem] shrink-0 items-center justify-center rounded-full bg-[#3ecf5e] text-white" aria-hidden="true">
                           <svg viewBox="0 0 12 12" fill="none" width="10" height="10" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="2,6 5,9 10,3" />
                           </svg>
                         </span>
                         <span
-                          className="font-body font-normal leading-[1.35] text-white"
+                          className="text-center font-body font-normal leading-[1.35] text-white md:text-left"
                           style={{ fontSize: 'clamp(1.05rem, 1.4vw, 1.15rem)' }}
                         >
                           {item.beneficio}
