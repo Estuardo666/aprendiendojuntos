@@ -14,7 +14,7 @@ export interface WPCorreo {
 }
 
 export interface WPRedSocial {
-  icono: 'facebook' | 'instagram' | 'tiktok' | 'youtube' | 'google';
+  icono: 'facebook' | 'instagram' | 'tiktok' | 'youtube' | 'google' | Array<'facebook' | 'instagram' | 'tiktok' | 'youtube' | 'google'>;
   link: string;
   nombreRed: string;
 }
@@ -40,6 +40,10 @@ export interface WPPaginaContacto {
 
 const REVALIDATE = 86400;
 
+function normalizeSocialIcon(icono: WPRedSocial['icono']) {
+  return Array.isArray(icono) ? (icono[0] ?? 'google') : icono;
+}
+
 function mapContactoData(contacto: WPContacto): ContactoPageData {
   return {
     hero: {
@@ -61,7 +65,10 @@ function mapContactoData(contacto: WPContacto): ContactoPageData {
       correo: correo.correo,
       descripcion: correo.descripcion ?? undefined,
     })),
-    redes: contacto.contactoDatosFields.redesSociales ?? [],
+    redes: (contacto.contactoDatosFields.redesSociales ?? []).map((red) => ({
+      ...red,
+      icono: normalizeSocialIcon(red.icono),
+    })),
   };
 }
 
