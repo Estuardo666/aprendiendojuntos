@@ -1,0 +1,355 @@
+import type { Metadata } from 'next';
+import { ServiceCard } from '@/components/molecules/ServiceCard';
+import { KeywordsMarquee } from '@/components/organisms/KeywordsMarquee';
+import { ServiceCTASection } from '@/components/organisms/ServiceCTASection';
+import { getServicios } from '@/lib/api/servicios';
+import { ServicesStackingSlider } from '@/components/organisms/ServicesStackingSlider';
+import type { ServiceCardProps } from '@/components/molecules/ServiceCard';
+import type { WPServicioResumen } from '@/lib/types/servicio.types';
+import type { BadgeProps } from '@/components/atoms/Badge';
+import { cn } from '@/lib/utils/cn';
+
+export const metadata: Metadata = {
+  title: 'Servicios | Aprendiendo Juntos',
+  description:
+    'Conoce nuestros servicios especializados en neuropsicología, psicopedagogía y más.',
+};
+
+type BadgeVariant = BadgeProps['variant'];
+
+type CategorySectionData = {
+  variant: BadgeVariant;
+  id: string;
+  label: string;
+  eyebrow: string;
+  description: string;
+  emoji: string;
+  panelClassName: string;
+  accentClassName: string;
+  servicios: ServiceCardProps[];
+};
+
+const CATEGORY_ORDER: BadgeVariant[] = [
+  'neuropsicologia',
+  'psicopedagogia',
+  'lenguaje',
+  'sensorial',
+  'default',
+];
+
+const CATEGORY_CONTENT: Record<BadgeVariant, Omit<CategorySectionData, 'id' | 'variant' | 'servicios'>> = {
+  neuropsicologia: {
+    label: 'Neuropsicología',
+    eyebrow: 'Evaluación y acompañamiento clínico',
+    description:
+      'Procesos para comprender funciones cognitivas, conducta y aprendizaje con una mirada integral y accionable para familias y equipos.',
+    emoji: '🧠',
+    panelClassName: 'border-[#b7d9ef] bg-[#dff0fb]',
+    accentClassName: 'bg-[#0080c9]',
+  },
+  psicopedagogia: {
+    label: 'Psicopedagogía',
+    eyebrow: 'Aprendizaje con estrategia',
+    description:
+      'Intervenciones y apoyos para fortalecer autonomía, hábitos, comprensión y herramientas concretas en cada etapa escolar.',
+    emoji: '📘',
+    panelClassName: 'border-[#f1c88a] bg-[#f9eddc]',
+    accentClassName: 'bg-[#f7a728]',
+  },
+  lenguaje: {
+    label: 'Lenguaje',
+    eyebrow: 'Comunicación que toma forma',
+    description:
+      'Espacios para potenciar expresión, comprensión y comunicación funcional con objetivos claros y seguimiento cercano.',
+    emoji: '💬',
+    panelClassName: 'border-[#b8dcc2] bg-[#e7f6ec]',
+    accentClassName: 'bg-[#43a36d]',
+  },
+  sensorial: {
+    label: 'Integración sensorial',
+    eyebrow: 'Regulación para el día a día',
+    description:
+      'Propuestas para apoyar autorregulación, participación y bienestar desde experiencias seguras, graduales y significativas.',
+    emoji: '🪁',
+    panelClassName: 'border-[#d1c6ef] bg-[#efeafb]',
+    accentClassName: 'bg-[#8f79d6]',
+  },
+  default: {
+    label: 'Acompañamiento integral',
+    eyebrow: 'Servicios transversales',
+    description:
+      'Recursos y apoyos complementarios para articular evaluación, intervención y seguimiento según cada necesidad.',
+    emoji: '✨',
+    panelClassName: 'border-[#d6dee3] bg-white',
+    accentClassName: 'bg-[#0f3655]',
+  },
+};
+
+function formatServiciosCount(count: number) {
+  return `${count} servicio${count === 1 ? '' : 's'} en esta línea`;
+}
+
+// Mapea la categoría string de WP a la variante del Badge
+const mapCategoria = (cat: string | string[] | null | undefined): BadgeProps['variant'] => {
+  const raw = Array.isArray(cat) ? (cat[0] ?? '') : (cat ?? '')
+  const lower = raw.toLowerCase()
+  if (lower.includes('neuro'))  return 'neuropsicologia'
+  if (lower.includes('psico'))  return 'psicopedagogia'
+  if (lower.includes('lengua')) return 'lenguaje'
+  if (lower.includes('sensor')) return 'sensorial'
+  return 'default'
+}
+
+function toServiceCardProps(s: WPServicioResumen): ServiceCardProps {
+  return {
+    titulo: s.title,
+    descripcionCorta: s.servicioFields.descripcionCorta,
+    icono: s.servicioFields.iconoEmoji,
+    categoria: mapCategoria(s.servicioFields.categoria ?? ''),
+    slug: s.slug,
+    destacado: s.servicioFields.destacado ?? false,
+  };
+}
+
+function toStackingSlide(s: WPServicioResumen) {
+  const variant = mapCategoria(s.servicioFields.categoria ?? '');
+
+  return {
+    titulo: s.title,
+    slug: s.slug,
+    imagenSrc: s.featuredImage?.node.sourceUrl,
+    imagenAlt: s.featuredImage?.node.altText || s.title,
+    categoria: CATEGORY_CONTENT[variant].label,
+  };
+}
+
+function buildCategorySections(serviciosRaw: WPServicioResumen[]): CategorySectionData[] {
+  return CATEGORY_ORDER.map((variant) => {
+    const servicios = serviciosRaw
+      .filter((servicio) => mapCategoria(servicio.servicioFields.categoria) === variant)
+      .map(toServiceCardProps);
+
+    if (!servicios.length) {
+      return null;
+    }
+
+    return {
+      variant,
+      id: `categoria-${variant}`,
+      ...CATEGORY_CONTENT[variant],
+      servicios,
+    };
+  }).filter((section): section is CategorySectionData => Boolean(section));
+}
+
+function CategorySection({
+  section,
+  reverse = false,
+}: {
+  section: CategorySectionData;
+  reverse?: boolean;
+}) {
+  return (
+    <section id={section.id} className="px-4 py-8 md:px-6 md:py-10 lg:px-8">
+      <div
+        className={cn(
+          'mx-auto grid max-w-7xl gap-6 lg:items-start',
+          reverse
+            ? 'lg:grid-cols-[minmax(0,1fr)_320px]'
+            : 'lg:grid-cols-[320px_minmax(0,1fr)]',
+        )}
+      >
+        <div
+          className={cn(
+            'relative overflow-hidden rounded-[2rem] border p-6 md:p-8',
+            section.panelClassName,
+            reverse && 'lg:order-2',
+          )}
+        >
+          <div className={cn('mb-8 h-1.5 w-20 rounded-full', section.accentClassName)} />
+          <p className="text-sm font-medium uppercase tracking-[0.18em] text-brand-azul/70">
+            {section.eyebrow}
+          </p>
+          <h2 className="mt-4 font-heading text-[clamp(2rem,3.8vw,3.25rem)] font-bold leading-[0.94] tracking-[-0.05em] text-brand-azul">
+            {section.label}
+          </h2>
+          <p className="mt-4 max-w-sm text-[0.98rem] leading-6 text-brand-azul/78">
+            {section.description}
+          </p>
+
+          <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-brand-azul/10 bg-white/75 px-4 py-3 text-sm font-medium text-brand-azul">
+            <span className="text-base" aria-hidden="true">{section.emoji}</span>
+            <span>{formatServiciosCount(section.servicios.length)}</span>
+          </div>
+        </div>
+
+        <div className={cn('grid gap-4 md:grid-cols-2 xl:grid-cols-3', reverse && 'lg:order-1')}>
+          {section.servicios.map((servicio) => (
+            <ServiceCard
+              key={servicio.slug}
+              {...servicio}
+              className="h-full border-brand-azul/10 bg-white/85 hover:-translate-y-1 hover:shadow-none"
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default async function ServiciosPage() {
+  const serviciosRaw = await getServicios();
+  const categorySections = buildCategorySections(serviciosRaw);
+  const servicios = serviciosRaw.map(toServiceCardProps);
+  const featuredServices = serviciosRaw.filter((servicio) => servicio.servicioFields.destacado);
+  const sliderSlides = (featuredServices.length ? featuredServices : serviciosRaw)
+    .slice(0, 8)
+    .map(toStackingSlide);
+  const ctaImage = serviciosRaw.find((servicio) => servicio.featuredImage?.node.sourceUrl)?.featuredImage?.node;
+  const marqueeKeywords = categorySections.map((section) => ({
+    texto: section.label,
+    emoji: section.emoji,
+  }));
+  const heroAnchors = categorySections.slice(0, 4);
+
+  return (
+    <main className="bg-brand-crema pb-10 text-brand-azul md:pb-14">
+      <section className="px-4 pb-8 pt-8 md:px-6 md:pb-10 md:pt-12 lg:px-8">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-brand-azul/10 bg-white">
+          <div className="grid gap-8 p-6 md:p-8 lg:grid-cols-[minmax(0,1.15fr)_360px] lg:p-10">
+            <div>
+              <span className="inline-flex rounded-full border border-brand-azul/10 bg-brand-celeste/10 px-4 py-2 text-sm font-medium uppercase tracking-[0.16em] text-brand-azul">
+                Servicios Aprendiendo Juntos
+              </span>
+              <h1 className="mt-5 max-w-4xl font-heading text-[clamp(3.25rem,7vw,6.2rem)] font-bold leading-[0.9] tracking-[-0.07em] text-brand-azul">
+                Un catálogo vivo de apoyos, evaluación y acompañamiento.
+              </h1>
+              <p className="mt-5 max-w-3xl text-[1.05rem] leading-7 text-brand-azul/75 md:text-[1.12rem]">
+                Reordenamos la página para que puedas explorar primero por afinidad, luego por área y finalmente por necesidad concreta. Menos listado plano. Más contexto, ritmo visual y decisiones rápidas.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                {heroAnchors.map((section) => (
+                  <a
+                    key={section.id}
+                    href={`#${section.id}`}
+                    className="inline-flex items-center gap-2 rounded-full border border-brand-azul/10 bg-brand-crema px-4 py-2 text-sm font-medium text-brand-azul transition-colors hover:bg-brand-celeste/12"
+                  >
+                    <span aria-hidden="true">{section.emoji}</span>
+                    <span>{section.label}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-4 self-start">
+              <div className="rounded-[2rem] border border-brand-azul/10 bg-brand-crema p-5">
+                <p className="text-sm uppercase tracking-[0.16em] text-brand-azul/65">Mapa rapido</p>
+                <div className="mt-5 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                  <div className="rounded-[1.4rem] border border-brand-azul/10 bg-white px-4 py-4">
+                    <p className="text-[2rem] font-heading font-bold leading-none tracking-[-0.06em] text-brand-azul">
+                      {servicios.length}
+                    </p>
+                    <p className="mt-2 text-sm leading-5 text-brand-azul/70">servicios activos</p>
+                  </div>
+                  <div className="rounded-[1.4rem] border border-brand-azul/10 bg-white px-4 py-4">
+                    <p className="text-[2rem] font-heading font-bold leading-none tracking-[-0.06em] text-brand-azul">
+                      {categorySections.length}
+                    </p>
+                    <p className="mt-2 text-sm leading-5 text-brand-azul/70">lineas de trabajo</p>
+                  </div>
+                  <div className="rounded-[1.4rem] border border-brand-azul/10 bg-white px-4 py-4">
+                    <p className="text-[2rem] font-heading font-bold leading-none tracking-[-0.06em] text-brand-azul">
+                      {featuredServices.length || sliderSlides.length}
+                    </p>
+                    <p className="mt-2 text-sm leading-5 text-brand-azul/70">destacados al frente</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-[2rem] border border-brand-azul/10 bg-brand-azul px-5 py-6 text-white">
+                <p className="text-sm uppercase tracking-[0.16em] text-white/65">Empieza por aquí</p>
+                <ul className="mt-4 space-y-3">
+                  {sliderSlides.slice(0, 3).map((slide, index) => (
+                    <li
+                      key={slide.slug}
+                      className="flex items-start gap-3 rounded-[1.4rem] border border-white/12 bg-white/6 px-4 py-3"
+                    >
+                      <span className="mt-0.5 text-xs font-semibold text-brand-sunrise/90">
+                        0{index + 1}
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium uppercase tracking-[0.16em] text-white/55">
+                          {slide.categoria}
+                        </p>
+                        <p className="mt-1 text-lg font-semibold leading-6 text-white">{slide.titulo}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {marqueeKeywords.length > 0 && (
+        <KeywordsMarquee keywords={marqueeKeywords} velocidad="normal" />
+      )}
+
+      {sliderSlides.length > 0 && (
+        <ServicesStackingSlider
+          heading="Servicios destacados para entrar rápido al catálogo"
+          slides={sliderSlides}
+        />
+      )}
+
+      <section className="px-4 pb-2 pt-12 md:px-6 md:pt-16 lg:px-8">
+        <div className="mx-auto max-w-7xl border-b border-brand-azul/10 pb-8">
+          <p className="text-sm font-medium uppercase tracking-[0.18em] text-brand-azul/60">
+            Explora por linea
+          </p>
+          <h2 className="mt-3 max-w-4xl font-heading text-[clamp(2.4rem,4.8vw,4.4rem)] font-bold leading-[0.93] tracking-[-0.06em] text-brand-azul">
+            Cards agrupadas para leer mejor la oferta completa.
+          </h2>
+          <p className="mt-4 max-w-2xl text-[1rem] leading-7 text-brand-azul/72">
+            Cada bloque ordena servicios relacionados bajo una misma intención terapéutica o educativa, manteniendo el acceso directo a cada detalle.
+          </p>
+        </div>
+      </section>
+
+      {categorySections.map((section, index) => (
+        <CategorySection key={section.id} section={section} reverse={index % 2 === 1} />
+      ))}
+
+      <section className="px-4 pt-4 md:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl rounded-[2.25rem] border border-brand-azul/10 bg-white px-6 py-6 md:px-8 md:py-7">
+          <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+            <div>
+              <p className="text-sm font-medium uppercase tracking-[0.16em] text-brand-azul/60">
+                Catálogo completo
+              </p>
+              <p className="mt-3 max-w-3xl text-[1rem] leading-7 text-brand-azul/74">
+                Todo el contenido sigue disponible en formato card, con jerarquía visual más clara y una entrada destacada para decisiones más rápidas.
+              </p>
+            </div>
+            <div className="rounded-full border border-brand-azul/10 bg-brand-crema px-4 py-3 text-sm font-medium text-brand-azul">
+              {servicios.length} cards disponibles en total
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <ServiceCTASection
+        pretitulo="Necesitas orientación personalizada"
+        heading="Te ayudamos a elegir el servicio adecuado para tu proceso."
+        descripcion="Si no sabes por dónde empezar, te orientamos según objetivo, etapa del desarrollo y tipo de acompañamiento que necesitas hoy."
+        ctaLabel="Ir a contacto"
+        ctaHref="/contacto"
+        imagenSrc={ctaImage?.sourceUrl}
+        imagenAlt={ctaImage?.altText || 'Equipo de Aprendiendo Juntos'}
+        wrapperClassName="pt-10"
+      />
+    </main>
+  );
+}

@@ -1,0 +1,193 @@
+# Windsurf Rules - Centro Neuropsicopedagógico Aprendiendo Juntos
+
+## Arquitectura de Componentes (Atomic Design)
+
+**Regla de oro**: Cada componente pertenece a exactamente un nivel. No se salta niveles. No se importa hacia arriba.
+
+| Nivel | Carpeta | Responsabilidad | Puede importar de |
+| Átomo | components/atoms/ | Elemento base sin hijos componentes | Nada de components/ |
+| Molécula | components/molecules/ | 2-4 átomos con función clara | Solo atoms/ |
+| Organismo | components/organisms/ | Sección visual completa | atoms/ + molecules/ |
+| Template | components/templates/ | Layout de página sin datos reales | Solo organisms/ |
+| Page | app/*/page.tsx | Fetch + transformar + pasar al template | lib/api/ + templates/ |
+
+**Reglas adicionales**:
+- Sin fetch fuera de app/*/page.tsx
+- Sin 'use client' en atoms, molecules, organismos ni templates salvo que el componente requiera estado de UI (hover, accordion, drawer), hooks de React (useState, useEffect, useRef), hooks de next/navigation (usePathname, useRouter), Framer Motion, o event handlers directos
+- **Regla clave**: Cualquier componente que importe o use NavLink (usePathname) o cualquier Client Component con hooks también DEBE tener 'use client'
+- Sin datos hardcodeados en organismos o templates
+- Sin JSX propio en pages — solo llamar al Template
+
+## Tokens de Diseño
+
+**Colores** (definidos en tailwind.config.ts — no buscar en otro lado):
+
+| Token | Hex | Uso |
+| brand-naranja | #FAB600 | CTAs, badges, acentos |
+| brand-azul | #0056A4 | Títulos H1-H3, navbar, footer |
+| brand-celeste | #0080C9 | Links, hover, iconos interactivos |
+| brand-crema | #EFEDE4 | Fondo de página SIEMPRE |
+| brand-blanco | #FFFFFF | Fondo de cards y contenedores |
+
+**Regla crítica**: NUNCA usar colores primarios (naranja, azul, celeste) como fondo de página o sección completa.
+
+**Tipografía**:
+
+| Clase Tailwind | Uso |
+| font-heading | Títulos, navbar, CTAs (Gilroy) |
+| font-body | Párrafos, descripciones (Inter) |
+| text-display | Hero principal |
+| text-h1 / text-h2 / text-h3 | Jerarquía de títulos |
+| text-lead | Subtítulos y destacados |
+| text-small | Labels, captions |
+
+## Conectividad con WordPress Headless
+
+**Archivo central**: `lib/graphql.ts` → `fetchGraphQL<T>()`
+- ÚNICA función que hace fetch a WP
+- Recibe query, variables, revalidate
+- URL desde NEXT_PUBLIC_WP_GRAPHQL_URL
+
+**Módulos lib/api/** — uno por recurso:
+
+| Archivo | Funciones | Revalidate |
+| servicios.ts | getServicios, getServicio(slug) | 86400 |
+| programas.ts | getProgramas, getPrograma(slug) | 86400 |
+| testimonios.ts | getTestimonios | 3600 |
+| faqs.ts | getFAQs | 3600 |
+| equipo.ts | getEquipo | 86400 |
+| blog.ts | getPosts, getPost(slug) | 1800 |
+| opciones.ts | getOpciones | 86400 |
+
+**Reglas**:
+- lib/api/ solo hace fetch, no transforma datos
+- La transformación raw WP → props ocurre en app/*/page.tsx
+- Verificar data.errors[] — WPGraphQL retorna 200 con errores
+- Imágenes: siempre next/image con dominio WP en next.config.ts
+
+## WPGraphQL - Reglas Críticas
+
+### Opciones globales (ACF Options)
+Query correcta:
+```graphql
+{
+  opcionesAprendiendoJuntos {
+    opcionesGlobales {
+      # ... fields
+    }
+  }
+}
+```
+**NO** usar `acfOptionsOpcionesGlobales`.
+
+### Campos ACF select
+Pueden devolver `string[]` en lugar de `string`. Patrón seguro:
+```typescript
+const valor = Array.isArray(campo) ? (campo[0] ?? '') : (campo ?? '')
+```
+
+### Campos ACF Relationship
+Siempre devuelven `AcfContentNodeConnection`, usar `nodes {}`:
+```graphql
+campoRelacion {
+  nodes {
+    ... on TipoEsperado {
+      id
+    }
+  }
+}
+```
+TypeScript: `campo?: { nodes: Tipo[] }` NO `campo?: Tipo[]`.
+
+## Convenciones de Código
+
+| Elemento | Convención | Ejemplo |
+| Componentes | PascalCase | ServiceCard.tsx |
+| Hooks | use + PascalCase | useContactForm.ts |
+| Tipos WP raw | WP + PascalCase | WPServicio |
+| Tipos componentes | PascalCase + Props | ServiceCardProps |
+| Archivos lib/ | minúscula | servicios.ts |
+| Clases Tailwind | mobile-first | sm: md: lg: |
+
+**TypeScript**:
+- strict: true
+- Sin any — usar unknown si el tipo es incierto
+- Tipos de WP en lib/types/ separados de tipos de componentes
+- Props siempre tipadas con interface, no type alias
+
+## Performance
+
+- Todas las pages son Server Components por defecto
+- 'use client' solo cuando sea estrictamente necesario
+- **Error "Cannot read properties of null (reading 'useContext')"**: Siempre indica un componente con hooks de cliente sin 'use client'. Buscar el componente padre más cercano que lo importe y agregarle la directiva
+- Fuentes: next/font/google con display: swap
+- Imágenes: next/image con sizes y priority en above-the-fold
+- No instalar librerías para lo que Tailwind ya resuelve
+
+## Errores Comunes - Prevención
+
+### 1. Imágenes no cargan: "hostname not configured"
+Agregar ambos protocolos en `next.config.mjs` y usar `unoptimized: isDev` en desarrollo local.
+
+### 2. Hydration warning: "Extra attributes from server"
+Añadir `suppressHydrationWarning` en `app/layout.tsx`:
+```tsx
+<html lang="es" suppressHydrationWarning>
+```
+
+### 3. Error "usePathname() requires 'use client'"
+Todo componente con hooks React, next/navigation, o Framer Motion → `'use client'` como PRIMERA línea.
+
+### 4. Categoria es array pero código espera string
+Tipos: `categoria: string | string[]`. Normalizar siempre antes de usar.
+
+### 5. Campos de relación ACF causan "Fragment cannot be spread"
+Usar `campoRelation { nodes { ... on Tipo { } } }` y accessores `sf.campo?.nodes ?? []`.
+
+### 6. Imágenes arriba del fold sin LCP optimization
+Imágenes hero, featured images above the fold → prop `priority` en `<Image>`.
+
+## Decisiones Tomadas (No Preguntar)
+
+| Área | Decisión |
+| API | Solo GraphQL, nunca REST de WP |
+| Estilos | Solo Tailwind con tokens del config |
+| Imágenes | Solo next/image |
+| Formularios | useContactForm + /api/contact/route.ts |
+| Fuentes | Solo next/font/google |
+| Estado global | No usar (no Redux, no Zustand, no Context) |
+| Animaciones | Solo Framer Motion (contradice CLAUDE.md - usar Framer Motion) |
+| Iconos | Solo emojis definidos en ACF — no icon libraries |
+| Testing | No generar tests salvo que se pida explícitamente |
+| Comentarios | No agregar comentarios salvo que se pida |
+
+## Componente Button - CTA Premium
+
+Archivo: `components/atoms/Button/Button.tsx`
+
+**Props disponibles**:
+- variant: 'primary' | 'secondary' | 'celeste' | 'ghost' | 'whatsapp' | 'dark'
+- size: 'sm' | 'md' (default) | 'lg' | 'xl'
+- iconName: IconName (opcional)
+- iconAnimation: 'none' (default) | 'slide'
+- href: string (opcional, renderiza como Link)
+- gradientStart: string (hex, opcional)
+- gradientEnd: string (hex, opcional)
+- fillColor: string (clase Tailwind, opcional)
+- hoverTextColor: string (clase Tailwind, opcional)
+
+## Seguridad
+
+- NEXT_PUBLIC_* solo para valores que el browser necesita
+- WP_PREVIEW_SECRET nunca expuesto al cliente
+- Nunca hardcodear URLs, tokens ni credenciales en el código
+- .env.local en .gitignore siempre
+- Sanitizar inputs en /api/contact/route.ts antes de enviar a WP
+
+## SEO
+
+Cada page exporta generateMetadata():
+- title: "[Nombre página] | Aprendiendo Juntos"
+- description: max 155 chars
+- openGraph: title + description + imagen de la página
+- Pages con [slug]: metadata dinámica desde WP
