@@ -6,6 +6,38 @@ import { getGlobalNavbarLinks } from '@/lib/navigation'
 import { ServicioDetalleTemplate } from '@/components/templates/ServicioDetalleTemplate'
 import type { BadgeProps } from '@/components/atoms/Badge'
 
+async function getServiciosSafe() {
+  try {
+    return await getServicios()
+  } catch {
+    return []
+  }
+}
+
+async function getServicioSafe(slug: string) {
+  try {
+    return await getServicio(slug)
+  } catch {
+    return null
+  }
+}
+
+async function getOpcionesSafe() {
+  try {
+    return await getOpciones()
+  } catch {
+    return null
+  }
+}
+
+async function getGlobalNavbarLinksSafe() {
+  try {
+    return await getGlobalNavbarLinks()
+  } catch {
+    return []
+  }
+}
+
 // ─── Helper: mapea el string de categoría a la variante del Badge ────────────
 const mapCategoria = (cat: string | string[] | null | undefined): BadgeProps['variant'] => {
   const raw = Array.isArray(cat) ? (cat[0] ?? '') : (cat ?? '')
@@ -19,7 +51,7 @@ const mapCategoria = (cat: string | string[] | null | undefined): BadgeProps['va
 
 // ─── Parámetros estáticos para SSG ───────────────────────────────────────────
 export async function generateStaticParams() {
-  const servicios = await getServicios()
+  const servicios = await getServiciosSafe()
   return servicios.map(s => ({ slug: s.slug }))
 }
 
@@ -28,7 +60,7 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params
-  const servicio = await getServicio(slug)
+  const servicio = await getServicioSafe(slug)
   if (!servicio) return { title: 'Servicio no encontrado' }
 
   const descripcion =
@@ -56,9 +88,9 @@ export default async function ServicioDetallePage(
 
   // Fetch en paralelo: servicio y opciones globales del centro
   const [servicio, opciones, navbarLinks] = await Promise.all([
-    getServicio(slug),
-    getOpciones(),
-    getGlobalNavbarLinks(),
+    getServicioSafe(slug),
+    getOpcionesSafe(),
+    getGlobalNavbarLinksSafe(),
   ])
 
   // Si el servicio no existe en WP → 404

@@ -7,9 +7,25 @@ import { ProgramaInfoCardsSection } from '@/components/organisms/ProgramaInfoCar
 import { ProgramaMasProgramasSection } from '@/components/organisms/ProgramaMasProgramasSection'
 import { ProgramaCTABottomSection } from '@/components/organisms/ProgramaCTABottomSection'
 
+async function getProgramasSafe() {
+  try {
+    return await getProgramas()
+  } catch {
+    return []
+  }
+}
+
+async function getProgramaSafe(slug: string) {
+  try {
+    return await getPrograma(slug)
+  } catch {
+    return null
+  }
+}
+
 // ─── SSG: genera rutas estáticas para todos los programas ────────────────────
 export async function generateStaticParams() {
-  const programas = await getProgramas()
+  const programas = await getProgramasSafe()
   return programas.map((p) => ({ slug: p.slug }))
 }
 
@@ -18,7 +34,7 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params
-  const programa = await getPrograma(slug)
+  const programa = await getProgramaSafe(slug)
   if (!programa) return { title: 'Programa no encontrado' }
 
   return {
@@ -40,8 +56,8 @@ export default async function ProgramaPage(
 ) {
   const { slug } = await params
   const [programa, programas] = await Promise.all([
-    getPrograma(slug),
-    getProgramas().catch(() => []),
+    getProgramaSafe(slug),
+    getProgramasSafe(),
   ])
 
   if (!programa) notFound()
