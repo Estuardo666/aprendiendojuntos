@@ -14,13 +14,29 @@ function sanitizeWhatsappPhone(value: string | null | undefined) {
   return (value ?? "").replace(/\D/g, "");
 }
 
+async function getOpcionesSafe() {
+  try {
+    return await getOpciones();
+  } catch {
+    return null;
+  }
+}
+
+async function getGlobalNavbarLinksSafe() {
+  try {
+    return await getGlobalNavbarLinks();
+  } catch {
+    return [];
+  }
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [links, opciones] = await Promise.all([getGlobalNavbarLinks(), getOpciones()]);
-  const whatsappNumber = sanitizeWhatsappPhone(opciones.ctaWhatsappNumero);
+  const [links, opciones] = await Promise.all([getGlobalNavbarLinksSafe(), getOpcionesSafe()]);
+  const whatsappNumber = sanitizeWhatsappPhone(opciones?.ctaWhatsappNumero);
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contacto";
 
   return (
