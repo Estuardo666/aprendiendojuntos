@@ -9,6 +9,20 @@ import type {
   ContactoPageData,
   ContactoSocialLinkData,
 } from '@/lib/types/contacto.types'
+import type { WPOpcionesGlobales } from '@/lib/types/opciones.types'
+
+const EMPTY_OPCIONES: WPOpcionesGlobales = {
+  heroTitulo: '',
+  heroSubtitulo: null,
+  ctaTexto: '',
+  ctaWhatsappNumero: '',
+  contactoTelefono: '',
+  contactoDireccion: null,
+  contactoMapsUrl: null,
+  redesInstagram: null,
+  redesFacebook: null,
+  mensajeBienvenida: null,
+}
 
 export const metadata: Metadata = {
   title: 'Contacto | Centro Aprendiendo Juntos',
@@ -151,11 +165,12 @@ function buildSocialLinks(
 }
 
 export default async function ContactoPage() {
-  const [contactoData, opciones, navLinks] = await Promise.all([
-    getContacto(),
-    getOpciones(),
-    getGlobalNavbarLinks(),
+  const [contactoData, opcionesData, navLinks] = await Promise.all([
+    getContacto().catch(() => null),
+    getOpciones().catch(() => null),
+    getGlobalNavbarLinks().catch(() => [] as Awaited<ReturnType<typeof getGlobalNavbarLinks>>),
   ])
+  const opciones = opcionesData ?? EMPTY_OPCIONES
   const contacto = contactoData ?? buildFallbackContacto(opciones)
   const infoSections = buildInfoSections(contacto, opciones)
   const socialLinks = buildSocialLinks(contacto, opciones)
