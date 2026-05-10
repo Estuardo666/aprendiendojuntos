@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Navbar } from "@/components/organisms/Navbar";
+import { ConditionalNavbar } from "@/components/organisms/ConditionalNavbar/ConditionalNavbar";
+import { NavbarWrapper } from "@/components/organisms/ConditionalNavbar/NavbarWrapper";
 import { FloatingDolphin } from "@/components/organisms/FloatingDolphin/FloatingDolphin";
 import { getOpciones } from "@/lib/api/opciones";
 import { getGlobalNavbarLinks } from "@/lib/navigation";
@@ -42,10 +43,10 @@ export default async function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className="antialiased">
-        <Navbar links={links} ctaLabel="Contáctanos" ctaHref={whatsappHref} ctaLabel2="Hablar con asesor" ctaHref2="/contacto" />
-        <div className="pt-14 md:pt-16">
+        <ConditionalNavbar links={links} ctaLabel="Contáctanos" ctaHref={whatsappHref} ctaLabel2="Hablar con asesor" ctaHref2="/contacto" />
+        <NavbarWrapper>
           {children}
-        </div>
+        </NavbarWrapper>
         <FloatingDolphin />
       </body>
     </html>

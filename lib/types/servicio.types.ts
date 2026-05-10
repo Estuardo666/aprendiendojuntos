@@ -53,7 +53,6 @@ export interface WPFAQRelacionada {
 
 // Campos ACF del servicio (completos)
 export interface WPServicioFields {
-  tituloCorto?: string
   descripcionCorta: string
   descripcionLarga: string
   iconoEmoji: string

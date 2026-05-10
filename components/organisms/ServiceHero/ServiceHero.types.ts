@@ -1,6 +1,5 @@
 export interface ServiceHeroProps {
   titulo: string
-  tituloCorto?: string
   descripcion: string
   categoria: string
   imagenSrc: string

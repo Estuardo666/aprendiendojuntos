@@ -19,11 +19,19 @@ const variantClasses = {
 
 // Tamaños: xs, sm, md, lg, xl
 const sizeClasses = {
-  xs: 'text-[10px] px-2.5 md:py-1.5',
-  sm: 'text-[12px] px-4 md:py-2',
-  md: 'text-[14px] px-[0.2rem] md:py-[11px]',
-  lg: 'text-[16px] px-7 md:py-[14px]',
-  xl: 'text-[19.5px] px-3.5 md:px-4 md:py-[11px]',
+  xs: 'text-[10px] px-2.5 py-[0.4rem]',
+  sm: 'min-h-[46px] text-[12px] px-4.5 py-[0.4rem] md:min-h-0 md:px-4 md:py-2',
+  md: 'min-h-[52px] text-[14px] px-5 py-[0.4rem] md:min-h-0 md:px-5 md:py-[11px]',
+  lg: 'min-h-[56px] text-[16px] px-7 py-[0.4rem] md:min-h-0 md:px-7 md:py-[14px]',
+  xl: 'min-h-[58px] text-[19.5px] px-4 py-[0.4rem] md:min-h-0 md:px-4 md:py-[11px]',
+};
+
+const slideSizeClasses = {
+  xs: 'min-h-[44px] py-[0.75rem]',
+  sm: 'min-h-[54px] py-[0.85rem] md:min-h-0 md:py-2',
+  md: 'min-h-[60px] py-[1rem] md:min-h-0 md:py-[11px]',
+  lg: 'min-h-[64px] py-[1.05rem] md:min-h-0 md:py-[14px]',
+  xl: 'min-h-[66px] py-[1.1rem] md:min-h-0 md:py-[11px]',
 };
 
 const slideFillClasses = {
@@ -92,7 +100,6 @@ export function Button({
   gradientEnd,
   hoverTextColor,
   fillColor,
-  slideTextColor,
 }: ButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
   const isSlideButton = Boolean(iconName && iconAnimation === 'slide');
@@ -109,7 +116,7 @@ export function Button({
   const effectiveVariant = variant;
   const effectiveFillColor = fillColor || slideFillClasses[variant];
   const effectiveHoverTextColor = hoverTextColor || slideHoverTextClasses[variant];
-  const effectiveSlideTextColor = slideTextColor || slideTextClasses[variant];
+  const effectiveSlideTextColor = slideTextClasses[variant];
 
   // Construir clases de variante, con soporte para gradiente custom
   let variantStyle: React.CSSProperties | undefined;
@@ -123,11 +130,13 @@ export function Button({
     // Estructura base: grupo para activar group-hover en hijos
     'group inline-flex items-center justify-center gap-3',
     'rounded-lg overflow-hidden relative isolate',
+    'leading-none',
     'transition-[background-color,transform,box-shadow,opacity] duration-300 cursor-pointer',
     isSlideButton ? 'font-body font-medium tracking-[-0.02em]' : 'font-heading font-bold',
     // Solo aplicar clases de variant si no hay gradiente custom
     !variantStyle && variantClasses[effectiveVariant],
     sizeClasses[size],
+    isSlideButton && slideSizeClasses[size],
     disabled && 'opacity-50 cursor-not-allowed pointer-events-none',
     className,
   );

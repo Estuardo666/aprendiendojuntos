@@ -36,3 +36,6 @@ export type { ProgramaMasProgramasSectionProps } from './ProgramaMasProgramasSec
 
 export { ProgramaCTABottomSection } from './ProgramaCTABottomSection'
 export type { ProgramaCTABottomSectionProps } from './ProgramaCTABottomSection'
+
+export { LandingPageForm } from './LandingPageForm'
+export type { LandingPageFormProps } from './LandingPageForm'

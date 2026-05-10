@@ -53,7 +53,6 @@ const GET_SERVICIO = `
       title
       slug
       servicioFields {
-        tituloCorto
         descripcionCorta
         descripcionLarga
         iconoEmoji

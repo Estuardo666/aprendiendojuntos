@@ -102,12 +102,14 @@ function DesktopSubmenuItem({ item, pathname }: { item: NavbarSubmenuItem; pathn
   const isActive = isRouteActive(pathname, item.href)
 
   return (
-    <motion.li whileHover={{ scale: 1.05 }} transition={pillTransition}>
+    <motion.li>
       <Link
         href={item.href}
         className={cn(
           'block rounded-[22px] px-4 py-3 transition-colors duration-200',
-          isActive ? 'text-brand-celeste' : 'text-brand-azul hover:text-brand-celeste',
+          isActive
+            ? 'bg-brand-azul text-white'
+            : 'text-brand-azul hover:bg-[rgba(253,217,4,0.33)] hover:text-brand-azul',
         )}
       >
         <span className="block font-body text-[0.98rem] font-medium leading-none">{item.label}</span>
@@ -406,8 +408,8 @@ export function Navbar({ links, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: Navbar
                                       className={cn(
                                         'block rounded-[20px] px-4 py-3 font-body text-[1.05rem] font-medium transition-[background-color,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-celeste/45',
                                         isSubmenuActive
-                                          ? 'bg-brand-celeste text-white'
-                                          : 'text-brand-azul hover:bg-brand-azul/6 hover:text-brand-azul',
+                                          ? 'bg-brand-azul text-white'
+                                          : 'text-brand-azul hover:bg-[rgba(253,217,4,0.33)] hover:text-brand-azul',
                                       )}
                                     >
                                       <span className="block leading-none">

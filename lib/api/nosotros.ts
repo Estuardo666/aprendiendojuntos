@@ -12,9 +12,10 @@ type WPPaginaNosotrosRaw = {
   paginaNosotros: {
     nosotrosFields: Omit<
       WPPaginaNosotrosFields,
-      'imagenDestacada' | 'heroImagenes' | 'historiaImagenes' | 'ctaImagen'
+      'imagenDestacada' | 'heroVideo' | 'heroImagenes' | 'historiaImagenes' | 'ctaImagen'
     > & {
       imagenDestacada?: WPImagenEdge;
+      heroVideo?: WPImagenEdge;
       heroImagenes?: Array<{ imagen?: WPImagenEdge } | null> | null;
       historiaImagenes?: Array<{ imagen?: WPImagenEdge } | null> | null;
       ctaImagen?: WPImagenEdge;
@@ -34,6 +35,13 @@ export async function getPaginaNosotros(): Promise<WPPaginaNosotrosFields> {
                 altText
               }
             }
+            heroVideo {
+              node {
+                sourceUrl
+                mediaItemUrl
+              }
+            }
+            heroPretitulo
             heroTitulo
             heroSubtitulo
             heroImagenes {
@@ -44,6 +52,7 @@ export async function getPaginaNosotros(): Promise<WPPaginaNosotrosFields> {
                 }
               }
             }
+            historiaPretitulo
             historiaTitulo
             historiaCuerpo
             historiaImagenes {
@@ -57,6 +66,7 @@ export async function getPaginaNosotros(): Promise<WPPaginaNosotrosFields> {
             propositoCuerpo
             misionCuerpo
             visionCuerpo
+            valoresPretitulo
             valoresTitulo
             valoresIntro
             valores {
@@ -64,14 +74,17 @@ export async function getPaginaNosotros(): Promise<WPPaginaNosotrosFields> {
               descripcion
               iconoEmoji
             }
+            diferencialPretitulo
             diferencialTitulo
             diferencialItems {
               titulo
               descripcion
             }
+            ctaPretitulo
             ctaTitulo
             ctaCuerpo
             ctaBotonTexto
+            ctaBotonUrl
             ctaImagen {
               node {
                 sourceUrl
@@ -91,6 +104,7 @@ export async function getPaginaNosotros(): Promise<WPPaginaNosotrosFields> {
   return {
     ...fields,
     imagenDestacada: fields.imagenDestacada?.node ?? undefined,
+    heroVideo: fields.heroVideo?.node?.mediaItemUrl ?? fields.heroVideo?.node?.sourceUrl ?? undefined,
     heroImagenes: (fields.heroImagenes ?? [])
       .map((item) => {
         const imagen = item?.imagen?.node;

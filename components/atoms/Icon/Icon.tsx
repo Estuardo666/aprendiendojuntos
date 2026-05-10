@@ -14,6 +14,7 @@ const colorClasses = {
   azul: 'text-brand-azul',
   naranja: 'text-brand-naranja',
   celeste: 'text-brand-celeste',
+  amarilloInicio: 'text-brand-amarilloInicio',
   blanco: 'text-brand-blanco',
   inherit: '',
 };

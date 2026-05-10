@@ -434,4 +434,4 @@ Por defecto SÍ:
 - Leer la skill correspondiente antes de generar código
 - Seguir Atomic Design sin desviarse
 - Usar tokens de diseño del tailwind.config.ts
-- Formato: prompt listo para Claude Code o archivo a editar
+- Formato: prompt listo para Codex o archivo a editar

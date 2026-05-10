@@ -1,6 +1,7 @@
 // Imagen WP reutilizable
 export interface WPImagen {
   sourceUrl: string;
+  mediaItemUrl?: string;
   altText: string;
 }
 
@@ -28,11 +29,14 @@ export interface WPPaginaNosotrosFields {
   imagenDestacada?: WPImagen;
 
   // Hero section
+  heroVideo?: string;
+  heroPretitulo?: string;
   heroTitulo: string;
   heroSubtitulo?: string;
   heroImagenes?: WPImagenItem[];
 
   // Historia section
+  historiaPretitulo?: string;
   historiaTitulo: string;
   historiaCuerpo: string;
   historiaImagenes?: WPImagenItem[];
@@ -43,18 +47,22 @@ export interface WPPaginaNosotrosFields {
   visionCuerpo: string;
 
   // Valores section
+  valoresPretitulo?: string;
   valoresTitulo: string;
   valoresIntro?: string;
   valores: WPValor[];
 
   // Diferencial section
+  diferencialPretitulo?: string;
   diferencialTitulo: string;
   diferencialItems: WPDiferencial[];
 
   // CTA section
+  ctaPretitulo?: string;
   ctaTitulo: string;
   ctaCuerpo?: string;
   ctaBotonTexto: string;
+  ctaBotonUrl?: string;
   ctaImagen?: WPImagen;
 }
 

@@ -1,7 +1,7 @@
 import type { IconName } from '@/lib/icons';
 
 export type IconSize = 'sm' | 'md' | 'lg';
-export type IconColor = 'azul' | 'naranja' | 'celeste' | 'blanco' | 'inherit';
+export type IconColor = 'azul' | 'naranja' | 'celeste' | 'amarilloInicio' | 'blanco' | 'inherit';
 
 export interface IconProps {
   /** Nombre del icono, debe ser clave de lib/icons.ts */

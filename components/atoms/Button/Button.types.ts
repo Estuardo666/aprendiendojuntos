@@ -23,6 +23,4 @@ export interface ButtonProps {
   hoverTextColor?: string;
   /** Color del fill que aparece en hover (ej: "#117FC3"). Solo aplica con slide animation */
   fillColor?: string;
-  /** Color del texto inicial, no hover (ej: "text-brand-azul"). Solo aplica con slide animation */
-  slideTextColor?: string;
 }

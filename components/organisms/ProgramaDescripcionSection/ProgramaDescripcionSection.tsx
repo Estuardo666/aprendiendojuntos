@@ -41,7 +41,7 @@ export function ProgramaDescripcionSection({
 
           {/* Columna izquierda: HTML rico de WordPress */}
           <div
-            style={{ marginTop: '-2em' }}
+            style={{ marginTop: '2em' }}
             className="pr-0 text-center md:pr-[7rem] md:text-left
               prose prose-lg max-w-none text-center md:text-justify
               prose-headings:text-center md:prose-headings:text-left prose-headings:font-heading prose-headings:text-brand-azul
@@ -99,7 +99,7 @@ export function ProgramaDescripcionSection({
                   <ul className="space-y-3">
                     {beneficios.map((item, i) => (
                       <li key={i} className="flex items-start justify-center gap-3 md:justify-start">
-                        <span className="mt-[2px] inline-flex h-[1.4rem] w-[1.4rem] shrink-0 items-center justify-center rounded-full bg-[#3ecf5e] text-white" aria-hidden="true">
+                        <span className="mt-[2px] inline-flex h-[1.4rem] w-[1.4rem] shrink-0 items-center justify-center rounded-full bg-brand-amarilloInicio text-brand-azul" aria-hidden="true">
                           <svg viewBox="0 0 12 12" fill="none" width="10" height="10" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="2,6 5,9 10,3" />
                           </svg>

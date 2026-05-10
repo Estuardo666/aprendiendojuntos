@@ -98,7 +98,7 @@ function DiferencialCard({ card, isActive, onToggle }: DiferencialCardProps) {
               layout="position"
               animate={{ color: isActive ? '#0080C9' : '#FFFFFF' }}
               transition={{ layout: layoutSpring, color: cardTransition }}
-              className="max-w-[10.6rem] overflow-hidden font-body text-[1.3rem] font-semibold leading-[0.95] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] md:text-[1.38rem]"
+              className="font-body text-[1.3rem] font-semibold leading-[1.1] md:text-[1.38rem]"
             >
               {card.titulo}
             </motion.h3>

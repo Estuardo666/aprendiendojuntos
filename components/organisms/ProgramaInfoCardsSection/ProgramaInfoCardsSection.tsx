@@ -51,7 +51,7 @@ function ProgramaInfoCard({ iconSrc, titulo, valor, items, className }: Programa
         <ul className="mt-4 flex flex-wrap justify-center gap-x-5 gap-y-3">
           {normalizedItems.map((item) => (
             <li key={item} className="flex flex-col items-center gap-1 capitalize">
-              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#49d47a] text-[0.72rem] leading-none text-white">
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-brand-amarilloInicio text-[0.72rem] leading-none text-brand-azul">
                 ✓
               </span>
               <Text

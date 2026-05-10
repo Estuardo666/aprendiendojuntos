@@ -45,7 +45,7 @@ export function ProgramCard({
       <ul className="mt-4 space-y-1">
         {beneficios.slice(0, 4).map((beneficio) => (
           <li key={beneficio} className="flex items-center gap-2 text-sm font-body text-brand-azul">
-            <Icon name="CheckIcon" size="sm" color="celeste" />
+            <Icon name="CheckIcon" size="sm" color="amarilloInicio" />
             {beneficio}
           </li>
         ))}
