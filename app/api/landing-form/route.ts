@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? ''
 const FROM_EMAIL = 'formulario@aprendiendojuntos.ec'
 
@@ -58,6 +57,12 @@ export async function POST(req: NextRequest) {
   if (!ADMIN_EMAIL) {
     return NextResponse.json({ error: 'Configuración de email incompleta' }, { status: 500 })
   }
+
+  const resendApiKey = process.env.RESEND_API_KEY
+  if (!resendApiKey) {
+    return NextResponse.json({ error: 'Configuración de email incompleta' }, { status: 500 })
+  }
+  const resend = new Resend(resendApiKey)
 
   try {
     await Promise.all([
