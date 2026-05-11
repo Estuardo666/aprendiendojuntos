@@ -71,10 +71,20 @@ export default async function RootLayout({
           {children}
         </NavbarWrapper>
         <Footer
+          logoUrl={logoUrl}
+          logoAlt={logoAlt}
+          description={opciones?.mensajeBienvenida ?? undefined}
           links={links}
           contactItems={[
-            { type: 'telefono', label: 'Teléfono', value: opciones?.contactoTelefono ?? '', href: opciones?.contactoTelefono ? `tel:${opciones.contactoTelefono}` : undefined },
-            { type: 'whatsapp', label: 'WhatsApp', value: whatsappNumber ? `+${whatsappNumber}` : '', href: whatsappNumber ? `https://wa.me/${whatsappNumber}` : undefined },
+            ...(opciones?.contactoDireccion
+              ? [{ type: 'direccion' as const, label: 'Dirección', value: opciones.contactoDireccion, href: opciones?.contactoMapsUrl ?? undefined }]
+              : []),
+            ...(opciones?.contactoTelefono
+              ? [{ type: 'telefono' as const, label: 'Teléfono', value: opciones.contactoTelefono, href: `tel:${opciones.contactoTelefono}` }]
+              : []),
+            ...(whatsappNumber
+              ? [{ type: 'whatsapp' as const, label: 'WhatsApp', value: `+${whatsappNumber}`, href: `https://wa.me/${whatsappNumber}` }]
+              : []),
           ]}
           socialLinks={[
             ...(opciones?.redesInstagram ? [{ platform: 'instagram' as const, href: opciones.redesInstagram }] : []),

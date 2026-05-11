@@ -14,6 +14,7 @@ export async function getOpciones(): Promise<WPOpcionesGlobales & { encabezado?:
             ctaTexto
             ctaWhatsappNumero
             contactoTelefono
+            contactoDireccion
             contactoMapsUrl
             redesInstagram
             redesFacebook
