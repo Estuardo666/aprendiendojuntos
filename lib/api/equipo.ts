@@ -20,7 +20,9 @@ export async function getEquipo(): Promise<WPMiembroEquipo[]> {
             slug
             miembroEquipoFields {
               cargo
-              especialidades
+              especialidades {
+                especialidad
+              }
               bioCosta: bioCorta
               foto {
                 node {

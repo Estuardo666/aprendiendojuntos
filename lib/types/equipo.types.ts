@@ -2,7 +2,7 @@ import type { WPImage } from './shared.types';
 
 export interface WPMiembroEquipoFields {
   cargo: string;
-  especialidades: string | null;
+  especialidades: { especialidad: string }[] | null;
   bioCosta: string | null;
   foto: WPImage | null;
 }
