@@ -4,6 +4,8 @@ export interface AboutTeamMember {
   cargo: string
   fotoSrc?: string
   fotoAlt?: string
+  bio?: string
+  especialidades?: string[]
 }
 
 export interface AboutTeamSectionProps {

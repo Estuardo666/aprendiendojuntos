@@ -86,6 +86,10 @@ export default async function NosotrosPage() {
           cargo: miembro.miembroEquipoFields.cargo,
           fotoSrc: miembro.miembroEquipoFields.foto?.node.sourceUrl,
           fotoAlt: miembro.miembroEquipoFields.foto?.node.altText ?? miembro.title,
+          bio: miembro.miembroEquipoFields.bioCosta ?? undefined,
+          especialidades: miembro.miembroEquipoFields.especialidades
+            ?.map((e) => e.especialidad)
+            .filter((e): e is string => Boolean(e)) ?? undefined,
         }))}
       />
 
