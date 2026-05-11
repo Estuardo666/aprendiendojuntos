@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ConditionalNavbar } from "@/components/organisms/ConditionalNavbar/ConditionalNavbar";
 import { NavbarWrapper } from "@/components/organisms/ConditionalNavbar/NavbarWrapper";
 import { FloatingDolphin } from "@/components/organisms/FloatingDolphin/FloatingDolphin";
+import { Footer } from "@/components/organisms/Footer/Footer";
 import { getOpciones } from "@/lib/api/opciones";
 import { getGlobalNavbarLinks } from "@/lib/navigation";
 import "./globals.css";
@@ -69,6 +70,17 @@ export default async function RootLayout({
         <NavbarWrapper>
           {children}
         </NavbarWrapper>
+        <Footer
+          links={links}
+          contactItems={[
+            { type: 'telefono', label: 'Teléfono', value: opciones?.contactoTelefono ?? '', href: opciones?.contactoTelefono ? `tel:${opciones.contactoTelefono}` : undefined },
+            { type: 'whatsapp', label: 'WhatsApp', value: whatsappNumber ? `+${whatsappNumber}` : '', href: whatsappNumber ? `https://wa.me/${whatsappNumber}` : undefined },
+          ]}
+          socialLinks={[
+            ...(opciones?.redesInstagram ? [{ platform: 'instagram' as const, href: opciones.redesInstagram }] : []),
+            ...(opciones?.redesFacebook ? [{ platform: 'facebook' as const, href: opciones.redesFacebook }] : []),
+          ]}
+        />
         <FloatingDolphin />
       </body>
     </html>

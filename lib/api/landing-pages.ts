@@ -108,6 +108,25 @@ export async function getLandingPage(slug: string): Promise<LandingPageData | nu
   return data.landingPage ? mapLandingPage(data.landingPage) : null
 }
 
+export async function getLandingPages(): Promise<Pick<WPLandingPage, 'title' | 'slug'>[]> {
+  const data = await fetchGraphQL<GetLandingPagesResponse>(
+    `
+      query GetLandingPages {
+        landingPages(first: 100) {
+          nodes {
+            title
+            slug
+          }
+        }
+      }
+    `,
+    undefined,
+    REVALIDATE,
+  )
+
+  return data.landingPages.nodes
+}
+
 export async function getLandingPageSlugs(): Promise<string[]> {
   const data = await fetchGraphQL<GetLandingPagesResponse>(
     `

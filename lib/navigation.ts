@@ -1,4 +1,5 @@
 import type { NavLink, NavbarSubmenuItem } from '@/components/organisms/Navbar'
+import { getLandingPages } from '@/lib/api/landing-pages'
 import { getProgramas } from '@/lib/api/programas'
 import { getServicios } from '@/lib/api/servicios'
 
@@ -7,12 +8,17 @@ const BASE_NAV_LINKS: Array<Omit<NavLink, 'submenu'>> = [
   { label: 'Nosotros', href: '/nosotros' },
   { label: 'Servicios', href: '/servicios' },
   { label: 'Programas', href: '/programas' },
+  { label: 'Eventos', href: '/landing' },
   { label: 'Testimonio', href: '/blog' },
   { label: 'Contacto', href: '/contacto' },
 ]
 
 export async function getGlobalNavbarLinks(): Promise<NavLink[]> {
-  const [serviciosResult, programasResult] = await Promise.allSettled([getServicios(), getProgramas()])
+  const [serviciosResult, programasResult, landingPagesResult] = await Promise.allSettled([
+    getServicios(),
+    getProgramas(),
+    getLandingPages(),
+  ])
 
   const serviciosSubmenu: NavbarSubmenuItem[] =
     serviciosResult.status === 'fulfilled'
@@ -32,6 +38,15 @@ export async function getGlobalNavbarLinks(): Promise<NavLink[]> {
           }))
       : []
 
+  const landingPagesSubmenu: NavbarSubmenuItem[] =
+    landingPagesResult.status === 'fulfilled'
+      ? landingPagesResult.value
+          .map(lp => ({
+            label: lp.title,
+            href: `/landing/${lp.slug}`,
+          }))
+      : []
+
   return BASE_NAV_LINKS.map(link => {
     if (link.href === '/servicios') {
       return { ...link, submenu: serviciosSubmenu }
@@ -39,6 +54,10 @@ export async function getGlobalNavbarLinks(): Promise<NavLink[]> {
 
     if (link.href === '/programas') {
       return { ...link, submenu: programasSubmenu }
+    }
+
+    if (link.href === '/landing') {
+      return { ...link, submenu: landingPagesSubmenu }
     }
 
     return link
