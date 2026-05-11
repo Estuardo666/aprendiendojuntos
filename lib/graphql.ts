@@ -51,6 +51,7 @@ export async function fetchGraphQL<T>(
   query: string,
   variables?: Record<string, unknown>,
   revalidate: number = 86400,
+  tags?: string[],
 ): Promise<T> {
   if (!WP_GRAPHQL_URL) {
     throw new Error('WP_GRAPHQL_URL or NEXT_PUBLIC_WP_GRAPHQL_URL is not defined');
@@ -70,7 +71,7 @@ export async function fetchGraphQL<T>(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ query, variables }),
-        next: { revalidate },
+        next: { revalidate, tags: tags && tags.length > 0 ? tags : ['wp-content'] },
       });
 
       if (!response.ok) {

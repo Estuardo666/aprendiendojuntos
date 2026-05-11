@@ -40,10 +40,32 @@ export default async function RootLayout({
   const whatsappNumber = sanitizeWhatsappPhone(opciones?.ctaWhatsappNumero);
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contacto";
 
+  const enc = opciones?.encabezado;
+  const logoNode = enc?.logoHeader?.node;
+  const logoUrl = logoNode?.sourceUrl ?? null;
+  const logoAlt = logoNode?.altText ?? "Aprendiendo Juntos";
+  const logoWidth = logoNode?.mediaDetails?.width ?? 262;
+  const logoHeight = logoNode?.mediaDetails?.height ?? 83;
+
+  const ctaLabel = enc?.boton1Texto ?? "Contáctanos";
+  const ctaHref = enc?.boton1Url ?? whatsappHref;
+  const ctaLabel2 = enc?.boton2Texto ?? "Hablar con asesor";
+  const ctaHref2 = enc?.boton2Url ?? "/contacto";
+
   return (
     <html lang="es" suppressHydrationWarning>
       <body className="antialiased">
-        <ConditionalNavbar links={links} ctaLabel="Contáctanos" ctaHref={whatsappHref} ctaLabel2="Hablar con asesor" ctaHref2="/contacto" />
+        <ConditionalNavbar
+          links={links}
+          logoUrl={logoUrl}
+          logoAlt={logoAlt}
+          logoWidth={logoWidth}
+          logoHeight={logoHeight}
+          ctaLabel={ctaLabel}
+          ctaHref={ctaHref}
+          ctaLabel2={ctaLabel2}
+          ctaHref2={ctaHref2}
+        />
         <NavbarWrapper>
           {children}
         </NavbarWrapper>

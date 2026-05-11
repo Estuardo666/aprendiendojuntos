@@ -12,6 +12,10 @@ export interface NavLink {
 
 export interface NavbarProps {
   links: NavLink[]
+  logoUrl?: string | null
+  logoAlt?: string
+  logoWidth?: number
+  logoHeight?: number
   ctaLabel?: string
   ctaHref?: string
   ctaLabel2?: string

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { buildAdminHtml, buildConfirmacionHtml } from '@/lib/email/templates'
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? ''
-const FROM_EMAIL = 'formulario@aprendiendojuntos.ec'
+const ADMIN_EMAILS = (process.env.ADMIN_EMAIL ?? '').split(',').map((e) => e.trim()).filter(Boolean)
+const FROM_EMAIL = 'hola@aprendiendojuntos.ec'
 
 export interface LandingFormPayload {
   nombre: string
@@ -16,27 +17,6 @@ export interface LandingFormPayload {
 // Stub CRM — reemplazar con implementación real (HubSpot, Brevo, etc.)
 async function sendToCRM(_data: LandingFormPayload): Promise<void> {
   // TODO: implementar integración CRM
-}
-
-function buildAdminHtml(d: LandingFormPayload): string {
-  return `
-    <h2>Nuevo lead desde la landing: ${d.landingTitulo ?? d.landingSlug}</h2>
-    <table cellpadding="8" style="border-collapse:collapse;font-family:sans-serif;">
-      <tr><td><strong>Nombre</strong></td><td>${d.nombre}</td></tr>
-      <tr><td><strong>Teléfono</strong></td><td>${d.telefono}</td></tr>
-      <tr><td><strong>Email</strong></td><td>${d.email}</td></tr>
-      <tr><td><strong>Landing</strong></td><td>${d.landingTitulo ?? d.landingSlug}</td></tr>
-      <tr><td><strong>URL origen</strong></td><td>${d.landingUrl ?? '-'}</td></tr>
-    </table>
-  `
-}
-
-function buildConfirmacionHtml(d: LandingFormPayload): string {
-  return `
-    <p>Hola <strong>${d.nombre}</strong>,</p>
-    <p>Hemos recibido tu solicitud. Nos pondremos en contacto contigo a la brevedad.</p>
-    <p style="margin-top:24px;">— Centro Aprendiendo Juntos</p>
-  `
 }
 
 export async function POST(req: NextRequest) {
@@ -54,7 +34,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 422 })
   }
 
-  if (!ADMIN_EMAIL) {
+  if (ADMIN_EMAILS.length === 0) {
     return NextResponse.json({ error: 'Configuración de email incompleta' }, { status: 500 })
   }
 
@@ -65,13 +45,17 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(resendApiKey)
 
   try {
-    await Promise.all([
+    const adminPromises = ADMIN_EMAILS.map((adminEmail) =>
       resend.emails.send({
         from: FROM_EMAIL,
-        to: ADMIN_EMAIL,
+        to: adminEmail,
         subject: `Nuevo lead: ${nombre} — ${body.landingTitulo ?? landingSlug}`,
         html: buildAdminHtml(body),
-      }),
+      })
+    )
+
+    await Promise.all([
+      ...adminPromises,
       resend.emails.send({
         from: FROM_EMAIL,
         to: email,

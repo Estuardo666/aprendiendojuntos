@@ -118,7 +118,7 @@ function DesktopSubmenuItem({ item, pathname }: { item: NavbarSubmenuItem; pathn
   )
 }
 
-export function Navbar({ links, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: NavbarProps) {
+export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: NavbarProps) {
   const pathname = usePathname()
   const [isCompact, setIsCompact] = useState(false)
   const [hoveredDesktopLink, setHoveredDesktopLink] = useState<string | null>(null)
@@ -174,10 +174,10 @@ export function Navbar({ links, ctaLabel, ctaHref, ctaLabel2, ctaHref2 }: Navbar
           <div className="flex items-center justify-between gap-2 md:gap-4">
             <Link href="/" aria-label="Inicio" className="shrink-0">
               <Image
-                src="/logoamarillo.svg"
-                alt="Aprendiendo Juntos"
-                width={262}
-                height={83}
+                src={logoUrl ?? '/logoamarillo.svg'}
+                alt={logoAlt ?? 'Aprendiendo Juntos'}
+                width={logoWidth ?? 262}
+                height={logoHeight ?? 83}
                 className="h-9 w-auto md:h-11"
                 priority
               />
