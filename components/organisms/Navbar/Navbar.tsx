@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/atoms/Button'
 import { Icon } from '@/components/atoms/Icon'
 import { cn } from '@/lib/utils/cn'
@@ -125,6 +125,25 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
   const [openDesktopMenu, setOpenDesktopMenu] = useState<string | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [openMobileMenu, setOpenMobileMenu] = useState<string | null>(null)
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const ulRef = useRef<HTMLUListElement>(null)
+  const itemRefs = useRef<Map<string, HTMLLIElement>>(new Map())
+  const [pillStyle, setPillStyle] = useState<{ left: number; width: number; height: number; opacity: number } | null>(null)
+
+  const handleHeaderMouseEnter = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = null
+    }
+    setIsHeaderHovered(true)
+  }
+
+  const handleHeaderMouseLeave = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsHeaderHovered(false)
+    }, 150)
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -142,7 +161,31 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
     setOpenDesktopMenu(null)
     setIsMobileMenuOpen(false)
     setOpenMobileMenu(null)
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+      hoverTimeoutRef.current = null
+    }
+    setIsHeaderHovered(false)
+    setPillStyle(null)
   }, [pathname])
+
+  useEffect(() => {
+    if (!hoveredDesktopLink) {
+      setPillStyle(prev => (prev ? { ...prev, opacity: 0 } : null))
+      return
+    }
+    const li = itemRefs.current.get(hoveredDesktopLink)
+    const ul = ulRef.current
+    if (!li || !ul) return
+    const ulRect = ul.getBoundingClientRect()
+    const liRect = li.getBoundingClientRect()
+    setPillStyle({
+      left: liRect.left - ulRect.left + ul.scrollLeft,
+      width: liRect.width,
+      height: liRect.height,
+      opacity: 1,
+    })
+  }, [hoveredDesktopLink])
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-3 md:top-5 md:px-0">
@@ -166,11 +209,21 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
 
       <motion.nav
         initial={false}
-        animate={{ scale: isCompact ? 0.9 : 1, y: isCompact ? -2 : 0 }}
+        animate={{ y: isCompact ? -2 : 0 }}
         transition={shellTransition}
-        className="pointer-events-auto relative z-10 w-[95vw] md:w-[80vw] origin-top"
+        className="pointer-events-auto relative z-10 w-[97vw] md:w-[95vw]"
+        onMouseEnter={handleHeaderMouseEnter}
+        onMouseLeave={handleHeaderMouseLeave}
       >
-        <div className="rounded-[30px] border border-white/10 bg-white/70 px-2 py-3 text-brand-azul backdrop-blur-xl md:px-3 md:py-3.5">
+        <div
+          className={cn(
+            'rounded-[30px] border border-white/10 px-2 py-3 text-brand-azul backdrop-blur-xl md:px-3 md:py-3.5',
+            'transition-[background-color] duration-200',
+            isHeaderHovered || openDesktopMenu !== null || isMobileMenuOpen
+              ? 'bg-white delay-0'
+              : 'bg-white/70 delay-500',
+          )}
+        >
           <div className="flex items-center justify-between gap-2 md:gap-4">
             <Link href="/" aria-label="Inicio" className="shrink-0">
               <Image
@@ -183,7 +236,20 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
               />
             </Link>
 
-            <ul className="hidden flex-1 items-center justify-center gap-0.5 md:flex">
+            <ul ref={ulRef} className="relative hidden flex-1 items-center justify-center gap-0.5 md:flex">
+              {pillStyle && (
+                <motion.div
+                  className="pointer-events-none absolute top-0 rounded-full bg-brand-azul/10"
+                  animate={{
+                    left: pillStyle.left,
+                    width: pillStyle.width,
+                    height: pillStyle.height,
+                    opacity: pillStyle.opacity,
+                  }}
+                  transition={pillTransition}
+                  style={{ top: '50%', translateY: '-50%' }}
+                />
+              )}
               {links.map(link => {
                 const hasSubmenu = Boolean(link.submenu?.length)
                 const isActive = isRouteActive(pathname, link.href) || hasActiveSubmenu(pathname, link)
@@ -192,6 +258,7 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
                 return (
                   <li
                     key={link.href}
+                    ref={el => { if (el) itemRefs.current.set(link.href, el) }}
                     className="relative"
                     onMouseEnter={() => {
                       setHoveredDesktopLink(link.href)
@@ -216,19 +283,6 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
                       }}
                       className="relative inline-flex items-center gap-1.5 overflow-hidden rounded-full px-2.5 py-2 transition-all duration-200"
                     >
-                      <AnimatePresence>
-                        {isHovered && (
-                          <motion.span
-                            layoutId="desktop-hover-pill"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
-                            transition={pillTransition}
-                            className="absolute inset-0 rounded-full bg-brand-azul/10"
-                          />
-                        )}
-                      </AnimatePresence>
-
                       <span
                         className={cn(
                           'relative z-10 font-body text-[1.02rem] font-medium tracking-[-0.03em] transition-colors duration-200',
@@ -249,6 +303,10 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
                         </motion.span>
                       )}
                     </Link>
+
+                    {hasSubmenu && openDesktopMenu === link.href && (
+                      <div className="absolute left-0 top-full z-[49] h-3 w-full" aria-hidden="true" />
+                    )}
 
                     <AnimatePresence>
                       {hasSubmenu && openDesktopMenu === link.href && link.submenu && (

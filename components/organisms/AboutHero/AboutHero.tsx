@@ -10,8 +10,8 @@ export function AboutHero({
 }: AboutHeroProps) {
   return (
     <section className="pb-14 pt-14 md:pb-20 md:pt-20">
-      <div className="mx-auto w-[90vw] max-w-[1728px]">
-        <div className="relative -mt-[3.25vh] h-[65vh] min-h-[360px] overflow-hidden rounded-[2rem] md:rounded-[2.75rem]">
+      <div className="mx-auto w-[97vw] md:w-[95vw]">
+        <div className="relative md:-mt-[3.25vh] h-[65vh] min-h-[360px] overflow-hidden rounded-[2rem] md:rounded-[2.75rem]">
           {videoSrc ? (
             <video
               key={videoSrc}

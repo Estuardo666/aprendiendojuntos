@@ -7,11 +7,20 @@ interface GraphQLResponse<T> {
   errors?: Array<{ message: string }>;
 }
 
+function normalizeUrl(rawUrl: string): string {
+  const trimmed = rawUrl.trim();
+  if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) {
+    return `http://${trimmed}`;
+  }
+  return trimmed;
+}
+
 function buildCandidateUrls(rawUrl: string) {
   const candidates = new Set<string>();
+  const urlWithProtocol = normalizeUrl(rawUrl);
 
   try {
-    const url = new URL(rawUrl);
+    const url = new URL(urlWithProtocol);
     const normalizedPath = url.pathname.replace(/\/+$/, '');
 
     candidates.add(url.toString());
@@ -41,7 +50,7 @@ function buildCandidateUrls(rawUrl: string) {
       candidates.add(indexPhpUrl.toString());
     }
   } catch {
-    candidates.add(rawUrl);
+    candidates.add(urlWithProtocol);
   }
 
   return Array.from(candidates);
@@ -88,7 +97,13 @@ export async function fetchGraphQL<T>(
       resolvedGraphqlUrl = candidateUrl;
       return json.data;
     } catch (error) {
-      lastError = error instanceof Error ? error : new Error('Unknown GraphQL request failure');
+      const baseMessage = error instanceof Error ? error.message : 'Unknown GraphQL request failure';
+      const cause = error instanceof Error && 'cause' in error && error.cause instanceof Error
+        ? error.cause.message
+        : '';
+      lastError = new Error(
+        `GraphQL request failed for ${candidateUrl}: ${baseMessage}${cause ? ` (${cause})` : ''}`,
+      );
     }
   }
 

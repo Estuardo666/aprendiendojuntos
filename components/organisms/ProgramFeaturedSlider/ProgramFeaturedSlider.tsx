@@ -23,17 +23,17 @@ export function ProgramFeaturedSlider({
   return (
     <section className="px-4 pb-8 pt-4 md:px-6 md:pb-10 md:pt-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="overflow-hidden rounded-[1.75rem]">
-          <div
-            className="flex transition-transform duration-500 ease-out"
-            style={{ transform: `translateX(-${current * 100}%)` }}
-          >
-            {slides.map((slide, index) => (
-              <div key={index} className="w-full flex-shrink-0">
-                <ProgramFeaturedSlide {...slide} />
-              </div>
-            ))}
-          </div>
+        <div className="grid overflow-hidden rounded-[1.75rem]">
+          {slides.map((slide, index) => (
+            <div
+              key={index}
+              className={`col-start-1 row-start-1 transition-opacity duration-500 ease-out ${
+                index === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              }`}
+            >
+              <ProgramFeaturedSlide {...slide} />
+            </div>
+          ))}
         </div>
 
         {/* Controles */}

@@ -23,10 +23,10 @@ export function ProgramaHero({
 }: ProgramaHeroProps) {
   return (
     <section className="bg-brand-crema pb-10 pt-14 md:pb-14 md:pt-20">
-      <div className="mx-auto w-[90vw] max-w-[1260px]">
+      <div className="mx-auto w-[97vw] md:w-[95vw] max-w-[1260px]">
 
         {/* Bloque centrado: pretitulo → logo → descripcion → botones */}
-        <div className="flex flex-col items-center text-center">
+        <div className="relative z-20 flex flex-col items-center text-center">
           {pretitulo && (
             <h1 className="pretitulo mb-6">{pretitulo}</h1>
           )}
@@ -88,9 +88,9 @@ export function ProgramaHero({
 
         {/* Carrusel parallax */}
         {imagenesCarrusel.length > 0 && (
-          <div className="relative mt-10 overflow-visible">
+          <div className="relative mt-10 md:mt-8 overflow-visible">
             <AnimatedGrowLine />
-            <div className="relative z-10">
+            <div>
               <ProgramaHeroSlider imagenes={imagenesCarrusel} />
             </div>
           </div>

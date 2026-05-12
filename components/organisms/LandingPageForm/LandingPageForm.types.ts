@@ -3,4 +3,5 @@ export interface LandingPageFormProps {
   landingTitulo: string
   formTitulo?: string
   formCtaTexto?: string
+  urgencia?: string
 }

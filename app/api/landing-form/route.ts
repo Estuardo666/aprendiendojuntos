@@ -3,7 +3,7 @@ import { Resend } from 'resend'
 import { buildAdminHtml, buildConfirmacionHtml } from '@/lib/email/templates'
 
 const ADMIN_EMAILS = (process.env.ADMIN_EMAIL ?? '').split(',').map((e) => e.trim()).filter(Boolean)
-const FROM_EMAIL = 'hola@aprendiendojuntos.ec'
+const FROM_EMAIL = 'Aprendiendo Juntos <hola@aprendiendojuntos.ec>'
 
 export interface LandingFormPayload {
   nombre: string

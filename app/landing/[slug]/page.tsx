@@ -42,7 +42,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
 
       {/* ── HERO ── misma estructura que AboutHero */}
       <section className="pb-14 pt-14 md:pb-20 md:pt-20">
-        <div className="mx-auto w-[90vw] max-w-[1728px]">
+        <div className="mx-auto w-[97vw] md:w-[95vw]">
 
           {/* Imagen redondeada */}
           <div className="relative -mt-[3.25vh] h-[65vh] min-h-[360px] overflow-hidden rounded-[2rem] md:rounded-[2.75rem]">
@@ -126,14 +126,8 @@ export default async function LandingPage({ params }: LandingPageProps) {
             landingTitulo={lp.title}
             formTitulo={lp.formTitulo}
             formCtaTexto={lp.formCtaTexto}
+            urgencia={lp.urgencia}
           />
-
-          {/* Urgencia debajo del formulario */}
-          {lp.urgencia && (
-            <p className="text-center font-body text-[0.88rem] font-semibold text-brand-azul">
-              ⚡ {lp.urgencia}
-            </p>
-          )}
         </div>
       </section>
 

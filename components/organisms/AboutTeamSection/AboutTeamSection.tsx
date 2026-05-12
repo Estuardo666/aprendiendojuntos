@@ -7,7 +7,7 @@ import { Heading } from '@/components/atoms/Heading'
 import { Icon } from '@/components/atoms/Icon'
 import type { AboutTeamMember, AboutTeamSectionProps } from './AboutTeamSection.types'
 
-function TeamCard({ miembro, onClick }: { miembro: AboutTeamMember; onClick: () => void }) {
+function TeamCard({ miembro, onClick }: { miembro: AboutTeamMember; onClick: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] bg-[#145ea5] transition-all duration-500 ease-out hover:scale-[1.025] hover:bg-brand-celeste">
       <div className="relative m-2 overflow-hidden rounded-[1.75rem] aspect-[4/4.3]">
@@ -35,7 +35,7 @@ function TeamCard({ miembro, onClick }: { miembro: AboutTeamMember; onClick: () 
 
         <button
           type="button"
-          onClick={onClick}
+          onClick={(e) => onClick(e)}
           aria-label={`Ver perfil de ${miembro.nombre}`}
           className="absolute bottom-4 right-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[linear-gradient(135deg,#FDD904_0%,#F9B50B_100%)] text-brand-azul opacity-100 transition-all duration-300 ease-out hover:scale-110 md:opacity-0 md:group-hover:opacity-100 md:group-hover:scale-100 md:scale-75"
         >
@@ -49,6 +49,7 @@ function TeamCard({ miembro, onClick }: { miembro: AboutTeamMember; onClick: () 
 export function AboutTeamSection({ pretitulo, titulo, miembros }: AboutTeamSectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [selectedMember, setSelectedMember] = useState<AboutTeamMember | null>(null)
+  const [origin, setOrigin] = useState({ x: 0, y: 0 })
 
   const scroll = (dir: 'prev' | 'next') => {
     if (!scrollRef.current) return
@@ -60,13 +61,18 @@ export function AboutTeamSection({ pretitulo, titulo, miembros }: AboutTeamSecti
   }
 
   useEffect(() => {
-    if (selectedMember) {
-      document.body.style.overflow = 'hidden'
-    } else {
+    if (!selectedMember) {
       document.body.style.overflow = ''
+      document.body.style.paddingRight = ''
+      return
     }
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    const prevPaddingRight = window.getComputedStyle(document.body).paddingRight
+    document.body.style.overflow = 'hidden'
+    document.body.style.paddingRight = `${scrollbarWidth}px`
     return () => {
       document.body.style.overflow = ''
+      document.body.style.paddingRight = prevPaddingRight
     }
   }, [selectedMember])
 
@@ -95,7 +101,18 @@ export function AboutTeamSection({ pretitulo, titulo, miembros }: AboutTeamSecti
           >
             {miembros.map((miembro) => (
               <div key={miembro.id} className="snap-start flex-shrink-0 w-[82%] sm:w-[46%] lg:w-[22rem]">
-                <TeamCard miembro={miembro} onClick={() => setSelectedMember(miembro)} />
+                <TeamCard
+                  miembro={miembro}
+                  onClick={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    const centerX = rect.left + rect.width / 2
+                    const centerY = rect.top + rect.height / 2
+                    const viewportCX = window.innerWidth / 2
+                    const viewportCY = window.innerHeight / 2
+                    setOrigin({ x: centerX - viewportCX, y: centerY - viewportCY })
+                    setSelectedMember(miembro)
+                  }}
+                />
               </div>
             ))}
           </div>
@@ -136,10 +153,10 @@ export function AboutTeamSection({ pretitulo, titulo, miembros }: AboutTeamSecti
 
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
               <motion.div
-                initial={{ opacity: 0, scale: 0.92, y: 24 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.92, y: 24 }}
-                transition={{ type: 'spring', damping: 25, stiffness: 320 }}
+                initial={{ opacity: 0, scale: 0, x: origin.x, y: origin.y }}
+                animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+                exit={{ opacity: 0, scale: 0, x: origin.x, y: origin.y }}
+                transition={{ type: 'spring', damping: 22, stiffness: 280 }}
                 className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2rem] bg-brand-crema shadow-2xl scrollbar-hide"
               >
                 <button

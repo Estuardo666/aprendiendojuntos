@@ -36,16 +36,11 @@ function emailWrapper(content: string): string {
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:${COLORS.blanco};border-radius:24px;overflow:hidden;border:1px solid #e0ddd3;">
           <!-- Header -->
           <tr>
-            <td style="background:linear-gradient(135deg,${COLORS.azul} 0%,${COLORS.celeste} 100%);padding:36px 32px;text-align:center;">
+            <td style="background:${COLORS.blanco};padding:36px 32px;text-align:center;border-bottom:1px solid #e0ddd3;">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
                 <tr>
-                  <td style="font-family:${FONTS.heading};font-size:22px;font-weight:800;color:${COLORS.blanco};letter-spacing:-0.02em;">
-                    Aprendiendo Juntos
-                  </td>
-                </tr>
-                <tr>
-                  <td style="font-family:${FONTS.body};font-size:12px;font-weight:500;color:rgba(255,255,255,0.82);padding-top:4px;letter-spacing:0.04em;text-transform:uppercase;">
-                    Centro Neuropsicopedagógico — Loja, Ecuador
+                      <td style="padding-bottom:4px;">
+                    <img src="https://adminaj.totemmassmedia.com/wp-content/uploads/2026/05/logoamarillo.png" alt="Aprendiendo Juntos" width="180" height="55" border="0" style="display:block;margin:0 auto;border:0;" />
                   </td>
                 </tr>
               </table>
@@ -53,7 +48,7 @@ function emailWrapper(content: string): string {
           </tr>
           <!-- Body -->
           <tr>
-            <td style="padding:32px;">
+            <td style="padding:32px;text-align:center;">
               ${content}
             </td>
           </tr>
@@ -142,7 +137,7 @@ export function buildConfirmacionHtml(d: LandingFormPayload): string {
       Hemos recibido tu solicitud desde <strong style="color:${COLORS.celeste};">${escapeHtml(d.landingTitulo ?? d.landingSlug)}</strong>. En breve un miembro de nuestro equipo se pondrá en contacto contigo para brindarte toda la información que necesitas.
     </p>
 
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${COLORS.crema};border-radius:12px;border:1px solid #e0ddd3;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${COLORS.crema};border-radius:24px;border:1px solid #e0ddd3;">
       <tr>
         <td style="padding:20px 24px;text-align:center;">
           <p style="margin:0 0 12px;font-family:${FONTS.heading};font-size:14px;font-weight:700;color:${COLORS.azul};">¿Tienes dudas mientras tanto?</p>
@@ -155,9 +150,6 @@ export function buildConfirmacionHtml(d: LandingFormPayload): string {
 
     <p style="margin:24px 0 0;font-family:${FONTS.body};font-size:14px;color:${COLORS.texto};line-height:1.6;">
       Gracias por confiar en <strong style="color:${COLORS.azul};">Aprendiendo Juntos</strong>.
-    </p>
-    <p style="margin:8px 0 0;font-family:${FONTS.body};font-size:14px;color:${COLORS.textoClaro};line-height:1.6;">
-      Con cariño,<br>El equipo de Centro Neuropsicopedagógico
     </p>
   `
   return emailWrapper(content.trim())

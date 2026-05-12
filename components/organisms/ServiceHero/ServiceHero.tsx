@@ -26,8 +26,8 @@ export function ServiceHero({
 
   return (
     <section className="pb-14 pt-14 md:pb-20 md:pt-20">
-      <div className="mx-auto w-[90vw] max-w-[1728px]">
-        <div className="relative h-[65vh] min-h-[300px] overflow-hidden rounded-[2rem] md:rounded-[2.75rem] md:z-[-1]">
+      <div className="mx-auto w-[97vw] md:w-[95vw]">
+        <div className="relative md:-mt-[3.25vh] h-[65vh] min-h-[300px] overflow-hidden rounded-[2rem] md:rounded-[2.75rem] md:z-[-1]">
           <Image
             src={imagenSrc}
             alt={imagenAlt}

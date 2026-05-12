@@ -33,31 +33,28 @@ export function ProgramaHeroSlider({
 
   return (
     <div className="relative h-[50vh] min-h-[320px] overflow-hidden rounded-[2rem]">
-      {/* Track */}
-      <div
-        className="flex h-full transition-transform duration-[1250ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
-        style={{ transform: `translate3d(-${activeIndex * 100}%, 0, 0)` }}
-      >
-        {slides.map((slide, index) => (
-          <div
-            key={`${slide.sourceUrl}-${index}`}
-            className="relative h-full w-full shrink-0 overflow-hidden"
-          >
-            <Image
-              src={slide.sourceUrl}
-              alt={slide.altText || `Slide ${index + 1}`}
-              fill
-              sizes="90vw"
-              className={`object-cover object-center transition-transform duration-[1400ms] [transition-timing-function:cubic-bezier(0.2,0.7,0.2,1)] ${
-                index === activeIndex
-                  ? 'scale-[1.06] translate-x-0'
-                  : 'scale-[1.02] -translate-x-2'
-              }`}
-              priority={index === 0}
-            />
-          </div>
-        ))}
-      </div>
+      {/* Slides apilados con fade */}
+      {slides.map((slide, index) => (
+        <div
+          key={`${slide.sourceUrl}-${index}`}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-out ${
+            index === activeIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+          }`}
+        >
+          <Image
+            src={slide.sourceUrl}
+            alt={slide.altText || `Slide ${index + 1}`}
+            fill
+            sizes="90vw"
+            className={`object-cover object-center transition-transform duration-[1400ms] [transition-timing-function:cubic-bezier(0.2,0.7,0.2,1)] ${
+              index === activeIndex
+                ? 'scale-[1.06] translate-x-0'
+                : 'scale-[1.02] -translate-x-2'
+            }`}
+            priority={index === 0}
+          />
+        </div>
+      ))}
 
       {/* Arrows */}
       {slides.length > 1 && (

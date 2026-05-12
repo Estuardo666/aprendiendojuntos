@@ -1,8 +1,11 @@
+'use client'
+
+import { useRef, useState } from 'react'
+import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Heading } from '@/components/atoms/Heading'
 import { Text } from '@/components/atoms/Text'
-import { Button } from '@/components/atoms/Button'
 import type { ServiceListCardProps } from './ServiceListCard.types'
 
 export function ServiceListCard({
@@ -13,10 +16,56 @@ export function ServiceListCard({
   descripcion,
   href,
 }: ServiceListCardProps) {
+  const cardRef = useRef<HTMLAnchorElement>(null)
+  const [isHovered, setIsHovered] = useState(false)
+
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const springX = useSpring(mouseX, { stiffness: 400, damping: 40 })
+  const springY = useSpring(mouseY, { stiffness: 400, damping: 40 })
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    mouseX.set(e.clientX - rect.left)
+    mouseY.set(e.clientY - rect.top)
+  }
+
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-brand-azul p-3">
+    <Link
+      ref={cardRef}
+      href={href}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onMouseMove={handleMouseMove}
+      className="group relative flex h-full flex-col overflow-hidden rounded-[2.25rem] bg-brand-azul p-3 transition-all duration-500 ease-out hover:scale-[1.025]"
+    >
+      {/* Tooltip que sigue al cursor */}
+      <motion.div
+        className="pointer-events-none absolute left-0 top-0 z-20"
+        style={{ x: springX, y: springY }}
+      >
+        <AnimatePresence>
+          {isHovered && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="-translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full px-5 py-2.5 font-body text-base font-semibold text-white"
+              style={{
+                backgroundColor: 'rgba(154, 204, 234, 0.5)',
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              Ver más
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
       {/* Imagen arriba */}
-      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[1.4rem]">
+      <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[1.85rem]">
         {imagenSrc ? (
           <Image
             src={imagenSrc}
@@ -38,7 +87,7 @@ export function ServiceListCard({
         <Heading
           as="h3"
           variant="h3"
-          className="mt-3 text-[1.55rem] font-bold leading-[1.05] text-white font-body"
+          className="mt-3 text-[1.75rem] font-bold leading-[1.05] text-white font-body transition-colors duration-300 group-hover:text-[#9accea]"
         >
           {titulo}
         </Heading>
@@ -50,23 +99,7 @@ export function ServiceListCard({
         >
           {descripcion}
         </Text>
-
-        <div className="mt-5">
-          <Link href={href}>
-            <Button
-              variant="primary"
-              size="sm"
-              iconName="ArrowRightIcon"
-              iconAnimation="slide"
-              fillColor="bg-brand-celeste"
-              hoverTextColor="text-white"
-              className="rounded-full !min-h-[38px] !px-4 !py-2 font-body text-[0.85rem] font-semibold"
-            >
-              Ver más
-            </Button>
-          </Link>
-        </div>
       </div>
-    </article>
+    </Link>
   )
 }

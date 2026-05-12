@@ -160,6 +160,7 @@ export function LandingPageForm({
   landingTitulo,
   formTitulo = 'Reserva tu lugar',
   formCtaTexto = 'Reservar mi lugar',
+  urgencia,
 }: LandingPageFormProps) {
   const uid = useId()
   const pathname = usePathname()
@@ -310,6 +311,21 @@ export function LandingPageForm({
           )}
         </AnimatePresence>
       </motion.div>
+
+      {/* Urgencia — oculta cuando se envía el formulario */}
+      {urgencia && state !== 'success' && (
+        <motion.p
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="text-center font-body text-[0.88rem] font-semibold text-brand-azul"
+        >
+          <span className="inline-flex items-center gap-1">
+            <span aria-hidden="true">⚡</span>
+            {urgencia}
+          </span>
+        </motion.p>
+      )}
     </div>
   )
 }
