@@ -1,7 +1,10 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { Icon } from '@/components/atoms/Icon'
-import type { ContactItem, FooterProps, SocialLinkItem } from './Footer.types'
+import type { ContactItem, FeaturedLink, FooterProps, SocialLinkItem } from './Footer.types'
 
 const contactIconMap: Record<ContactItem['type'], string> = {
   direccion: 'MapPinIcon',
@@ -18,31 +21,28 @@ const socialIconMap: Record<SocialLinkItem['platform'], string> = {
 
 /**
  * Footer principal del sitio.
- * Estructura de 4 columnas: Logo+desc+redes | Explorar | Familias | Contacto.
+ * Estructura de 5 columnas: Logo+redes | Explorar | Servicios | Programas | Contacto.
  */
-export function Footer({ logoUrl, logoAlt, description, links, contactItems, socialLinks }: FooterProps) {
-  const exploreLinks = links.filter(l => l.href !== '/landing')
-  const familyHrefs = new Set(['/servicios', '/programas', '/blog', '/contacto'])
-  const familyLinks = links.filter(l => familyHrefs.has(l.href))
+export function Footer({ logoUrl, logoAlt, description, links, contactItems, socialLinks, serviciosDestacados, programasDestacados }: FooterProps) {
+  const exploreLinks = links.filter(l => l.href !== '/landing' && l.href !== '/' && l.label !== 'Inicio')
+  const serviciosLinks = (serviciosDestacados ?? []).slice(0, 5)
+  const programasLinks = (programasDestacados ?? []).slice(0, 5)
 
   return (
-    <footer className="bg-brand-azul text-white py-16 px-6 md:px-16">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+    <footer className="bg-brand-footer text-white pt-16 pb-6 px-6 md:px-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[auto_auto_1fr_1fr_auto] gap-10 lg:gap-6">
 
         {/* Columna 1: Logo + descripción + redes sociales */}
-        <div className="sm:col-span-2 lg:col-span-1">
+        <div className="sm:col-span-2 lg:col-span-1 lg:pr-6">
           <Link href="/" aria-label="Inicio">
             <Image
-              src={logoUrl ?? '/logoamarillo.svg'}
+              src={logoUrl ?? '/logobgazul2.png'}
               alt={logoAlt ?? 'Aprendiendo Juntos'}
               width={200}
               height={64}
-              className="h-10 w-auto mb-6"
+              className="h-20 w-auto mb-6"
             />
           </Link>
-          <p className="font-body text-sm text-white/70 leading-relaxed mb-6 max-w-xs">
-            {description ?? 'Centro neuropsicopedagógico dedicado al desarrollo integral de niños y niñas a través de terapias especializadas, programas educativos y acompañamiento familiar.'}
-          </p>
           {socialLinks.length > 0 && (
             <ul className="flex gap-3">
               {socialLinks.map((social, i) => (
@@ -52,7 +52,7 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.platform}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/70 hover:bg-brand-naranja hover:text-brand-azul transition-colors duration-200"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-brand-crema text-brand-azul hover:bg-brand-naranja hover:text-brand-azul transition-colors duration-200"
                   >
                     <Icon name={socialIconMap[social.platform] as any} size="sm" />
                   </a>
@@ -63,55 +63,107 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
         </div>
 
         {/* Columna 2: Explorar */}
-        <div>
-          <span className="inline-block rounded-full border border-white/20 px-4 py-1.5 font-heading text-[0.7rem] font-bold uppercase tracking-wider text-white/90 mb-5">
+        <div className="lg:mr-6">
+          <h4 className="font-heading text-[1.3rem] font-bold text-white mb-5">
             Explorar
-          </span>
+          </h4>
           <ul className="space-y-2.5">
             {exploreLinks.map(link => (
               <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="font-body text-sm text-white/70 hover:text-brand-naranja transition-colors duration-200"
+                <motion.div
+                  className="relative inline-block"
+                  initial="rest"
+                  whileHover="hover"
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    href={link.href}
+                    className="font-body text-sm text-white hover:text-white transition-colors duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                  <motion.span
+                    className="absolute -bottom-0.5 left-0 h-[2px] w-full bg-brand-naranja origin-left"
+                    variants={{ rest: { scaleX: 0 }, hover: { scaleX: 1 } }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                  />
+                </motion.div>
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Columna 3: Familias */}
+        {/* Columna 3: Servicios destacados */}
         <div>
-          <span className="inline-block rounded-full border border-white/20 px-4 py-1.5 font-heading text-[0.7rem] font-bold uppercase tracking-wider text-white/90 mb-5">
-            Familias
-          </span>
+          <h4 className="font-heading text-[1.3rem] font-bold text-white mb-5">
+            Servicios destacados
+          </h4>
           <ul className="space-y-2.5">
-            {familyLinks.map(link => (
+            {serviciosLinks.map((link: FeaturedLink) => (
               <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="font-body text-sm text-white/70 hover:text-brand-naranja transition-colors duration-200"
+                <motion.div
+                  className="relative inline-block"
+                  initial="rest"
+                  whileHover="hover"
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    href={link.href}
+                    className="font-body text-sm text-white hover:text-white transition-colors duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                  <motion.span
+                    className="absolute -bottom-0.5 left-0 h-[2px] w-full bg-brand-naranja origin-left"
+                    variants={{ rest: { scaleX: 0 }, hover: { scaleX: 1 } }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                  />
+                </motion.div>
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Columna 4: Contacto */}
+        {/* Columna 4: Programas destacados */}
         <div>
-          <span className="inline-block rounded-full border border-white/20 px-4 py-1.5 font-heading text-[0.7rem] font-bold uppercase tracking-wider text-white/90 mb-5">
+          <h4 className="font-heading text-[1.3rem] font-bold text-white mb-5">
+            Programas destacados
+          </h4>
+          <ul className="space-y-2.5">
+            {programasLinks.map((link: FeaturedLink) => (
+              <li key={link.href}>
+                <motion.div
+                  className="relative inline-block"
+                  initial="rest"
+                  whileHover="hover"
+                >
+                  <Link
+                    href={link.href}
+                    className="font-body text-sm text-white hover:text-white transition-colors duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                  <motion.span
+                    className="absolute -bottom-0.5 left-0 h-[2px] w-full bg-brand-naranja origin-left"
+                    variants={{ rest: { scaleX: 0 }, hover: { scaleX: 1 } }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                  />
+                </motion.div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Columna 5: Contacto */}
+        <div>
+          <h4 className="font-heading text-[1.3rem] font-bold text-white mb-5">
             Contacto
-          </span>
+          </h4>
           <ul className="space-y-4">
             {contactItems.map((item, i) => (
               <li key={i} className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex shrink-0 text-brand-naranja">
-                  <Icon name={contactIconMap[item.type] as any} size="sm" />
+                <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-acua text-brand-azul">
+                  <Icon name={contactIconMap[item.type] as any} size="sm" className="[&_svg]:stroke-[2]" />
                 </span>
-                <div className="font-body text-sm text-white/70">
+                <div className="font-body text-sm text-white">
                   {item.href ? (
                     <a href={item.href} className="hover:text-white transition-colors duration-200">
                       {item.value}
@@ -127,8 +179,14 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
 
       </div>
 
-      <div className="max-w-7xl mx-auto mt-14 pt-8 border-t border-white/10 text-center">
-        <p className="font-body text-xs text-white/40">
+      <div className="max-w-7xl mx-auto mt-14">
+        <img
+          src="/separador amarillo.svg"
+          alt=""
+          aria-hidden="true"
+          className="mx-auto mb-10 h-auto w-full max-w-[15rem]"
+        />
+        <p className="text-center font-body text-xs text-white/40 pt-4">
           &copy; {new Date().getFullYear()} Centro Aprendiendo Juntos. Todos los derechos reservados.
         </p>
       </div>

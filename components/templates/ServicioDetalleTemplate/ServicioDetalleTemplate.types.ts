@@ -1,4 +1,3 @@
-import type { FooterProps } from '@/components/organisms/Footer'
 import type { ServiceHeroProps } from '@/components/organisms/ServiceHero'
 import type { ServiceContentSectionProps } from '@/components/organisms/ServiceContentSection'
 import type { ProcessStepsSectionProps } from '@/components/organisms/ProcessStepsSection'
@@ -16,5 +15,4 @@ export interface ServicioDetalleTemplateProps {
   faqs?:        FAQServiceSectionProps
   masServicios: ServicesStackingSliderProps
   marquee:      KeywordsMarqueeProps
-  footer:       FooterProps
 }

@@ -15,6 +15,11 @@ export interface SocialLinkItem {
   href: string
 }
 
+export interface FeaturedLink {
+  label: string
+  href: string
+}
+
 export interface FooterProps {
   logoUrl?: string | null
   logoAlt?: string
@@ -22,4 +27,6 @@ export interface FooterProps {
   links: NavLink[]
   contactItems: ContactItem[]
   socialLinks: SocialLinkItem[]
+  serviciosDestacados?: FeaturedLink[]
+  programasDestacados?: FeaturedLink[]
 }

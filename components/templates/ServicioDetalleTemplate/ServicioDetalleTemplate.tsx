@@ -1,4 +1,3 @@
-import { Footer } from '@/components/organisms/Footer'
 import { ServiceHero } from '@/components/organisms/ServiceHero'
 import { ServiceContentSection } from '@/components/organisms/ServiceContentSection'
 import { ProcessStepsSection } from '@/components/organisms/ProcessStepsSection'
@@ -21,7 +20,6 @@ export function ServicioDetalleTemplate({
   faqs,
   masServicios,
   marquee,
-  footer,
 }: ServicioDetalleTemplateProps) {
   return (
     <>
@@ -47,7 +45,6 @@ export function ServicioDetalleTemplate({
         {/* 7. Marquee: keywords animadas antes del footer */}
         <KeywordsMarquee {...marquee} />
       </main>
-      <Footer {...footer} />
     </>
   )
 }

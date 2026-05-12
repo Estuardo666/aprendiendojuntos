@@ -4,6 +4,8 @@ import { NavbarWrapper } from "@/components/organisms/ConditionalNavbar/NavbarWr
 import { FloatingDolphin } from "@/components/organisms/FloatingDolphin/FloatingDolphin";
 import { Footer } from "@/components/organisms/Footer/Footer";
 import { getOpciones } from "@/lib/api/opciones";
+import { getServicios } from "@/lib/api/servicios";
+import { getProgramas } from "@/lib/api/programas";
 import { getGlobalNavbarLinks } from "@/lib/navigation";
 import "./globals.css";
 
@@ -32,12 +34,33 @@ async function getGlobalNavbarLinksSafe() {
   }
 }
 
+async function getServiciosSafe() {
+  try {
+    return await getServicios();
+  } catch {
+    return [];
+  }
+}
+
+async function getProgramasSafe() {
+  try {
+    return await getProgramas();
+  } catch {
+    return [];
+  }
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [links, opciones] = await Promise.all([getGlobalNavbarLinksSafe(), getOpcionesSafe()]);
+  const [links, opciones, servicios, programas] = await Promise.all([
+    getGlobalNavbarLinksSafe(),
+    getOpcionesSafe(),
+    getServiciosSafe(),
+    getProgramasSafe(),
+  ]);
   const whatsappNumber = sanitizeWhatsappPhone(opciones?.ctaWhatsappNumero);
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contacto";
 
@@ -76,20 +99,43 @@ export default async function RootLayout({
           description={opciones?.mensajeBienvenida ?? undefined}
           links={links}
           contactItems={[
-            ...(opciones?.contactoDireccion
-              ? [{ type: 'direccion' as const, label: 'Dirección', value: opciones.contactoDireccion, href: opciones?.contactoMapsUrl ?? undefined }]
-              : []),
-            ...(opciones?.contactoTelefono
-              ? [{ type: 'telefono' as const, label: 'Teléfono', value: opciones.contactoTelefono, href: `tel:${opciones.contactoTelefono}` }]
-              : []),
-            ...(whatsappNumber
-              ? [{ type: 'whatsapp' as const, label: 'WhatsApp', value: `+${whatsappNumber}`, href: `https://wa.me/${whatsappNumber}` }]
-              : []),
+            {
+              type: 'telefono' as const,
+              label: 'Teléfono',
+              value: opciones?.contactoTelefono ?? '(07) 261-3255',
+              href: `tel:${opciones?.contactoTelefono ?? '072613255'}`,
+            },
+            {
+              type: 'direccion' as const,
+              label: 'Dirección',
+              value: opciones?.contactoDireccion ?? 'Bilbao entre Valencia y Lérida, Loja',
+              href: opciones?.contactoMapsUrl ?? undefined,
+            },
+            {
+              type: 'whatsapp' as const,
+              label: 'WhatsApp',
+              value: whatsappNumber ? `+${whatsappNumber}` : '098 578 8925',
+              href: whatsappNumber ? `https://wa.me/${whatsappNumber}` : 'https://wa.me/593985788925',
+            },
           ]}
           socialLinks={[
-            ...(opciones?.redesInstagram ? [{ platform: 'instagram' as const, href: opciones.redesInstagram }] : []),
-            ...(opciones?.redesFacebook ? [{ platform: 'facebook' as const, href: opciones.redesFacebook }] : []),
+            {
+              platform: 'instagram' as const,
+              href: opciones?.redesInstagram ?? 'https://www.instagram.com/aprendiendojuntosec/',
+            },
+            {
+              platform: 'facebook' as const,
+              href: opciones?.redesFacebook ?? 'https://www.facebook.com/aprendiendojuntosec/',
+            },
           ]}
+          serviciosDestacados={servicios.slice(0, 5).map(s => ({
+            label: s.title,
+            href: `/servicios/${s.slug}`,
+          }))}
+          programasDestacados={programas.slice(0, 5).map(p => ({
+            label: p.title,
+            href: `/programas/${p.slug}`,
+          }))}
         />
         <FloatingDolphin />
       </body>

@@ -13,6 +13,7 @@ const config: Config = {
           amarilloInicio: '#FDD904',
           amarilloFin: '#F9B50B',
           azul: '#0056A4',
+          footer: '#117fc3',
           celeste: '#0080C9',
           acua: '#9ACCEA',
           crema: '#EFEDE4',

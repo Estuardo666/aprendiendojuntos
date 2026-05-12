@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import { ContactoSplitStage } from '@/components/organisms/ContactoSplitStage/ContactoSplitStage'
-import { Footer } from '@/components/organisms/Footer'
 import { getContacto } from '@/lib/api/contacto'
 import { getOpciones } from '@/lib/api/opciones'
-import { getGlobalNavbarLinks } from '@/lib/navigation'
 import type {
   ContactoInfoSectionData,
   ContactoPageData,
@@ -165,54 +163,29 @@ function buildSocialLinks(
 }
 
 export default async function ContactoPage() {
-  const [contactoData, opcionesData, navLinks] = await Promise.all([
+  const [contactoData, opcionesData] = await Promise.all([
     getContacto().catch(() => null),
     getOpciones().catch(() => null),
-    getGlobalNavbarLinks().catch(() => [] as Awaited<ReturnType<typeof getGlobalNavbarLinks>>),
   ])
   const opciones = opcionesData ?? EMPTY_OPCIONES
   const contacto = contactoData ?? buildFallbackContacto(opciones)
   const infoSections = buildInfoSections(contacto, opciones)
   const socialLinks = buildSocialLinks(contacto, opciones)
 
-  const footerContactItems = [
-    {
-      type: 'telefono' as const,
-      label: 'Teléfono',
-      value: opciones.contactoTelefono,
-      href: `tel:${sanitizePhone(opciones.contactoTelefono)}`,
-    },
-    {
-      type: 'direccion' as const,
-      label: 'Dirección',
-      value: contacto.ubicacion.direccion,
-      href: opciones.contactoMapsUrl ?? undefined,
-    },
-  ]
-
-  const footerSocialLinks = [
-    ...(opciones.redesInstagram ? [{ platform: 'instagram' as const, href: opciones.redesInstagram }] : []),
-    ...(opciones.redesFacebook ? [{ platform: 'facebook' as const, href: opciones.redesFacebook }] : []),
-  ]
-
   return (
-    <>
-      <main className="overflow-hidden px-0 pt-[4.5rem] md:pt-[2rem]">
-        <div id="ubicacion">
-          <ContactoSplitStage
-            pretitulo={contacto.hero.pretitulo}
-            titulo={contacto.hero.titulo}
-            descripcion={contacto.hero.descripcion}
-            infoSections={infoSections}
-            socialPretitulo="Redes sociales"
-            socialLinks={socialLinks}
-            latitude={-3.9740564558924913}
-            longitude={-79.20941891089117}
-          />
-        </div>
-      </main>
-
-      <Footer links={navLinks} contactItems={footerContactItems} socialLinks={footerSocialLinks} />
-    </>
+    <main className="overflow-hidden px-0 pt-[4.5rem] md:pt-[2rem]">
+      <div id="ubicacion">
+        <ContactoSplitStage
+          pretitulo={contacto.hero.pretitulo}
+          titulo={contacto.hero.titulo}
+          descripcion={contacto.hero.descripcion}
+          infoSections={infoSections}
+          socialPretitulo="Redes sociales"
+          socialLinks={socialLinks}
+          latitude={-3.9740564558924913}
+          longitude={-79.20941891089117}
+        />
+      </div>
+    </main>
   )
 }

@@ -200,40 +200,6 @@ export default async function ServicioDetallePage(
     velocidad: 'normal' as const,
   }
 
-  // ── FOOTER: datos de contacto desde opciones globales de WP ──────────────────
-  const footer = {
-    links: navbarLinks,
-    contactItems: [
-      {
-        type:  'telefono' as const,
-        label: 'Teléfono',
-        value: opciones?.contactoTelefono ?? '(07) 261-3255',
-        href:  `tel:${opciones?.contactoTelefono ?? '072613255'}`,
-      },
-      {
-        type:  'direccion' as const,
-        label: 'Dirección',
-        value: opciones?.contactoDireccion
-          ?? 'Bilbao entre Valencia y Lérida, Loja',
-      },
-      {
-        type:  'whatsapp' as const,
-        label: 'WhatsApp',
-        value: opciones?.ctaWhatsappNumero ?? '098 578 8925',
-        href:  `https://wa.me/${
-          opciones?.ctaWhatsappNumero?.replace(/\D/g, '')
-          ?? '593985788925'
-        }`,
-      },
-    ],
-    socialLinks: [
-      { platform: 'instagram' as const,
-        href: 'https://www.instagram.com/aprendiendojuntosec/' },
-      { platform: 'facebook'  as const,
-        href: 'https://www.facebook.com/aprendiendojuntosec/' },
-    ],
-  }
-
   // ── RENDER: delega todo el UI al template ────────────────────────────────────
   return (
     <ServicioDetalleTemplate
@@ -244,7 +210,6 @@ export default async function ServicioDetallePage(
       faqs={faqs}
       masServicios={masServicios}
       marquee={marquee}
-      footer={footer}
     />
   )
 }
