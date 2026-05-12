@@ -31,9 +31,9 @@ const panelTransition = {
 
 const mobileMenuTransition = {
   type: 'spring',
-  stiffness: 230,
-  damping: 24,
-  mass: 0.92,
+  stiffness: 380,
+  damping: 28,
+  mass: 0.75,
 } as const
 
 const mobileMenuVariants = {
@@ -46,7 +46,7 @@ const mobileMenuVariants = {
     transition: {
       ...mobileMenuTransition,
       when: 'afterChildren',
-      staggerChildren: 0.04,
+      staggerChildren: 0.025,
       staggerDirection: -1,
     },
   },
@@ -59,8 +59,8 @@ const mobileMenuVariants = {
     transition: {
       ...mobileMenuTransition,
       when: 'beforeChildren',
-      staggerChildren: 0.055,
-      delayChildren: 0.04,
+      staggerChildren: 0.035,
+      delayChildren: 0.02,
     },
   },
 } as const
@@ -76,7 +76,7 @@ const mobileMenuItemVariants = {
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.34,
+      duration: 0.22,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -394,9 +394,9 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
               animate="open"
               exit="closed"
               variants={mobileMenuVariants}
-              className="mt-3 overflow-hidden rounded-[30px] border border-brand-azul/10 bg-white px-4 py-4 backdrop-blur-2xl md:hidden"
+              className="mt-3 overflow-hidden rounded-[30px] border border-brand-azul/10 bg-white px-3 py-3 backdrop-blur-2xl md:hidden"
             >
-              <ul className="space-y-2">
+              <ul className="space-y-1">
                 {links.map(link => {
                   const hasSubmenu = Boolean(link.submenu?.length)
                   const isExpanded = openMobileMenu === link.href
@@ -417,7 +417,7 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
                         <Link
                           href={link.href}
                           className={cn(
-                            'flex-1 rounded-full px-4 py-3 font-heading text-[1.18rem] font-bold tracking-[-0.03em] transition-[background-color,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-celeste/45',
+                            'flex-1 rounded-full px-3 py-2.5 font-heading text-[1.1rem] font-bold tracking-[-0.03em] transition-[background-color,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-celeste/45',
                             isActive
                               ? 'bg-brand-celeste text-white'
                               : 'text-brand-azul hover:bg-brand-azul/6 hover:text-brand-azul',
@@ -455,7 +455,7 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
                             transition={panelTransition}
                             className="overflow-hidden"
                           >
-                            <ul className="mt-1 space-y-1 rounded-[20px] bg-brand-azul/[0.035] px-2 pb-2 pt-2">
+                            <ul className="mt-1 space-y-0.5 rounded-[20px] bg-brand-azul/[0.035] px-2 pb-1.5 pt-1.5">
                               {link.submenu.map(item => {
                                 const isSubmenuActive = isRouteActive(pathname, item.href)
 
@@ -464,7 +464,7 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
                                     <Link
                                       href={item.href}
                                       className={cn(
-                                        'block rounded-[20px] px-4 py-3 font-body text-[1.05rem] font-medium transition-[background-color,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-celeste/45',
+                                        'block rounded-[20px] px-3 py-2 font-body text-[1rem] font-medium transition-[background-color,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-celeste/45',
                                         isSubmenuActive
                                           ? 'bg-brand-azul text-white'
                                           : 'text-brand-azul hover:bg-[rgba(253,217,4,0.33)] hover:text-brand-azul',
@@ -489,7 +489,7 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
               {ctaLabel && ctaHref && (
                 <motion.div
                   variants={mobileMenuItemVariants}
-                  className="mt-4 space-y-2"
+                  className="mt-3 space-y-2"
                 >
                   <Button
                     variant="primary"
