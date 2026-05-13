@@ -39,3 +39,27 @@ export type { ProgramaCTABottomSectionProps } from './ProgramaCTABottomSection'
 
 export { LandingPageForm } from './LandingPageForm'
 export type { LandingPageFormProps } from './LandingPageForm'
+
+export { HomeHero } from './HomeHero'
+export type { HomeHeroProps } from './HomeHero'
+
+export { HomeSectionHeader } from './HomeSectionHeader'
+export type { HomeSectionHeaderProps } from './HomeSectionHeader'
+
+export { HomeAboutSection } from './HomeAboutSection'
+export type { HomeAboutSectionProps } from './HomeAboutSection'
+
+export { HomeProgramsSection } from './HomeProgramsSection'
+export type { HomeProgramsSectionProps } from './HomeProgramsSection'
+
+export { HomeServicesCarousel } from './HomeServicesCarousel'
+export type { HomeServicesCarouselProps } from './HomeServicesCarousel'
+
+export { HomeProgramsCarousel } from './HomeProgramsCarousel'
+export type { HomeProgramsCarouselProps } from './HomeProgramsCarousel'
+
+export { HomeFAQSection } from './HomeFAQSection'
+export type { HomeFAQSectionProps } from './HomeFAQSection'
+
+export { HomeTestimonialsSection } from './HomeTestimonialsSection'
+export type { HomeTestimonialCard, HomeTestimonialsSectionProps } from './HomeTestimonialsSection'

@@ -250,7 +250,7 @@ export function ProcessStepsSection({ pretitulo, heading, ctaLabel, ctaHref, pas
   }
 
   return (
-    <section className="bg-brand-crema pb-4 pt-14 md:pb-6 md:pt-16">
+    <section className="bg-brand-crema pb-0 pt-14 md:pt-16">
       <div className="mx-auto w-[95vw] max-w-[1540px]">
         <div className="text-center">
           {pretitulo && (

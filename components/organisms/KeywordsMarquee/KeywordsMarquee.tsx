@@ -20,12 +20,12 @@ export function KeywordsMarquee({
   // Versión estática para usuarios con reduced-motion habilitado
   if (prefersReducedMotion) {
     return (
-      <section className="bg-brand-celeste py-5" aria-hidden="true">
+      <section className="bg-brand-crema py-6 md:py-8" aria-hidden="true">
         <div className="flex flex-wrap justify-center gap-4 px-6">
           {keywords.map((kw, i) => (
             <span
               key={i}
-              className="inline-flex items-center gap-2 font-heading font-semibold text-white text-[1.75rem] hover:text-brand-naranja transition-colors cursor-default"
+              className="inline-flex items-center gap-2 font-heading font-semibold text-brand-azul text-[2.5rem] hover:text-brand-celeste transition-colors cursor-default"
             >
               <span>{kw.emoji}</span>
               <span>{kw.texto}</span>
@@ -40,7 +40,7 @@ export function KeywordsMarquee({
   const items = [...keywords, ...keywords, ...keywords, ...keywords]
 
   return (
-    <section className="bg-brand-celeste py-5 overflow-hidden" aria-hidden="true">
+    <section className="bg-brand-crema py-6 md:py-8 overflow-hidden" aria-hidden="true">
       <motion.div
         className="flex whitespace-nowrap gap-0"
         animate={{ x: ['0%', '-25%'] }}
@@ -53,11 +53,11 @@ export function KeywordsMarquee({
         {items.map((kw, i) => (
           <span
             key={i}
-            className="inline-flex items-center gap-2 mx-6 font-heading font-semibold text-white text-[1.75rem] tracking-tight select-none hover:text-brand-naranja transition-colors cursor-default"
+            className="inline-flex items-center gap-2 mx-6 font-heading font-semibold text-brand-azul text-[2.5rem] tracking-tight select-none hover:text-brand-celeste transition-colors cursor-default"
           >
             <span>{kw.emoji}</span>
             <span>{kw.texto}</span>
-            <span className="text-white/25 ml-4">·</span>
+            <span className="text-brand-azul/25 ml-4">·</span>
           </span>
         ))}
       </motion.div>
