@@ -16,7 +16,7 @@ export function HomeFAQSection({
   const [openIndex, setOpenIndex] = useState<number | null>(faqs.length > 0 ? 0 : null)
 
   return (
-    <section className="bg-brand-crema px-6 py-16 md:px-16 md:py-20">
+    <section className="bg-brand-crema px-6 pt-10 pb-16 md:px-16 md:pt-14 md:pb-20">
       <div className="mx-auto w-full max-w-[1260px]">
         <div className="text-center">
           {pretitulo && (

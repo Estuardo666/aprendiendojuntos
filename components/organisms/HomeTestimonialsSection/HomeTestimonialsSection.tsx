@@ -53,8 +53,8 @@ export function HomeTestimonialsSection({
   const current = testimonios[currentIndex]
 
   return (
-    <section className="bg-brand-crema px-4 py-16 sm:px-6 md:py-24 lg:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-10 md:flex-row md:gap-16">
+    <section className="bg-brand-crema px-4 pt-8 pb-10 sm:px-6 md:pt-10 md:pb-14 lg:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10 rounded-[2.5rem] bg-brand-blanco p-6 md:flex-row md:gap-16 md:p-10 lg:p-14 min-h-[400px]">
         {/* Columna izquierda: header + controles */}
         <div className="flex flex-col justify-between md:w-[42%]">
           <div>
@@ -108,7 +108,7 @@ export function HomeTestimonialsSection({
               {/* Título corto */}
               <motion.h3
                 variants={itemVariants}
-                className="font-heading text-[clamp(1.4rem,2.4vw,1.75rem)] font-bold leading-[1.15] tracking-[-0.02em] text-brand-azul"
+                className="font-heading text-[clamp(1.68rem,2.88vw,2.1rem)] font-bold leading-[1.15] tracking-[-0.02em] text-brand-celeste"
               >
                 {current.tituloCorto}
               </motion.h3>
@@ -116,7 +116,7 @@ export function HomeTestimonialsSection({
               {/* Descripción corta */}
               <motion.p
                 variants={itemVariants}
-                className="mt-4 font-body text-[1rem] leading-[1.6] text-brand-texto/80"
+                className="mt-4 max-w-[60%] font-body text-[1rem] leading-[1.6] text-brand-texto/80"
               >
                 {current.descripcionCorta}
               </motion.p>
@@ -124,10 +124,10 @@ export function HomeTestimonialsSection({
               {/* Autor + servicio + botón */}
               <motion.div
                 variants={itemVariants}
-                className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+                className="mt-24 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <div className="relative h-12 w-14 overflow-hidden rounded-xl bg-brand-celeste/20">
+                  <div className="relative h-14 w-16 overflow-hidden rounded-xl bg-brand-celeste/20">
                     {current.imageSrc ? (
                       <Image
                         src={current.imageSrc}
@@ -165,6 +165,8 @@ export function HomeTestimonialsSection({
                   variant="primary"
                   size="md"
                   href={`/testimonios/${current.slug}`}
+                  iconName="ArrowRightIcon"
+                  iconAnimation="slide"
                   className="self-start rounded-full sm:self-auto"
                 >
                   Leer más

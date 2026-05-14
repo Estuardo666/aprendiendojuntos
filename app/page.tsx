@@ -175,8 +175,8 @@ export default async function HomePage() {
         role: testimonio.testimonioFields.autorRol,
         imageSrc: testimonio.featuredImage?.node?.sourceUrl,
         imageAlt: testimonio.featuredImage?.node?.altText ?? testimonio.testimonioFields.autorNombre,
-        servicioNombre: testimonio.testimonioFields.servicioRelacionado?.title ?? null,
-        servicioSlug: testimonio.testimonioFields.servicioRelacionado?.slug ?? null,
+        servicioNombre: testimonio.testimonioFields.servicioRelacionado?.nodes?.[0]?.title ?? null,
+        servicioSlug: testimonio.testimonioFields.servicioRelacionado?.nodes?.[0]?.slug ?? null,
       })),
     },
     faqs: {

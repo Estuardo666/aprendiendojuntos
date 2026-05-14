@@ -10,47 +10,85 @@ interface GetTestimoniosData {
 const REVALIDATE = 3600
 
 export async function getTestimonios(): Promise<WPTestimonio[]> {
-  const data = await fetchGraphQL<GetTestimoniosData>(
-    `
-      query GetTestimonios {
-        testimonios(first: 12, where: { orderby: { field: DATE, order: DESC } }) {
-          nodes {
-            id
-            databaseId
-            title
-            slug
-            testimonioFields {
-              autorNombre
-              autorRol
-              texto
-              calificacion
-              tituloCortoCard
-              descripcionCortaCard
-              videoTestimonial {
-                url
-                mimeType
-              }
-              servicioRelacionado {
-                ... on AjServicio {
-                  id
-                  title
-                  slug
+  try {
+    const data = await fetchGraphQL<GetTestimoniosData>(
+      `
+        query GetTestimonios {
+          testimonios(first: 12, where: { orderby: { field: DATE, order: DESC } }) {
+            nodes {
+              id
+              databaseId
+              title
+              slug
+              testimonioFields {
+                autorNombre
+                autorRol
+                texto
+                calificacion
+                tituloCortoCard
+                descripcionCortaCard
+                videoTestimonial {
+                  node {
+                    mediaItemUrl
+                    mimeType
+                  }
+                }
+                servicioRelacionado {
+                  nodes {
+                    ... on Servicio {
+                      id
+                      title
+                      slug
+                    }
+                  }
                 }
               }
-            }
-            featuredImage {
-              node {
-                sourceUrl
-                altText
+              featuredImage {
+                node {
+                  sourceUrl
+                  altText
+                }
               }
             }
           }
         }
-      }
-    `,
-    undefined,
-    REVALIDATE,
-  )
+      `,
+      undefined,
+      REVALIDATE,
+    )
 
-  return data.testimonios.nodes
+    return data.testimonios.nodes
+  } catch (err) {
+    console.error('[getTestimonios] Error con campos nuevos, fallback:', err)
+    // Fallback: query sin campos nuevos para aislar el problema
+    const data = await fetchGraphQL<GetTestimoniosData>(
+      `
+        query GetTestimoniosFallback {
+          testimonios(first: 12, where: { orderby: { field: DATE, order: DESC } }) {
+            nodes {
+              id
+              databaseId
+              title
+              slug
+              testimonioFields {
+                autorNombre
+                autorRol
+                texto
+                calificacion
+              }
+              featuredImage {
+                node {
+                  sourceUrl
+                  altText
+                }
+              }
+            }
+          }
+        }
+      `,
+      undefined,
+      REVALIDATE,
+    )
+    return data.testimonios.nodes
+  }
 }

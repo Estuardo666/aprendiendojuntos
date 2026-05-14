@@ -14,8 +14,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'Invalid token' }, { status: 401 })
   }
 
-  const body = (await request.json()) as { path?: string; tag?: string; slug?: string }
-  const { path, tag, slug } = body
+  const body = (await request.json()) as { path?: string; tag?: string; slug?: string; postType?: string }
+  const { path, tag, slug, postType } = body
 
   if (tag) {
     // @ts-expect-error — Next.js 16 types expect 2 args but runtime accepts 1
@@ -29,6 +29,12 @@ export async function POST(request: NextRequest) {
   }
 
   if (slug) {
+    if (postType === 'aj_testimonio') {
+      await revalidatePath(`/testimonios/${slug}`)
+      await revalidatePath('/')
+      return NextResponse.json({ revalidated: true, slug, path: `/testimonios/${slug}` })
+    }
+
     await revalidatePath(`/servicios/${slug}`)
     await revalidatePath('/servicios')
     return NextResponse.json({ revalidated: true, slug })

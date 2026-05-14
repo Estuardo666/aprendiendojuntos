@@ -1,14 +1,18 @@
 import type { WPImagen } from '@/lib/types/servicio.types'
 
 export interface WPVideoTestimonial {
-  url?: string | null
-  mimeType?: string | null
+  node?: {
+    mediaItemUrl?: string | null
+    mimeType?: string | null
+  } | null
 }
 
 export interface WPServicioRelacionado {
-  id: string
-  title: string
-  slug: string
+  nodes: {
+    id: string
+    title: string
+    slug: string
+  }[]
 }
 
 export interface WPTestimonioFields {
