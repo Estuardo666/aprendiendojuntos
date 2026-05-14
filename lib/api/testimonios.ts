@@ -16,12 +16,27 @@ export async function getTestimonios(): Promise<WPTestimonio[]> {
         testimonios(first: 12, where: { orderby: { field: DATE, order: DESC } }) {
           nodes {
             id
+            databaseId
             title
+            slug
             testimonioFields {
               autorNombre
               autorRol
               texto
               calificacion
+              tituloCortoCard
+              descripcionCortaCard
+              videoTestimonial {
+                url
+                mimeType
+              }
+              servicioRelacionado {
+                ... on AjServicio {
+                  id
+                  title
+                  slug
+                }
+              }
             }
             featuredImage {
               node {

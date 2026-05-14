@@ -161,17 +161,22 @@ export default async function HomePage() {
     testimonios: {
       pretitulo: home.testimoniosPretitulo,
       titulo: home.testimoniosTitulo ?? 'Familias que avanzan junto a nosotros',
-      parrafo: home.testimoniosParrafo,
-      botonLabel: home.testimoniosBotonLabel,
-      botonHref: home.testimoniosBotonHref,
       items: testimonios.map((testimonio) => ({
         id: testimonio.id,
-        quote: stripHtml(testimonio.testimonioFields.texto),
+        slug: testimonio.slug,
+        tituloCorto:
+          testimonio.testimonioFields.tituloCortoCard?.trim() ||
+          testimonio.title,
+        descripcionCorta:
+          testimonio.testimonioFields.descripcionCortaCard?.trim() ||
+          stripHtml(testimonio.testimonioFields.texto).slice(0, 180) +
+            (stripHtml(testimonio.testimonioFields.texto).length > 180 ? '...' : ''),
         author: testimonio.testimonioFields.autorNombre,
         role: testimonio.testimonioFields.autorRol,
-        rating: testimonio.testimonioFields.calificacion,
         imageSrc: testimonio.featuredImage?.node?.sourceUrl,
         imageAlt: testimonio.featuredImage?.node?.altText ?? testimonio.testimonioFields.autorNombre,
+        servicioNombre: testimonio.testimonioFields.servicioRelacionado?.title ?? null,
+        servicioSlug: testimonio.testimonioFields.servicioRelacionado?.slug ?? null,
       })),
     },
     faqs: {

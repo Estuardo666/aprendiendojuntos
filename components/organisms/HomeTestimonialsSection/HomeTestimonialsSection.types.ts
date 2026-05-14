@@ -1,18 +1,18 @@
-export interface HomeTestimonialCard {
+export interface HomeTestimonialItem {
   id: string
-  quote: string
+  slug: string
+  tituloCorto: string
+  descripcionCorta: string
   author: string
   role: string
-  rating?: number
   imageSrc?: string
   imageAlt?: string
+  servicioNombre?: string | null
+  servicioSlug?: string | null
 }
 
 export interface HomeTestimonialsSectionProps {
   pretitulo?: string | null
   titulo: string
-  parrafo?: string | null
-  testimonios: HomeTestimonialCard[]
-  botonLabel?: string | null
-  botonHref?: string | null
+  testimonios: HomeTestimonialItem[]
 }

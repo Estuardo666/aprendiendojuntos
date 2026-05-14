@@ -1,2 +1,2 @@
 export { HomeTestimonialsSection } from './HomeTestimonialsSection'
-export type { HomeTestimonialCard, HomeTestimonialsSectionProps } from './HomeTestimonialsSection.types'
+export type { HomeTestimonialItem, HomeTestimonialsSectionProps } from './HomeTestimonialsSection.types'

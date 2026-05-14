@@ -2,7 +2,7 @@ import type { ServiceFeaturedCardProps } from '@/components/molecules/ServiceFea
 import type { ProgramListCardProps } from '@/components/molecules/ProgramListCard'
 import type { KeywordsMarqueeProps } from '@/components/organisms/KeywordsMarquee'
 import type { ProcessStep } from '@/components/organisms/ProcessStepsSection'
-import type { HomeTestimonialCard } from '@/components/organisms/HomeTestimonialsSection'
+import type { HomeTestimonialItem } from '@/components/organisms/HomeTestimonialsSection'
 
 export interface HomeTemplateProps {
   hero: {
@@ -52,10 +52,7 @@ export interface HomeTemplateProps {
   testimonios: {
     pretitulo?: string | null
     titulo: string
-    parrafo?: string | null
-    items: HomeTestimonialCard[]
-    botonLabel?: string | null
-    botonHref?: string | null
+    items: HomeTestimonialItem[]
   }
   faqs: {
     pretitulo?: string | null

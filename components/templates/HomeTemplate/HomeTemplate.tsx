@@ -97,10 +97,7 @@ export function HomeTemplate({
       <HomeTestimonialsSection
         pretitulo={testimonios.pretitulo}
         titulo={testimonios.titulo}
-        parrafo={testimonios.parrafo}
         testimonios={testimonios.items}
-        botonLabel={testimonios.botonLabel}
-        botonHref={testimonios.botonHref}
       />
 
       {faqs.items.length > 0 && (

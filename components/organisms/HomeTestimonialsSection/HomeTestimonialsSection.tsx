@@ -1,75 +1,178 @@
-import Image from 'next/image'
-import { Button } from '@/components/atoms/Button'
-import { HomeSectionHeader } from '@/components/organisms/HomeSectionHeader'
-import type { HomeTestimonialCard, HomeTestimonialsSectionProps } from './HomeTestimonialsSection.types'
+'use client'
 
-function TestimonialCard({ quote, author, role, rating = 5, imageSrc, imageAlt }: HomeTestimonialCard) {
-  return (
-    <article className="flex h-full min-h-[18rem] flex-col justify-between rounded-[2rem] border border-brand-azul/10 bg-brand-blanco p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-      <div>
-        <div className="mb-5 flex gap-1 text-brand-naranja" aria-label={`${rating} de 5 estrellas`}>
-          {Array.from({ length: Math.max(1, Math.min(5, rating)) }).map((_, index) => (
-            <span key={index} aria-hidden="true">★</span>
-          ))}
-        </div>
-        <p className="font-body text-[1rem] leading-[1.55] text-brand-texto/85">
-          “{quote}”
-        </p>
-      </div>
-      <div className="mt-8 flex items-center gap-3">
-        <div className="relative h-12 w-14 overflow-hidden rounded-xl bg-brand-celeste/20">
-          {imageSrc ? (
-            <Image src={imageSrc} alt={imageAlt ?? author} fill className="object-cover" />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center font-heading text-sm font-bold text-brand-azul">
-              <span className="text-base">{author.slice(0, 1)}</span>
-            </div>
-          )}
-        </div>
-        <div>
-          <p className="font-body text-base font-semibold text-brand-azul">{author}</p>
-          <p className="font-body text-xs text-brand-texto/60">{role}</p>
-        </div>
-      </div>
-    </article>
-  )
+import { useState, useCallback } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Button } from '@/components/atoms/Button'
+import { Icon } from '@/components/atoms/Icon'
+import type { HomeTestimonialsSectionProps } from './HomeTestimonialsSection.types'
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.05,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.2 },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] as const },
+  },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.2 } },
 }
 
 export function HomeTestimonialsSection({
   pretitulo,
   titulo,
-  parrafo,
   testimonios,
-  botonLabel,
-  botonHref,
 }: HomeTestimonialsSectionProps) {
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const goNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % testimonios.length)
+  }, [testimonios.length])
+
+  const goPrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + testimonios.length) % testimonios.length)
+  }, [testimonios.length])
+
   if (testimonios.length === 0) return null
 
+  const current = testimonios[currentIndex]
+
   return (
-    <section className="bg-brand-crema px-4 pt-8 pb-16 sm:px-6 md:pt-10 md:pb-24 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <HomeSectionHeader pretitulo={pretitulo} titulo={titulo} parrafo={parrafo} />
-        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {testimonios.slice(0, 3).map((testimonio, index) => (
-            <div key={testimonio.id} className={index % 3 === 1 ? 'lg:translate-y-8' : undefined}>
-              <TestimonialCard {...testimonio} />
-            </div>
-          ))}
-        </div>
-        {botonLabel && botonHref && (
-          <div className="mt-14 flex justify-center">
-            <Button
-              variant="primary"
-              size="md"
-              href={botonHref}
-              iconName="ArrowRightIcon"
-              iconAnimation="slide"
-              className="rounded-full"
-            >
-              {botonLabel}
-            </Button>
+    <section className="bg-brand-crema px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10 md:flex-row md:gap-16">
+        {/* Columna izquierda: header + controles */}
+        <div className="flex flex-col justify-between md:w-[42%]">
+          <div>
+            {pretitulo && (
+              <span className="inline-flex rounded-full bg-[#9accea] px-3 py-2 font-body text-[0.77rem] font-medium leading-none text-brand-azul md:px-4 md:text-[0.95rem]">
+                {pretitulo}
+              </span>
+            )}
+            <h2 className="mt-4 font-heading text-[clamp(1.75rem,3.5vw,2.5rem)] font-bold leading-[1.05] tracking-[-0.04em] text-brand-azul">
+              {titulo}
+            </h2>
           </div>
-        )}
+
+          {/* Flechas de navegación */}
+          <div className="mt-10 flex gap-3">
+            <button
+              type="button"
+              onClick={goPrev}
+              aria-label="Anterior testimonio"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-celeste text-white shadow-md transition-all duration-200 hover:scale-105 hover:bg-brand-azul active:scale-95"
+            >
+              <Icon name="ChevronRightIcon" size="sm" className="rotate-180" color="blanco" />
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label="Siguiente testimonio"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-celeste text-white shadow-md transition-all duration-200 hover:scale-105 hover:bg-brand-azul active:scale-95"
+            >
+              <Icon name="ChevronRightIcon" size="sm" color="blanco" />
+            </button>
+          </div>
+        </div>
+
+        {/* Columna derecha: carrusel */}
+        <div className="relative md:w-[58%]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="flex flex-col"
+            >
+              {/* Comillas decorativas */}
+              <motion.div variants={itemVariants} className="mb-2 text-[3.5rem] leading-none text-brand-celeste/60">
+                <Icon name="QuoteIcon" size="lg" className="h-10 w-10 md:h-12 md:w-12" color="celeste" />
+              </motion.div>
+
+              {/* Título corto */}
+              <motion.h3
+                variants={itemVariants}
+                className="font-heading text-[clamp(1.4rem,2.4vw,1.75rem)] font-bold leading-[1.15] tracking-[-0.02em] text-brand-azul"
+              >
+                {current.tituloCorto}
+              </motion.h3>
+
+              {/* Descripción corta */}
+              <motion.p
+                variants={itemVariants}
+                className="mt-4 font-body text-[1rem] leading-[1.6] text-brand-texto/80"
+              >
+                {current.descripcionCorta}
+              </motion.p>
+
+              {/* Autor + servicio + botón */}
+              <motion.div
+                variants={itemVariants}
+                className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="relative h-12 w-14 overflow-hidden rounded-xl bg-brand-celeste/20">
+                    {current.imageSrc ? (
+                      <Image
+                        src={current.imageSrc}
+                        alt={current.imageAlt ?? current.author}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center font-heading text-sm font-bold text-brand-azul">
+                        <span className="text-base">{current.author.slice(0, 1)}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-body text-base font-semibold text-brand-azul">
+                      {current.author}
+                      {current.role && (
+                        <span className="font-normal text-brand-texto/60">, {current.role}</span>
+                      )}
+                    </p>
+                    {current.servicioSlug && current.servicioNombre ? (
+                      <Link
+                        href={`/servicios/${current.servicioSlug}`}
+                        className="font-body text-sm text-brand-celeste underline-offset-2 hover:text-brand-azul hover:underline"
+                      >
+                        {current.servicioNombre}
+                      </Link>
+                    ) : current.servicioNombre ? (
+                      <p className="font-body text-sm text-brand-texto/50">{current.servicioNombre}</p>
+                    ) : null}
+                  </div>
+                </div>
+
+                <Button
+                  variant="primary"
+                  size="md"
+                  href={`/testimonios/${current.slug}`}
+                  className="self-start rounded-full sm:self-auto"
+                >
+                  Leer más
+                </Button>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   )

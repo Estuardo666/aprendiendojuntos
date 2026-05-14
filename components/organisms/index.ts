@@ -62,4 +62,7 @@ export { HomeFAQSection } from './HomeFAQSection'
 export type { HomeFAQSectionProps } from './HomeFAQSection'
 
 export { HomeTestimonialsSection } from './HomeTestimonialsSection'
-export type { HomeTestimonialCard, HomeTestimonialsSectionProps } from './HomeTestimonialsSection'
+export type { HomeTestimonialItem, HomeTestimonialsSectionProps } from './HomeTestimonialsSection'
+
+export { TestimonialsLandingSection } from './TestimonialsLandingSection'
+export type { TestimonialLandingCard, TestimonialsLandingSectionProps } from './TestimonialsLandingSection'
