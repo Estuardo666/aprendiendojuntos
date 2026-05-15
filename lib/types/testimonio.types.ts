@@ -15,6 +15,13 @@ export interface WPServicioRelacionado {
   }[]
 }
 
+export interface WPImagenDestacadaTestimonio {
+  node?: {
+    sourceUrl?: string | null
+    altText?: string | null
+  } | null
+}
+
 export interface WPTestimonioFields {
   autorNombre: string
   autorRol: string
@@ -23,6 +30,7 @@ export interface WPTestimonioFields {
   tituloCortoCard?: string | null
   descripcionCortaCard?: string | null
   videoTestimonial?: WPVideoTestimonial | null
+  imagenDestacadaTestimonio?: WPImagenDestacadaTestimonio | null
   servicioRelacionado?: WPServicioRelacionado | null
 }
 
@@ -31,6 +39,7 @@ export interface WPTestimonio {
   databaseId: number
   title: string
   slug: string
+  date: string
   testimonioFields: WPTestimonioFields
   featuredImage?: {
     node?: WPImagen | null

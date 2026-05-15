@@ -66,3 +66,6 @@ export type { HomeTestimonialItem, HomeTestimonialsSectionProps } from './HomeTe
 
 export { TestimonialsLandingSection } from './TestimonialsLandingSection'
 export type { TestimonialLandingCard, TestimonialsLandingSectionProps } from './TestimonialsLandingSection'
+
+export { TestimoniosGrid } from './TestimoniosGrid'
+export type { TestimoniosGridProps, TestimonioGridItem } from './TestimoniosGrid'

@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/atoms/Button'
 import { Icon } from '@/components/atoms/Icon'
+import { TestimonialPopup } from '@/components/molecules/TestimonialPopup'
 import type { HomeTestimonialsSectionProps } from './HomeTestimonialsSection.types'
 
 const containerVariants = {
@@ -39,6 +40,9 @@ export function HomeTestimonialsSection({
   testimonios,
 }: HomeTestimonialsSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [selectedTestimonio, setSelectedTestimonio] = useState<(typeof testimonios)[number] | null>(null)
+  const [origin, setOrigin] = useState({ x: 0, y: 0 })
+  const buttonRef = useRef<HTMLSpanElement>(null)
 
   const goNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % testimonios.length)
@@ -161,21 +165,46 @@ export function HomeTestimonialsSection({
                   </div>
                 </div>
 
-                <Button
-                  variant="primary"
-                  size="md"
-                  href={`/testimonios/${current.slug}`}
-                  iconName="ArrowRightIcon"
-                  iconAnimation="slide"
-                  className="self-start rounded-full sm:self-auto"
-                >
-                  Leer más
-                </Button>
+                <span ref={buttonRef}>
+                  <Button
+                    variant="primary"
+                    size="md"
+                    iconName="ArrowRightIcon"
+                    iconAnimation="slide"
+                    className="self-start rounded-full sm:self-auto"
+                    onClick={() => {
+                      const rect = buttonRef.current?.getBoundingClientRect()
+                      if (rect) {
+                        const centerX = rect.left + rect.width / 2
+                        const centerY = rect.top + rect.height / 2
+                        const viewportCX = window.innerWidth / 2
+                        const viewportCY = window.innerHeight / 2
+                        setOrigin({ x: centerX - viewportCX, y: centerY - viewportCY })
+                      }
+                      setSelectedTestimonio(current)
+                    }}
+                  >
+                    Leer más
+                  </Button>
+                </span>
               </motion.div>
             </motion.div>
           </AnimatePresence>
         </div>
       </div>
+
+      <TestimonialPopup
+        testimonio={selectedTestimonio ?? {
+          id: '',
+          author: '',
+          role: '',
+          texto: '',
+          calificacion: 0,
+        }}
+        isOpen={!!selectedTestimonio}
+        onClose={() => setSelectedTestimonio(null)}
+        origin={origin}
+      />
     </section>
   )
 }

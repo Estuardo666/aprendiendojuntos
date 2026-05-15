@@ -6,6 +6,13 @@ export interface TestimonialLandingCard {
   rating?: number
   imageSrc?: string
   imageAlt?: string
+  texto: string
+  calificacion: number
+  videoUrl?: string | null
+  imagenDestacadaTestimonioSrc?: string
+  imagenDestacadaTestimonioAlt?: string
+  servicioNombre?: string | null
+  servicioSlug?: string | null
 }
 
 export interface TestimonialsLandingSectionProps {

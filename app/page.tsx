@@ -175,8 +175,13 @@ export default async function HomePage() {
         role: testimonio.testimonioFields.autorRol,
         imageSrc: testimonio.featuredImage?.node?.sourceUrl,
         imageAlt: testimonio.featuredImage?.node?.altText ?? testimonio.testimonioFields.autorNombre,
+        imagenDestacadaTestimonioSrc: testimonio.testimonioFields.imagenDestacadaTestimonio?.node?.sourceUrl ?? undefined,
+        imagenDestacadaTestimonioAlt: testimonio.testimonioFields.imagenDestacadaTestimonio?.node?.altText ?? undefined,
         servicioNombre: testimonio.testimonioFields.servicioRelacionado?.nodes?.[0]?.title ?? null,
         servicioSlug: testimonio.testimonioFields.servicioRelacionado?.nodes?.[0]?.slug ?? null,
+        texto: stripHtml(testimonio.testimonioFields.texto),
+        calificacion: testimonio.testimonioFields.calificacion,
+        videoUrl: testimonio.testimonioFields.videoTestimonial?.node?.mediaItemUrl ?? null,
       })),
     },
     faqs: {

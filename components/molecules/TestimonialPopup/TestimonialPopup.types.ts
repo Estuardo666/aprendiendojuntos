@@ -1,8 +1,5 @@
-export interface HomeTestimonialItem {
+export interface TestimonialPopupData {
   id: string
-  slug: string
-  tituloCorto: string
-  descripcionCorta: string
   author: string
   role: string
   imageSrc?: string
@@ -16,8 +13,9 @@ export interface HomeTestimonialItem {
   videoUrl?: string | null
 }
 
-export interface HomeTestimonialsSectionProps {
-  pretitulo?: string | null
-  titulo: string
-  testimonios: HomeTestimonialItem[]
+export interface TestimonialPopupProps {
+  testimonio: TestimonialPopupData
+  isOpen: boolean
+  onClose: () => void
+  origin: { x: number; y: number }
 }

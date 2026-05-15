@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { ServiciosTemplate } from '@/components/templates/ServiciosTemplate'
 import { getServicios } from '@/lib/api/servicios'
 import { getPaginaNosotros } from '@/lib/api/nosotros'
+import { getServiciosPageOptions } from '@/lib/api/pagina-options'
 import type { WPServicioResumen } from '@/lib/types/servicio.types'
 
 export const metadata: Metadata = {
@@ -31,9 +32,10 @@ function pickDestacados(servicios: WPServicioResumen[]): WPServicioResumen[] {
 }
 
 export default async function ServiciosPage() {
-  const [serviciosRaw, nosotros] = await Promise.all([
+  const [serviciosRaw, nosotros, options] = await Promise.all([
     getServicios(),
     getPaginaNosotros().catch(() => null),
+    getServiciosPageOptions().catch(() => null),
   ])
 
   const destacadosRaw = pickDestacados(serviciosRaw)
@@ -43,11 +45,12 @@ export default async function ServiciosPage() {
   return (
     <ServiciosTemplate
       hero={{
-        pretitulo: 'Servicios Aprendiendo Juntos',
-        titulo: 'Nuestros\nservicios',
+        pretitulo: options?.pretitulo ?? 'Servicios Aprendiendo Juntos',
+        titulo: options?.titulo ?? 'Nuestros\nservicios',
         descripcion:
+          options?.descripcion ??
           'Ofrecemos servicios especializados en neuropsicología, psicopedagogía, lenguaje e integración sensorial, diseñados para acompañar el desarrollo de cada niño y adolescente.',
-        imagenSrc: '/bg-test.jpg',
+        imagenSrc: options?.bgHeroImagen?.node?.sourceUrl ?? '/bg-test.jpg',
       }}
       destacados={{
         servicios: destacadosRaw.map((s) => ({

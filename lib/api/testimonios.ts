@@ -20,6 +20,7 @@ export async function getTestimonios(): Promise<WPTestimonio[]> {
               databaseId
               title
               slug
+              date
               testimonioFields {
                 autorNombre
                 autorRol
@@ -31,6 +32,12 @@ export async function getTestimonios(): Promise<WPTestimonio[]> {
                   node {
                     mediaItemUrl
                     mimeType
+                  }
+                }
+                imagenDestacadaTestimonio {
+                  node {
+                    sourceUrl
+                    altText
                   }
                 }
                 servicioRelacionado {

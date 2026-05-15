@@ -17,15 +17,19 @@ export async function POST(request: NextRequest) {
   const body = (await request.json()) as { path?: string; tag?: string; slug?: string; postType?: string }
   const { path, tag, slug, postType } = body
 
+  if (path) {
+    await revalidatePath(path)
+    if (tag) {
+      // @ts-expect-error — Next.js 16 types expect 2 args but runtime accepts 1
+      await revalidateTag(tag)
+    }
+    return NextResponse.json({ revalidated: true, path, tag })
+  }
+
   if (tag) {
     // @ts-expect-error — Next.js 16 types expect 2 args but runtime accepts 1
     await revalidateTag(tag)
     return NextResponse.json({ revalidated: true, tag })
-  }
-
-  if (path) {
-    await revalidatePath(path)
-    return NextResponse.json({ revalidated: true, path })
   }
 
   if (slug) {

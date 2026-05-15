@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { ProgramasTemplate } from '@/components/templates/ProgramasTemplate'
 import { getProgramas } from '@/lib/api/programas'
 import { getPaginaNosotros } from '@/lib/api/nosotros'
+import { getProgramasPageOptions } from '@/lib/api/pagina-options'
 import type { WPPrograma } from '@/lib/types/programa.types'
 
 export const metadata: Metadata = {
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
 }
 
 export default async function ProgramasPage() {
-  const [programasRaw, nosotros] = await Promise.all([
+  const [programasRaw, nosotros, options] = await Promise.all([
     getProgramas(),
     getPaginaNosotros().catch(() => null),
+    getProgramasPageOptions().catch(() => null),
   ])
 
   // Los 2 primeros programas son los destacados
@@ -23,11 +25,12 @@ export default async function ProgramasPage() {
   return (
     <ProgramasTemplate
       hero={{
-        pretitulo: 'Programas Aprendiendo Juntos',
-        titulo: 'Nuestros\nprogramas',
+        pretitulo: options?.pretitulo ?? 'Programas Aprendiendo Juntos',
+        titulo: options?.titulo ?? 'Nuestros\nprogramas',
         descripcion:
+          options?.descripcion ??
           'Ofrecemos programas especializados diseñados para potenciar el desarrollo cognitivo, emocional y social de cada niño y adolescente.',
-        imagenSrc: '/bg-test.jpg',
+        imagenSrc: options?.bgHeroImagen?.node?.sourceUrl ?? '/bg-test.jpg',
       }}
       featured={{
         slides: featuredRaw.map((p) => ({

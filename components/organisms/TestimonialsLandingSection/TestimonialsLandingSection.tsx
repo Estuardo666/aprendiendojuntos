@@ -1,11 +1,27 @@
+'use client'
+
+import { useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/atoms/Button'
 import { HomeSectionHeader } from '@/components/organisms/HomeSectionHeader'
+import { TestimonialPopup } from '@/components/molecules/TestimonialPopup'
 import type { TestimonialLandingCard, TestimonialsLandingSectionProps } from './TestimonialsLandingSection.types'
 
-function TestimonialCard({ quote, author, role, rating = 5, imageSrc, imageAlt }: TestimonialLandingCard) {
+function TestimonialCard({
+  quote,
+  author,
+  role,
+  rating = 5,
+  imageSrc,
+  imageAlt,
+  onClick,
+}: TestimonialLandingCard & { onClick: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
   return (
-    <article className="flex h-full min-h-[18rem] flex-col justify-between rounded-[2rem] border border-brand-azul/10 bg-brand-blanco p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex h-full min-h-[18rem] w-full flex-col justify-between rounded-[2rem] border border-brand-azul/10 bg-brand-blanco p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md text-left"
+    >
       <div>
         <div className="mb-5 flex gap-1 text-brand-naranja" aria-label={`${rating} de 5 estrellas`}>
           {Array.from({ length: Math.max(1, Math.min(5, rating)) }).map((_, index) => (
@@ -13,7 +29,7 @@ function TestimonialCard({ quote, author, role, rating = 5, imageSrc, imageAlt }
           ))}
         </div>
         <p className="font-body text-[1rem] leading-[1.55] text-brand-texto/85">
-          "{quote}"
+          &ldquo;{quote}&rdquo;
         </p>
       </div>
       <div className="mt-8 flex items-center gap-3">
@@ -31,7 +47,7 @@ function TestimonialCard({ quote, author, role, rating = 5, imageSrc, imageAlt }
           <p className="font-body text-xs text-brand-texto/60">{role}</p>
         </div>
       </div>
-    </article>
+    </button>
   )
 }
 
@@ -43,6 +59,9 @@ export function TestimonialsLandingSection({
   botonLabel,
   botonHref,
 }: TestimonialsLandingSectionProps) {
+  const [selectedTestimonio, setSelectedTestimonio] = useState<TestimonialLandingCard | null>(null)
+  const [origin, setOrigin] = useState({ x: 0, y: 0 })
+
   if (testimonios.length === 0) return null
 
   return (
@@ -51,8 +70,22 @@ export function TestimonialsLandingSection({
         <HomeSectionHeader pretitulo={pretitulo} titulo={titulo} parrafo={parrafo} />
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {testimonios.slice(0, 3).map((testimonio, index) => (
-            <div key={testimonio.id} className={index % 3 === 1 ? 'lg:translate-y-8' : undefined}>
-              <TestimonialCard {...testimonio} />
+            <div
+              key={testimonio.id}
+              className={index % 3 === 1 ? 'lg:translate-y-8' : undefined}
+            >
+              <TestimonialCard
+                {...testimonio}
+                onClick={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect()
+                  const centerX = rect.left + rect.width / 2
+                  const centerY = rect.top + rect.height / 2
+                  const viewportCX = window.innerWidth / 2
+                  const viewportCY = window.innerHeight / 2
+                  setOrigin({ x: centerX - viewportCX, y: centerY - viewportCY })
+                  setSelectedTestimonio(testimonio)
+                }}
+              />
             </div>
           ))}
         </div>
@@ -71,6 +104,19 @@ export function TestimonialsLandingSection({
           </div>
         )}
       </div>
+
+      <TestimonialPopup
+        testimonio={selectedTestimonio ?? {
+          id: '',
+          author: '',
+          role: '',
+          texto: '',
+          calificacion: 0,
+        }}
+        isOpen={!!selectedTestimonio}
+        onClose={() => setSelectedTestimonio(null)}
+        origin={origin}
+      />
     </section>
   )
 }
