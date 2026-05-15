@@ -145,6 +145,40 @@ export function LandingNavbar({ ctaLabel = 'Reservar mi lugar' }: LandingNavbarP
           </div>
         </div>
       </motion.nav>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 z-[1]"
+        style={{ height: 'calc(100% + 35px)', transform: 'translateY(-20px)' }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 50%, black 80%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 50%, black 80%, transparent 100%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 30%, black 60%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 30%, black 60%, transparent 100%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
+            maskImage: 'linear-gradient(to bottom, black 0%, black 20%, transparent 55%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 20%, transparent 55%)',
+          }}
+        />
+      </div>
     </header>
   )
 }
