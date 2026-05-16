@@ -26,7 +26,7 @@ export function HomeServicesCarousel({
 
   return (
     <section className="bg-brand-crema overflow-hidden px-4 py-6 md:px-6 md:py-8 lg:px-8">
-      <div className="relative mx-auto w-full max-w-[1260px]">
+      <div className="relative mx-auto w-full max-w-7xl">
         {/* Flechas desktop: extremos laterales, color celeste */}
         <button
           type="button"

@@ -21,8 +21,8 @@ export function ServiceCTASection({
   wrapperClassName,
 }: ServiceCTASectionProps) {
   return (
-    <section className={cn('bg-brand-crema px-6 pb-14 pt-1 md:px-16 md:pb-16 md:pt-2', wrapperClassName)}>
-      <div className="group mx-auto w-full max-w-[1260px] overflow-hidden rounded-[2.75rem] bg-brand-azul">
+    <section className={cn('bg-brand-crema px-4 pb-14 pt-1 sm:px-6 lg:px-8 md:pb-16 md:pt-2', wrapperClassName)}>
+      <div className="group mx-auto w-full max-w-7xl overflow-hidden rounded-[2.75rem] bg-brand-azul">
         <div className="grid h-auto min-h-[400px] items-stretch gap-0 lg:grid-cols-2">
           <div className="flex h-full flex-col items-center justify-end px-5 py-5 text-center md:px-9 md:py-7 lg:items-start lg:px-11 lg:py-9 lg:text-left">
             {pretitulo && (

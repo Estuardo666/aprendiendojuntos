@@ -109,7 +109,7 @@ function ProcessCard({
         layout: layoutSpring,
         y: cardTransition,
       }}
-      className="flex w-full max-w-[20rem] overflow-hidden rounded-[2rem] border border-[#d7e6f4] bg-brand-azul cursor-pointer"
+      className="flex w-full max-w-[18rem] overflow-hidden rounded-[2rem] border border-[#d7e6f4] bg-brand-azul cursor-pointer"
     >
       <div className="flex w-full flex-col overflow-hidden">
         <motion.div
@@ -251,7 +251,7 @@ export function ProcessStepsSection({ pretitulo, heading, ctaLabel, ctaHref, pas
 
   return (
     <section className="bg-brand-crema pb-0 pt-14 md:pt-16">
-      <div className="mx-auto w-[95vw] max-w-[1540px]">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           {pretitulo && (
             <span className="pretitulo">{pretitulo}</span>
@@ -266,7 +266,7 @@ export function ProcessStepsSection({ pretitulo, heading, ctaLabel, ctaHref, pas
           </Heading>
         </div>
 
-        <div className="mt-11 hidden min-h-[37rem] flex-wrap items-start justify-center gap-5 xl:flex">
+        <div className="mt-11 hidden min-h-[37rem] flex-wrap items-start justify-center gap-4 xl:flex">
           {pasos.map((paso, index) => (
             <ProcessCard
               key={`${paso.numero}-${paso.titulo}`}
@@ -281,7 +281,7 @@ export function ProcessStepsSection({ pretitulo, heading, ctaLabel, ctaHref, pas
           ))}
         </div>
 
-        <div className="mt-11 hidden min-h-[84rem] flex-wrap items-start justify-center gap-5 md:flex xl:hidden">
+        <div className="mt-11 hidden min-h-[84rem] flex-wrap items-start justify-center gap-4 md:flex xl:hidden">
           {pasos.map((paso, index) => (
             <ProcessCard
               key={`${paso.numero}-${paso.titulo}-tablet`}
@@ -295,7 +295,7 @@ export function ProcessStepsSection({ pretitulo, heading, ctaLabel, ctaHref, pas
           ))}
         </div>
 
-        <div className="mt-10 grid min-h-[104rem] justify-items-center gap-4 md:hidden">
+        <div className="mt-10 grid min-h-[104rem] justify-items-center gap-3 md:hidden">
           {pasos.map((paso, index) => (
             <ProcessCard
               key={`${paso.numero}-${paso.titulo}-mobile`}
