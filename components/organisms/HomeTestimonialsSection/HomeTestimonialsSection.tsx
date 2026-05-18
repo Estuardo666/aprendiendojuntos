@@ -137,6 +137,7 @@ export function HomeTestimonialsSection({
                         src={current.imageSrc}
                         alt={current.imageAlt ?? current.author}
                         fill
+                        sizes="56px"
                         className="object-cover"
                       />
                     ) : (

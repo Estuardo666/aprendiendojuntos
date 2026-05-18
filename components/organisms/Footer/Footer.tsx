@@ -77,6 +77,7 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
                 >
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="font-body text-sm text-white hover:text-white transition-colors duration-200"
                   >
                     {link.label}
@@ -107,6 +108,7 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
                 >
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="font-body text-sm text-white hover:text-white transition-colors duration-200"
                   >
                     {link.label}
@@ -137,6 +139,7 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
                 >
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="font-body text-sm text-white hover:text-white transition-colors duration-200"
                   >
                     {link.label}

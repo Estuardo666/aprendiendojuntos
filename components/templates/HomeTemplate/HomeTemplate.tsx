@@ -1,15 +1,25 @@
+import dynamic from 'next/dynamic'
 import { Button } from '@/components/atoms/Button'
 import { HomeHero } from '@/components/organisms/HomeHero'
 import { KeywordsMarquee } from '@/components/organisms/KeywordsMarquee'
 import { HomeAboutSection } from '@/components/organisms/HomeAboutSection'
 import { HomeServicesCarousel } from '@/components/organisms/HomeServicesCarousel'
 import { HomeProgramsCarousel } from '@/components/organisms/HomeProgramsCarousel'
-import { ProcessStepsSection } from '@/components/organisms/ProcessStepsSection'
-import { HomeTestimonialsSection } from '@/components/organisms/HomeTestimonialsSection'
-import { HomeFAQSection } from '@/components/organisms/HomeFAQSection'
-import { AboutCTASection } from '@/components/organisms/AboutCTASection'
 import { HomeSectionHeader } from '@/components/organisms/HomeSectionHeader'
 import type { HomeTemplateProps } from './HomeTemplate.types'
+
+const ProcessStepsSection = dynamic(
+  () => import('@/components/organisms/ProcessStepsSection').then(m => m.ProcessStepsSection)
+)
+const HomeTestimonialsSection = dynamic(
+  () => import('@/components/organisms/HomeTestimonialsSection').then(m => m.HomeTestimonialsSection)
+)
+const HomeFAQSection = dynamic(
+  () => import('@/components/organisms/HomeFAQSection').then(m => m.HomeFAQSection)
+)
+const AboutCTASection = dynamic(
+  () => import('@/components/organisms/AboutCTASection').then(m => m.AboutCTASection)
+)
 
 export function HomeTemplate({
   hero,

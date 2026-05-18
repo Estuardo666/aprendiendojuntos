@@ -2,11 +2,11 @@
 const isDev = process.env.NODE_ENV === 'development'
 
 const nextConfig = {
+  compress: true,
+  poweredByHeader: false,
   images: {
-    // En desarrollo local el cert de LocalWP es auto-firmado y el optimizador
-    // server-side de Next.js lo rechaza → desactivar optimización en dev.
-    // En producción (Vercel) la optimización queda activa con los dominios reales.
     unoptimized: isDev,
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'http',
@@ -29,6 +29,19 @@ const nextConfig = {
         hostname: '*.aprendiendojuntos.ec',
       },
     ],
+  },
+  async headers() {
+    return [
+      {
+        source: '/fonts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ]
   },
 };
 

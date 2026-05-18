@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { ConditionalNavbar } from "@/components/organisms/ConditionalNavbar/ConditionalNavbar";
 import { NavbarWrapper } from "@/components/organisms/ConditionalNavbar/NavbarWrapper";
 import { FloatingDolphin } from "@/components/organisms/FloatingDolphin/FloatingDolphin";
@@ -9,9 +10,19 @@ import { getProgramas } from "@/lib/api/programas";
 import { getGlobalNavbarLinks } from "@/lib/navigation";
 import "./globals.css";
 
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
 export const metadata: Metadata = {
   title: "Centro Aprendiendo Juntos",
   description: "Centro de desarrollo infantil Aprendiendo Juntos",
+  other: {
+    preconnect: "https://fonts.gstatic.com",
+  },
 };
 
 function sanitizeWhatsappPhone(value: string | null | undefined) {
@@ -78,7 +89,7 @@ export default async function RootLayout({
 
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className="antialiased">
+      <body className={`${inter.variable} antialiased`}>
         <ConditionalNavbar
           links={links}
           logoUrl={logoUrl}

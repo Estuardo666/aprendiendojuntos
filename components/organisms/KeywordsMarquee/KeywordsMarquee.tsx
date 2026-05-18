@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useReducedMotion } from 'framer-motion'
+import { useReducedMotion } from 'framer-motion'
 import type { KeywordsMarqueeProps } from './KeywordsMarquee.types'
 
 // Duración del ciclo en segundos según velocidad configurada
@@ -10,6 +10,7 @@ const duraciones = { lenta: 30, normal: 15, rapida: 8 } as const
  * Banda de keywords animadas antes del footer.
  * Fondo celeste, texto blanco en semibold + emojis.
  * Respeta prefers-reduced-motion: muestra keywords estáticas en flex wrap.
+ * Implementación CSS pura sin Framer Motion runtime para mejor performance.
  */
 export function KeywordsMarquee({
   keywords,
@@ -36,18 +37,16 @@ export function KeywordsMarquee({
     )
   }
 
-  // Versión animada: cuadruplicamos las keywords para bucle infinito sin gaps
-  const items = [...keywords, ...keywords, ...keywords, ...keywords]
+  // Duplicamos para bucle infinito con CSS animation
+  const items = [...keywords, ...keywords]
+  const duration = duraciones[velocidad]
 
   return (
     <section className="bg-brand-crema py-6 md:py-8 overflow-hidden" aria-hidden="true">
-      <motion.div
-        className="flex whitespace-nowrap gap-0"
-        animate={{ x: ['0%', '-25%'] }}
-        transition={{
-          duration: duraciones[velocidad],
-          repeat: Infinity,
-          ease: 'linear',
+      <div
+        className="flex whitespace-nowrap"
+        style={{
+          animation: `marquee-scroll ${duration}s linear infinite`,
         }}
       >
         {items.map((kw, i) => (
@@ -60,7 +59,7 @@ export function KeywordsMarquee({
             <span className="text-brand-azul/25 ml-4">·</span>
           </span>
         ))}
-      </motion.div>
+      </div>
     </section>
   )
 }

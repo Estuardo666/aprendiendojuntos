@@ -128,6 +128,7 @@ function ProcessCard({
                 src={paso.imagenSrc}
                 alt={paso.imagenAlt ?? paso.titulo}
                 fill
+                sizes="(max-width: 768px) 85vw, (max-width: 1280px) 45vw, 18rem"
                 className="object-cover"
               />
             </motion.div>
