@@ -208,7 +208,7 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
               setIsMobileMenuOpen(false)
               setOpenMobileMenu(null)
             }}
-            className="pointer-events-auto fixed inset-0 z-[80] bg-brand-azul/30 backdrop-blur-[8px] md:hidden"
+            className="pointer-events-auto fixed inset-0 z-[5] bg-brand-azul/30 backdrop-blur-[8px] md:hidden"
           />
         )}
       </AnimatePresence>
@@ -400,7 +400,7 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
               animate="open"
               exit="closed"
               variants={mobileMenuVariants}
-              className="mt-3 overflow-hidden rounded-[30px] border border-brand-azul/10 bg-white px-3 py-3 backdrop-blur-2xl md:hidden"
+              className="mt-3 overflow-hidden rounded-[30px] border border-brand-azul/10 bg-white px-3 py-3 md:hidden"
             >
               <ul className="space-y-1">
                 {links.map(link => {
