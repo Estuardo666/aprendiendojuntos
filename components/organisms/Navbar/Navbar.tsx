@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/atoms/Button'
 import { Icon } from '@/components/atoms/Icon'
+import { mobileMenuStore } from '@/lib/mobile-menu-store'
 import { cn } from '@/lib/utils/cn'
 import type { NavLink, NavbarProps, NavbarSubmenuItem } from './Navbar.types'
 
@@ -168,6 +169,10 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
     setIsHeaderHovered(false)
     setPillStyle(null)
   }, [pathname])
+
+  useEffect(() => {
+    mobileMenuStore.setOpen(isMobileMenuOpen)
+  }, [isMobileMenuOpen])
 
   useEffect(() => {
     if (!hoveredDesktopLink) {

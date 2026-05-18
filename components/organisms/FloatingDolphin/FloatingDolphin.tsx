@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { useMobileMenuOpen } from '@/hooks/useMobileMenuOpen'
 
 const bubbleSequence = [
   { id: 'hola', text: 'Hola' },
@@ -29,6 +30,7 @@ const hoverTransition = {
 
 export function FloatingDolphin() {
   const shouldReduceMotion = useReducedMotion()
+  const isMobileMenuOpen = useMobileMenuOpen()
   const [activeBubble, setActiveBubble] = useState<BubbleId | null>(null)
 
   useEffect(() => {
@@ -73,11 +75,16 @@ export function FloatingDolphin() {
   return (
     <div className="pointer-events-none fixed bottom-[-2px] right-[-2px] z-[70] sm:bottom-0 sm:right-0">
       <motion.div
-        initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 28, y: 32, scale: 0.84, rotate: 8 }}
-        animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
-        transition={{ ...introTransition, delay: 2 }}
+        animate={{ y: isMobileMenuOpen ? 80 : 0 }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
         className="relative flex h-[124px] w-[108px] items-end sm:h-[168px] sm:w-[146px]"
       >
+        <motion.div
+          initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 28, y: 32, scale: 0.84, rotate: 8 }}
+          animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
+          transition={{ ...introTransition, delay: 2 }}
+          className="relative flex h-full w-full items-end"
+        >
         <AnimatePresence mode="wait">
           {bubbleText && (
             <motion.div
@@ -105,25 +112,26 @@ export function FloatingDolphin() {
           )}
         </AnimatePresence>
 
-        <motion.div
-          whileHover={
-            shouldReduceMotion
-              ? undefined
-              : {
-                  y: -6,
-                  scale: 1.04,
-                  rotate: -4,
-                }
-          }
-          transition={hoverTransition}
-          className="pointer-events-auto relative h-full w-full origin-bottom-right"
-        >
-          <img
-            src="/delfinweb.png"
-            alt="Delfín Aprendiendo Juntos"
-            className="h-full w-full object-contain object-bottom select-none"
-            draggable="false"
-          />
+          <motion.div
+            whileHover={
+              shouldReduceMotion
+                ? undefined
+                : {
+                    y: -6,
+                    scale: 1.04,
+                    rotate: -4,
+                  }
+            }
+            transition={hoverTransition}
+            className="pointer-events-auto relative h-full w-full origin-bottom-right"
+          >
+            <img
+              src="/delfinweb.png"
+              alt="Delfín Aprendiendo Juntos"
+              className="h-full w-full object-contain object-bottom select-none"
+              draggable="false"
+            />
+          </motion.div>
         </motion.div>
       </motion.div>
     </div>
