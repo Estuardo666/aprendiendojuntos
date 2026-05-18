@@ -193,7 +193,7 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
   }, [hoveredDesktopLink])
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-3 md:top-5 md:px-0">
+    <header className={cn('pointer-events-none fixed inset-x-0 top-3 flex justify-center px-3 md:top-5 md:px-0', isMobileMenuOpen ? 'z-[90]' : 'z-50')}>
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.button
@@ -208,7 +208,7 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
               setIsMobileMenuOpen(false)
               setOpenMobileMenu(null)
             }}
-            className="pointer-events-auto fixed inset-0 z-[60] bg-brand-azul/30 backdrop-blur-[8px] md:hidden"
+            className="pointer-events-auto fixed inset-0 z-[80] bg-brand-azul/30 backdrop-blur-[8px] md:hidden"
           />
         )}
       </AnimatePresence>
