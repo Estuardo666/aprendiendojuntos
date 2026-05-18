@@ -197,17 +197,18 @@ export function Navbar({ links, logoUrl, logoAlt, logoWidth, logoHeight, ctaLabe
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.button
+            key="mobile-overlay"
             type="button"
             aria-label="Cerrar menú"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             onClick={() => {
               setIsMobileMenuOpen(false)
               setOpenMobileMenu(null)
             }}
-            className="pointer-events-auto fixed inset-0 bg-brand-azul/10 backdrop-blur-[8px] md:hidden"
+            className="pointer-events-auto fixed inset-0 z-[60] bg-brand-azul/30 backdrop-blur-[8px] md:hidden"
           />
         )}
       </AnimatePresence>
