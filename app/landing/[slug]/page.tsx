@@ -38,7 +38,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
     <>
       <LandingNavbar ctaLabel={lp.formCtaTexto} />
 
-      <main className="min-h-screen bg-brand-crema pt-14 md:pt-16">
+      <main className="min-h-screen bg-brand-blanco pt-14 md:pt-16">
 
       {/* ── HERO ── misma estructura que AboutHero */}
       <section className="pb-14 pt-14 md:pb-20 md:pt-20">
@@ -57,7 +57,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
             ) : (
               <div className="h-full w-full bg-brand-acua" aria-hidden="true" />
             )}
-            <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-brand-crema via-brand-crema/78 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-brand-blanco via-brand-blanco/78 to-transparent" />
           </div>
 
           {/* Pretitulo pill + título + descripción — superpuestos con -mt igual que AboutHero */}
