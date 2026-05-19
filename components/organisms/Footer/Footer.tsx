@@ -189,9 +189,28 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
           aria-hidden="true"
           className="mx-auto mb-10 h-auto w-full max-w-[15rem]"
         />
-        <p className="text-center font-body text-xs text-white/40 pt-4">
-          &copy; {new Date().getFullYear()} Centro Aprendiendo Juntos. Todos los derechos reservados.
-        </p>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 pt-4">
+          <p className="font-body text-xs text-white/40">
+            &copy; {new Date().getFullYear()} Centro Aprendiendo Juntos. Todos los derechos reservados.
+          </p>
+          <span className="hidden md:block text-white/20">|</span>
+          <div className="flex gap-4">
+            <Link
+              href="/politica-privacidad"
+              prefetch={false}
+              className="font-body text-xs text-white/40 hover:text-white/60 transition-colors duration-200"
+            >
+              Política de Privacidad
+            </Link>
+            <Link
+              href="/terminos-uso"
+              prefetch={false}
+              className="font-body text-xs text-white/40 hover:text-white/60 transition-colors duration-200"
+            >
+              Términos de Uso
+            </Link>
+          </div>
+        </div>
       </div>
     </footer>
   )

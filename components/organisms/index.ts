@@ -69,3 +69,9 @@ export type { TestimonialLandingCard, TestimonialsLandingSectionProps } from './
 
 export { TestimoniosGrid } from './TestimoniosGrid'
 export type { TestimoniosGridProps, TestimonioGridItem } from './TestimoniosGrid'
+
+export { RecursoCard } from './RecursoCard'
+export type { RecursoCardItem } from './RecursoCard'
+
+export { RecursosListSection } from './RecursosListSection'
+export type { RecursosListSectionProps } from './RecursosListSection'

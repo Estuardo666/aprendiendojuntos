@@ -10,6 +10,7 @@ const BASE_NAV_LINKS: Array<Omit<NavLink, 'submenu'>> = [
   { label: 'Programas', href: '/programas' },
   { label: 'Eventos', href: '/landing' },
   { label: 'Testimonios', href: '/testimonios' },
+  { label: 'Recursos', href: '/recursos' },
   { label: 'Contacto', href: '/contacto' },
 ]
 
