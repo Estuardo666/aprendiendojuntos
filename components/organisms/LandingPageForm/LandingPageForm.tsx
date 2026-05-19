@@ -215,7 +215,7 @@ export function LandingPageForm({
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full rounded-[2rem] bg-white px-5 pb-5 pt-8 md:px-6 md:pb-6 md:pt-9"
+        className="w-full rounded-[2rem] border-2 border-brand-acua bg-white px-5 pb-5 pt-8 md:px-6 md:pb-6 md:pt-9"
       >
         <AnimatePresence mode="wait">
           {isSuccess ? (

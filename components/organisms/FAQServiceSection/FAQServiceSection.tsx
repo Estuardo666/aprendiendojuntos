@@ -26,7 +26,7 @@ export function FAQServiceSection({
   return (
     <section
       className="px-6 py-16 md:px-16 md:py-20"
-      style={{ backgroundImage: 'linear-gradient(180deg, #EFEDE4 0%, #EFEDE4 42%, #0080C9 100%)' }}
+      style={{ backgroundImage: 'linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 42%, #0080C9 100%)' }}
     >
       <div className="mx-auto w-full max-w-[1260px]">
 
