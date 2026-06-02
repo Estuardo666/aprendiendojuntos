@@ -5,9 +5,14 @@ import { getRecursos } from '@/lib/api/recursos'
 import { getPaginaNosotros } from '@/lib/api/nosotros'
 
 export const metadata: Metadata = {
-  title: 'Recursos | Centro Aprendiendo Juntos',
+  title: 'Recursos',
   description:
     'Descarga materiales, guías y herramientas gratuitas diseñadas por nuestro equipo para apoyar el desarrollo de tus hijos.',
+  openGraph: {
+    title: 'Recursos',
+    description:
+      'Descarga materiales, guías y herramientas gratuitas diseñadas por nuestro equipo para apoyar el desarrollo de tus hijos.',
+  },
 }
 
 export default async function RecursosPage() {

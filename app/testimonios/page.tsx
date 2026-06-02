@@ -6,9 +6,14 @@ import { stripHtml } from '@/lib/utils/stripHtml'
 import { buildTestimoniosReviewSchema } from '@/lib/seo/testimonios-review-schema'
 
 export const metadata: Metadata = {
-  title: 'Testimonios | Centro Aprendiendo Juntos',
+  title: 'Testimonios',
   description:
     'Conoce las experiencias de familias que han confiado en Centro Aprendiendo Juntos para el desarrollo de sus hijos.',
+  openGraph: {
+    title: 'Testimonios',
+    description:
+      'Conoce las experiencias de familias que han confiado en Centro Aprendiendo Juntos para el desarrollo de sus hijos.',
+  },
 }
 
 export default async function TestimoniosPage() {

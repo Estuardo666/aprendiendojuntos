@@ -6,9 +6,14 @@ import { getProgramasPageOptions } from '@/lib/api/pagina-options'
 import type { WPPrograma } from '@/lib/types/programa.types'
 
 export const metadata: Metadata = {
-  title: 'Nuestros Programas | Centro Aprendiendo Juntos',
+  title: 'Nuestros Programas',
   description:
     'Descubre nuestros programas especializados en neuropsicología, psicopedagogía y desarrollo integral para niños, adolescentes y familias.',
+  openGraph: {
+    title: 'Nuestros Programas',
+    description:
+      'Descubre nuestros programas especializados en neuropsicología, psicopedagogía y desarrollo integral para niños, adolescentes y familias.',
+  },
 }
 
 export default async function ProgramasPage() {

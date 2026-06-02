@@ -8,5 +8,5 @@ export interface TestimonioCardProps {
   rating?: number
   servicioNombre?: string | null
   servicioSlug?: string | null
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onClick: (e: React.MouseEvent<HTMLElement>) => void
 }

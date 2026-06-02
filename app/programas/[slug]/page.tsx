@@ -6,6 +6,7 @@ import { ProgramaDescripcionSection } from '@/components/organisms/ProgramaDescr
 import { ProgramaInfoCardsSection } from '@/components/organisms/ProgramaInfoCardsSection'
 import { ProgramaMasProgramasSection } from '@/components/organisms/ProgramaMasProgramasSection'
 import { ProgramaCTABottomSection } from '@/components/organisms/ProgramaCTABottomSection'
+import { buildBreadcrumbSchema } from '@/lib/seo/breadcrumb-schema'
 
 async function getProgramasSafe() {
   try {
@@ -38,7 +39,7 @@ export async function generateMetadata(
   if (!programa) return { title: 'Programa no encontrado' }
 
   return {
-    title: `${programa.title} | Centro Aprendiendo Juntos`,
+    title: programa.title,
     description: programa.programaFields.descripcion,
     openGraph: {
       title: programa.title,
@@ -93,8 +94,18 @@ export default async function ProgramaPage(
       })),
   }
 
+  const breadcrumbJsonLd = buildBreadcrumbSchema([
+    { name: 'Programas', url: 'https://aprendiendojuntos.ec/programas' },
+    { name: programa.title, url: `https://aprendiendojuntos.ec/programas/${slug}` },
+  ])
+
   return (
-    <main>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <main>
       <ProgramaHero
         pretitulo={programa.title}
         logoSrc={f.logoPrograma?.node.sourceUrl}
@@ -136,6 +147,7 @@ export default async function ProgramaPage(
         heading={masProgramas.heading}
         slides={masProgramas.slides}
       />
-    </main>
+      </main>
+    </>
   )
 }

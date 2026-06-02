@@ -7,22 +7,27 @@ export async function getTestimoniosPageOptions(): Promise<WPPaginaTestimoniosOp
   try {
     const data = await fetchGraphQL<{
       opcionesAprendiendoJuntos?: {
-        opcionesPaginaTestimonios?: WPPaginaTestimoniosOptions | null
+        opcionesPaginaTestimonios?: {
+          testimoniosBgHeroImagen?: { node?: { sourceUrl: string; altText?: string | null } | null } | null
+          testimoniosPretitulo?: string | null
+          testimoniosTitulo?: string | null
+          testimoniosDescripcion?: string | null
+        } | null
       } | null
     }>(
       `
         query GetOpcionesPaginaTestimonios {
           opcionesAprendiendoJuntos {
             opcionesPaginaTestimonios {
-              bgHeroImagen {
+              testimoniosBgHeroImagen {
                 node {
                   sourceUrl
                   altText
                 }
               }
-              pretitulo
-              titulo
-              descripcion
+              testimoniosPretitulo
+              testimoniosTitulo
+              testimoniosDescripcion
             }
           }
         }
@@ -31,7 +36,14 @@ export async function getTestimoniosPageOptions(): Promise<WPPaginaTestimoniosOp
       REVALIDATE,
     )
 
-    return data.opcionesAprendiendoJuntos?.opcionesPaginaTestimonios ?? null
+    const raw = data.opcionesAprendiendoJuntos?.opcionesPaginaTestimonios
+    if (!raw) return null
+    return {
+      bgHeroImagen: raw.testimoniosBgHeroImagen ?? undefined,
+      pretitulo: raw.testimoniosPretitulo ?? null,
+      titulo: raw.testimoniosTitulo ?? null,
+      descripcion: raw.testimoniosDescripcion ?? null,
+    }
   } catch (err) {
     console.error('[getTestimoniosPageOptions] Error:', err)
     return null

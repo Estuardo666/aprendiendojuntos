@@ -11,4 +11,6 @@ export interface ServicesStackingSliderProps {
   heading: string
   slides: StackingSlide[]
   hrefBase?: string
+  className?: string
+  headingClassName?: string
 }

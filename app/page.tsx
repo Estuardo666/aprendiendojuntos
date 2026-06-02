@@ -7,6 +7,7 @@ import { getTestimonios } from '@/lib/api/testimonios'
 import { HomeTemplate } from '@/components/templates/HomeTemplate'
 import type { BadgeProps } from '@/components/atoms/Badge'
 import type { HomeTemplateProps } from '@/components/templates/HomeTemplate'
+import { buildFAQSchema } from '@/lib/seo/faq-schema'
 
 const DEFAULT_KEYWORDS = [
   { texto: 'Neuropsicología', emoji: '🧠' },
@@ -57,10 +58,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const home = await getPaginaHome()
 
   return {
-    title: home.metaTitle ?? 'Inicio | Aprendiendo Juntos',
+    title: home.metaTitle ?? 'Inicio',
     description: home.metaDescription ?? 'Centro Neuropsicopedagógico Aprendiendo Juntos.',
     openGraph: {
-      title: home.metaTitle ?? 'Inicio | Aprendiendo Juntos',
+      title: home.metaTitle ?? 'Inicio',
       description: home.metaDescription ?? 'Centro Neuropsicopedagógico Aprendiendo Juntos.',
       images: home.imagenDestacada?.node?.sourceUrl ? [home.imagenDestacada.node.sourceUrl] : undefined,
     },
@@ -106,6 +107,13 @@ export default async function HomePage() {
       imagenSrc: paso.imagen?.node?.sourceUrl,
       imagenAlt: paso.imagen?.node?.altText ?? paso.titulo ?? '',
     }))
+
+  const faqItems = faqs.slice(0, 5).map((faq) => ({
+    pregunta: faq.faqFields.pregunta,
+    respuesta: stripHtml(faq.faqFields.respuesta),
+  }))
+
+  const faqJsonLd = buildFAQSchema(faqItems)
 
   const templateProps: HomeTemplateProps = {
     hero: {
@@ -190,10 +198,7 @@ export default async function HomePage() {
       parrafo: home.faqsParrafo,
       ctaLabel: home.faqsCtaLabel,
       ctaHref: home.faqsCtaHref,
-      items: faqs.slice(0, 5).map((faq) => ({
-        pregunta: faq.faqFields.pregunta,
-        respuesta: faq.faqFields.respuesta,
-      })),
+      items: faqItems,
     },
     cta: {
       pretitulo: home.ctaPretitulo,
@@ -206,5 +211,13 @@ export default async function HomePage() {
     },
   }
 
-  return <HomeTemplate {...templateProps} />
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <HomeTemplate {...templateProps} />
+    </>
+  )
 }

@@ -23,8 +23,12 @@ export async function generateMetadata({ params }: LandingPageProps): Promise<Me
   const lp = await getLandingPage(slug).catch(() => null)
   if (!lp) return {}
   return {
-    title: `${lp.titulo} | Centro Aprendiendo Juntos`,
+    title: lp.titulo,
     description: lp.descripcionCorta ?? undefined,
+    openGraph: {
+      title: lp.titulo,
+      description: lp.descripcionCorta ?? undefined,
+    },
   }
 }
 

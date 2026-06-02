@@ -1,66 +1,21 @@
 import type { NavLink, NavbarSubmenuItem } from '@/components/organisms/Navbar'
-import { getLandingPages } from '@/lib/api/landing-pages'
-import { getProgramas } from '@/lib/api/programas'
-import { getServicios } from '@/lib/api/servicios'
-
-const BASE_NAV_LINKS: Array<Omit<NavLink, 'submenu'>> = [
-  { label: 'Inicio', href: '/' },
-  { label: 'Nosotros', href: '/nosotros' },
-  { label: 'Servicios', href: '/servicios' },
-  { label: 'Programas', href: '/programas' },
-  { label: 'Eventos', href: '/landing' },
-  { label: 'Testimonios', href: '/testimonios' },
-  { label: 'Recursos', href: '/recursos' },
-  { label: 'Contacto', href: '/contacto' },
-]
+import { getNavigationConfig } from '@/lib/api/navigation'
 
 export async function getGlobalNavbarLinks(): Promise<NavLink[]> {
-  const [serviciosResult, programasResult, landingPagesResult] = await Promise.allSettled([
-    getServicios(),
-    getProgramas(),
-    getLandingPages(),
-  ])
+  const items = await getNavigationConfig()
 
-  const serviciosSubmenu: NavbarSubmenuItem[] =
-    serviciosResult.status === 'fulfilled'
-      ? serviciosResult.value
-          .map(servicio => ({
-            label: servicio.title,
-            href: `/servicios/${servicio.slug}`,
-          }))
-      : []
-
-  const programasSubmenu: NavbarSubmenuItem[] =
-    programasResult.status === 'fulfilled'
-      ? programasResult.value
-          .map(programa => ({
-            label: programa.title,
-            href: `/programas/${programa.slug}`,
-          }))
-      : []
-
-  const landingPagesSubmenu: NavbarSubmenuItem[] =
-    landingPagesResult.status === 'fulfilled'
-      ? landingPagesResult.value
-          .map(lp => ({
-            label: lp.title,
-            href: `/landing/${lp.slug}`,
-          }))
-      : []
-
-  return BASE_NAV_LINKS.map(link => {
-    if (link.href === '/servicios') {
-      return { ...link, submenu: serviciosSubmenu }
-    }
-
-    if (link.href === '/programas') {
-      return { ...link, submenu: programasSubmenu }
-    }
-
-    if (link.href === '/landing') {
-      return { ...link, submenu: landingPagesSubmenu }
-    }
-
-    return link
-  })
+  return items
+    .filter(i => i.visible && i.href)
+    .sort((a, b) => a.order - b.order)
+    .map(item => ({
+      label: item.label,
+      href: item.href,
+      submenu: item.subitems
+        ?.filter(s => s.visible)
+        .sort((a, b) => a.order - b.order)
+        .map(s => ({
+          label: s.label,
+          href: s.href,
+        })),
+    }))
 }

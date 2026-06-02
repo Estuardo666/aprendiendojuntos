@@ -22,11 +22,20 @@ export function TestimonioCard({
   servicioNombre,
   onClick,
 }: TestimonioCardProps) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      onClick(e as unknown as React.MouseEvent<HTMLElement>)
+    }
+  }
+
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       onClick={onClick}
-      className="group flex h-full w-full flex-col items-start rounded-[2rem] border border-brand-azul/10 bg-brand-blanco p-6 text-left shadow-sm transition-all duration-500 ease-out hover:scale-[1.025] hover:shadow-md"
+      onKeyDown={handleKeyDown}
+      className="group flex h-full w-full cursor-pointer flex-col items-start rounded-[2rem] border border-brand-azul/10 bg-brand-blanco p-6 text-left shadow-sm transition-all duration-500 ease-out hover:scale-[1.025] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-celeste focus-visible:ring-offset-2"
     >
       {/* Comillas + texto */}
       <div className="flex-1">
@@ -79,6 +88,6 @@ export function TestimonioCard({
           Leer más
         </Button>
       </div>
-    </button>
+    </div>
   )
 }

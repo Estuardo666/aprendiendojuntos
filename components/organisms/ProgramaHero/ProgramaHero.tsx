@@ -28,8 +28,10 @@ export function ProgramaHero({
         {/* Bloque centrado: pretitulo → logo → descripcion → botones */}
         <div className="relative z-20 flex flex-col items-center text-center">
           {pretitulo && (
-            <h1 className="pretitulo mb-6">{pretitulo}</h1>
+            <span className="pretitulo mb-6">{pretitulo}</span>
           )}
+
+          <h1 className="sr-only">{logoAlt}</h1>
 
           {logoSrc && (
             <div className="relative mb-6 h-[120px] w-full max-w-[420px]">

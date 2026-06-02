@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Button } from '@/components/atoms/Button'
 
 export const metadata: Metadata = {
-  title: 'Términos de Uso | Centro Aprendiendo Juntos',
+  title: 'Términos de Uso',
   description: 'Conoce los términos y condiciones de uso de nuestro sitio web y servicios.',
 }
 

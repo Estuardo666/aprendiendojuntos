@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Button } from '@/components/atoms/Button'
 
 export const metadata: Metadata = {
-  title: 'Política de Privacidad | Centro Aprendiendo Juntos',
+  title: 'Política de Privacidad',
   description: 'Conoce nuestra política de privacidad y cómo protegemos tus datos personales.',
 }
 

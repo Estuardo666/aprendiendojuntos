@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
 import { Heading } from '@/components/atoms/Heading'
 import { Icon } from '@/components/atoms/Icon'
+import { cn } from '@/lib/utils/cn'
 import type { StackingSlide, ServicesStackingSliderProps } from './ServicesStackingSlider.types'
 
 // ─── Subcomponente: card individual del slider ────────────────────────────────
@@ -109,6 +110,8 @@ export function ServicesStackingSlider({
   heading,
   slides,
   hrefBase = '/servicios',
+  className,
+  headingClassName,
 }: ServicesStackingSliderProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -122,14 +125,14 @@ export function ServicesStackingSlider({
   }
 
   return (
-    <section className="bg-brand-celeste overflow-hidden px-6 py-14 md:px-16 md:py-16">
+    <section className={cn('overflow-hidden px-6 py-14 md:px-16 md:py-16', 'bg-brand-celeste', className)}>
       <div className="mx-auto w-full max-w-[1260px]">
 
         <Heading
           as="h2"
           variant="h2"
           animate={true}
-          className="mb-10 text-center text-[clamp(2.45rem,4.8vw,3em)] leading-[0.92] tracking-[-0.06em] text-white"
+          className={cn('mb-10 text-center text-[clamp(2.45rem,4.8vw,3em)] leading-[0.92] tracking-[-0.06em] text-white', headingClassName)}
         >
           {heading}
         </Heading>

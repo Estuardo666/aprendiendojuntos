@@ -4,10 +4,13 @@ import { ConditionalNavbar } from "@/components/organisms/ConditionalNavbar/Cond
 import { NavbarWrapper } from "@/components/organisms/ConditionalNavbar/NavbarWrapper";
 import { FloatingDolphin } from "@/components/organisms/FloatingDolphin/FloatingDolphin";
 import { Footer } from "@/components/organisms/Footer/Footer";
+import { PopupImage } from "@/components/organisms/PopupImage/PopupImage";
 import { getOpciones } from "@/lib/api/opciones";
+import { getPopup } from "@/lib/api/popup";
 import { getServicios } from "@/lib/api/servicios";
 import { getProgramas } from "@/lib/api/programas";
 import { getGlobalNavbarLinks } from "@/lib/navigation";
+import { buildOrganizationSchema } from "@/lib/seo/organization-schema";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,8 +21,36 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Centro Aprendiendo Juntos",
-  description: "Centro de desarrollo infantil Aprendiendo Juntos",
+  metadataBase: new URL("https://aprendiendojuntos.ec"),
+  title: {
+    default: "Centro Neuropsicopedagógico Aprendiendo Juntos",
+    template: "%s | Aprendiendo Juntos",
+  },
+  description:
+    "Centro neuropsicopedagógico en Loja especializado en evaluación, neuropsicología, psicopedagogía, terapia de lenguaje y acompañamiento integral para niños, adolescentes y familias.",
+  openGraph: {
+    type: "website",
+    locale: "es_EC",
+    siteName: "Centro Aprendiendo Juntos",
+    title: "Centro Neuropsicopedagógico Aprendiendo Juntos",
+    description:
+      "Centro neuropsicopedagógico en Loja especializado en evaluación, neuropsicología, psicopedagogía, terapia de lenguaje y acompañamiento integral para niños, adolescentes y familias.",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Centro Aprendiendo Juntos",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  icons: {
+    icon: "/favico.png",
+    apple: "/favico.png",
+  },
   other: {
     preconnect: "https://fonts.gstatic.com",
   },
@@ -61,16 +92,25 @@ async function getProgramasSafe() {
   }
 }
 
+async function getPopupSafe() {
+  try {
+    return await getPopup();
+  } catch {
+    return null;
+  }
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [links, opciones, servicios, programas] = await Promise.all([
+  const [links, opciones, servicios, programas, popupData] = await Promise.all([
     getGlobalNavbarLinksSafe(),
     getOpcionesSafe(),
     getServiciosSafe(),
     getProgramasSafe(),
+    getPopupSafe(),
   ]);
   const whatsappNumber = sanitizeWhatsappPhone(opciones?.ctaWhatsappNumero);
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contacto";
@@ -87,9 +127,17 @@ export default async function RootLayout({
   const ctaLabel2 = enc?.boton2Texto ?? "Hablar con asesor";
   const ctaHref2 = enc?.boton2Url ?? "/contacto";
 
+  const organizationJsonLd = buildOrganizationSchema(opciones);
+
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
+        />
         <ConditionalNavbar
           links={links}
           logoUrl={logoUrl}
@@ -149,6 +197,7 @@ export default async function RootLayout({
           }))}
         />
         <FloatingDolphin />
+        <PopupImage data={popupData} />
       </body>
     </html>
   );

@@ -7,22 +7,27 @@ export async function getRecursosPageOptions(): Promise<WPPaginaRecursosOptions 
   try {
     const data = await fetchGraphQL<{
       opcionesAprendiendoJuntos?: {
-        opcionesPaginaRecursos?: WPPaginaRecursosOptions | null
+        opcionesPaginaRecursos?: {
+          recursosBgHeroImagen?: { node?: { sourceUrl: string; altText?: string | null } | null } | null
+          recursosPretitulo?: string | null
+          recursosTitulo?: string | null
+          recursosDescripcion?: string | null
+        } | null
       } | null
     }>(
       `
         query GetOpcionesPaginaRecursos {
           opcionesAprendiendoJuntos {
             opcionesPaginaRecursos {
-              bgHeroImagen {
+              recursosBgHeroImagen {
                 node {
                   sourceUrl
                   altText
                 }
               }
-              pretitulo
-              titulo
-              descripcion
+              recursosPretitulo
+              recursosTitulo
+              recursosDescripcion
             }
           }
         }
@@ -31,7 +36,14 @@ export async function getRecursosPageOptions(): Promise<WPPaginaRecursosOptions 
       REVALIDATE,
     )
 
-    return data.opcionesAprendiendoJuntos?.opcionesPaginaRecursos ?? null
+    const raw = data.opcionesAprendiendoJuntos?.opcionesPaginaRecursos
+    if (!raw) return null
+    return {
+      bgHeroImagen: raw.recursosBgHeroImagen ?? undefined,
+      pretitulo: raw.recursosPretitulo ?? null,
+      titulo: raw.recursosTitulo ?? null,
+      descripcion: raw.recursosDescripcion ?? null,
+    }
   } catch (err) {
     console.error('[getRecursosPageOptions] Error:', err)
     return null

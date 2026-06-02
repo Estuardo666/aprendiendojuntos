@@ -7,22 +7,27 @@ export async function getServiciosPageOptions(): Promise<WPPaginaHeroOptions | n
   try {
     const data = await fetchGraphQL<{
       opcionesAprendiendoJuntos?: {
-        opcionesPaginaServicios?: WPPaginaHeroOptions | null
+        opcionesPaginaServicios?: {
+          serviciosBgHeroImagen?: { node?: { sourceUrl: string; altText?: string | null } | null } | null
+          serviciosPretitulo?: string | null
+          serviciosTitulo?: string | null
+          serviciosDescripcion?: string | null
+        } | null
       } | null
     }>(
       `
         query GetOpcionesPaginaServicios {
           opcionesAprendiendoJuntos {
             opcionesPaginaServicios {
-              bgHeroImagen {
+              serviciosBgHeroImagen {
                 node {
                   sourceUrl
                   altText
                 }
               }
-              pretitulo
-              titulo
-              descripcion
+              serviciosPretitulo
+              serviciosTitulo
+              serviciosDescripcion
             }
           }
         }
@@ -31,7 +36,14 @@ export async function getServiciosPageOptions(): Promise<WPPaginaHeroOptions | n
       REVALIDATE,
     )
 
-    return data.opcionesAprendiendoJuntos?.opcionesPaginaServicios ?? null
+    const raw = data.opcionesAprendiendoJuntos?.opcionesPaginaServicios
+    if (!raw) return null
+    return {
+      bgHeroImagen: raw.serviciosBgHeroImagen ?? undefined,
+      pretitulo: raw.serviciosPretitulo ?? null,
+      titulo: raw.serviciosTitulo ?? null,
+      descripcion: raw.serviciosDescripcion ?? null,
+    }
   } catch (err) {
     console.error('[getServiciosPageOptions] Error:', err)
     return null
@@ -42,22 +54,27 @@ export async function getProgramasPageOptions(): Promise<WPPaginaHeroOptions | n
   try {
     const data = await fetchGraphQL<{
       opcionesAprendiendoJuntos?: {
-        opcionesPaginaProgramas?: WPPaginaHeroOptions | null
+        opcionesPaginaProgramas?: {
+          programasBgHeroImagen?: { node?: { sourceUrl: string; altText?: string | null } | null } | null
+          programasPretitulo?: string | null
+          programasTitulo?: string | null
+          programasDescripcion?: string | null
+        } | null
       } | null
     }>(
       `
         query GetOpcionesPaginaProgramas {
           opcionesAprendiendoJuntos {
             opcionesPaginaProgramas {
-              bgHeroImagen {
+              programasBgHeroImagen {
                 node {
                   sourceUrl
                   altText
                 }
               }
-              pretitulo
-              titulo
-              descripcion
+              programasPretitulo
+              programasTitulo
+              programasDescripcion
             }
           }
         }
@@ -66,9 +83,63 @@ export async function getProgramasPageOptions(): Promise<WPPaginaHeroOptions | n
       REVALIDATE,
     )
 
-    return data.opcionesAprendiendoJuntos?.opcionesPaginaProgramas ?? null
+    const raw = data.opcionesAprendiendoJuntos?.opcionesPaginaProgramas
+    if (!raw) return null
+    return {
+      bgHeroImagen: raw.programasBgHeroImagen ?? undefined,
+      pretitulo: raw.programasPretitulo ?? null,
+      titulo: raw.programasTitulo ?? null,
+      descripcion: raw.programasDescripcion ?? null,
+    }
   } catch (err) {
     console.error('[getProgramasPageOptions] Error:', err)
+    return null
+  }
+}
+
+export async function getArticulosPageOptions(): Promise<WPPaginaHeroOptions | null> {
+  try {
+    const data = await fetchGraphQL<{
+      opcionesAprendiendoJuntos?: {
+        opcionesPaginaArticulos?: {
+          articulosBgHeroImagen?: { node?: { sourceUrl: string; altText?: string | null } | null } | null
+          articulosPretitulo?: string | null
+          articulosTitulo?: string | null
+          articulosDescripcion?: string | null
+        } | null
+      } | null
+    }>(
+      `
+        query GetOpcionesPaginaArticulos {
+          opcionesAprendiendoJuntos {
+            opcionesPaginaArticulos {
+              articulosBgHeroImagen {
+                node {
+                  sourceUrl
+                  altText
+                }
+              }
+              articulosPretitulo
+              articulosTitulo
+              articulosDescripcion
+            }
+          }
+        }
+      `,
+      undefined,
+      REVALIDATE,
+    )
+
+    const raw = data.opcionesAprendiendoJuntos?.opcionesPaginaArticulos
+    if (!raw) return null
+    return {
+      bgHeroImagen: raw.articulosBgHeroImagen ?? undefined,
+      pretitulo: raw.articulosPretitulo ?? null,
+      titulo: raw.articulosTitulo ?? null,
+      descripcion: raw.articulosDescripcion ?? null,
+    }
+  } catch (err) {
+    console.error('[getArticulosPageOptions] Error:', err)
     return null
   }
 }

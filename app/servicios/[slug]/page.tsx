@@ -5,6 +5,10 @@ import { getOpciones } from '@/lib/api/opciones'
 import { getGlobalNavbarLinks } from '@/lib/navigation'
 import { ServicioDetalleTemplate } from '@/components/templates/ServicioDetalleTemplate'
 import type { BadgeProps } from '@/components/atoms/Badge'
+import { buildBreadcrumbSchema } from '@/lib/seo/breadcrumb-schema'
+import { buildServiceSchema } from '@/lib/seo/service-schema'
+import { buildFAQSchema } from '@/lib/seo/faq-schema'
+import { stripHtml } from '@/lib/utils/stripHtml'
 
 async function getServiciosSafe() {
   try {
@@ -68,7 +72,7 @@ export async function generateMetadata(
     servicio.servicioFields.descripcionCorta
 
   return {
-    title: `${servicio.title} | Centro Aprendiendo Juntos`,
+    title: servicio.title,
     description: descripcion,
     openGraph: {
       title: servicio.title,
@@ -200,16 +204,52 @@ export default async function ServicioDetallePage(
     velocidad: 'normal' as const,
   }
 
+  // ── JSON-LD: schemas estructurados ──────────────────────────────────────────
+  const breadcrumbJsonLd = buildBreadcrumbSchema([
+    { name: 'Servicios', url: 'https://aprendiendojuntos.ec/servicios' },
+    { name: servicio.title, url: `https://aprendiendojuntos.ec/servicios/${slug}` },
+  ])
+
+  const serviceJsonLd = buildServiceSchema({
+    title: servicio.title,
+    slug,
+    descripcionCorta: sf.descripcionCorta,
+    imagenSrc: servicio.featuredImage?.node.sourceUrl,
+  })
+
+  const faqJsonLd = faqs
+    ? buildFAQSchema(faqs.faqs.map(f => ({
+        pregunta: f.pregunta,
+        respuesta: stripHtml(f.respuesta),
+      })))
+    : null
+
   // ── RENDER: delega todo el UI al template ────────────────────────────────────
   return (
-    <ServicioDetalleTemplate
-      hero={hero}
-      contenido={contenido}
-      proceso={proceso}
-      cta={cta}
-      faqs={faqs}
-      masServicios={masServicios}
-      marquee={marquee}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+      <ServicioDetalleTemplate
+        hero={hero}
+        contenido={contenido}
+        proceso={proceso}
+        cta={cta}
+        faqs={faqs}
+        masServicios={masServicios}
+        marquee={marquee}
+      />
+    </>
   )
 }

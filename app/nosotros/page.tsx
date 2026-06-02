@@ -12,8 +12,12 @@ import type { WPMiembroEquipo } from '@/lib/types/equipo.types'
 const FALLBACK_EQUIPO: WPMiembroEquipo[] = []
 
 export const metadata: Metadata = {
-  title: 'Nosotros | Centro Aprendiendo Juntos',
+  title: 'Nosotros',
   description: 'Conoce nuestra historia, propósito y forma de acompañar el desarrollo infantil.',
+  openGraph: {
+    title: 'Nosotros',
+    description: 'Conoce nuestra historia, propósito y forma de acompañar el desarrollo infantil.',
+  },
 }
 
 export default async function NosotrosPage() {

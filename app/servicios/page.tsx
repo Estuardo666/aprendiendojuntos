@@ -6,9 +6,14 @@ import { getServiciosPageOptions } from '@/lib/api/pagina-options'
 import type { WPServicioResumen } from '@/lib/types/servicio.types'
 
 export const metadata: Metadata = {
-  title: 'Nuestros Servicios | Centro Aprendiendo Juntos',
+  title: 'Nuestros Servicios',
   description:
     'Descubre nuestros servicios especializados en neuropsicología, psicopedagogía y acompañamiento integral para niños, adolescentes y familias.',
+  openGraph: {
+    title: 'Nuestros Servicios',
+    description:
+      'Descubre nuestros servicios especializados en neuropsicología, psicopedagogía y acompañamiento integral para niños, adolescentes y familias.',
+  },
 }
 
 // Mapea categoría string a pretítulo legible

@@ -75,3 +75,6 @@ export type { RecursoCardItem } from './RecursoCard'
 
 export { RecursosListSection } from './RecursosListSection'
 export type { RecursosListSectionProps } from './RecursosListSection'
+
+export { PopupImage } from './PopupImage'
+export type { PopupData } from './PopupImage'

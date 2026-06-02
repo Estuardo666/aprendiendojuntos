@@ -23,8 +23,12 @@ const EMPTY_OPCIONES: WPOpcionesGlobales = {
 }
 
 export const metadata: Metadata = {
-  title: 'Contacto | Centro Aprendiendo Juntos',
+  title: 'Contacto',
   description: 'Agenda una consulta y conoce nuestros canales de atención, horarios y ubicación.',
+  openGraph: {
+    title: 'Contacto',
+    description: 'Agenda una consulta y conoce nuestros canales de atención, horarios y ubicación.',
+  },
 }
 
 function sanitizePhone(value: string) {
