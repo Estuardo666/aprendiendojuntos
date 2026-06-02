@@ -39,7 +39,9 @@ export async function getRecursosPageOptions(): Promise<WPPaginaRecursosOptions 
     const raw = data.opcionesAprendiendoJuntos?.opcionesPaginaRecursos
     if (!raw) return null
     return {
-      bgHeroImagen: raw.recursosBgHeroImagen ?? undefined,
+      bgHeroImagen: raw.recursosBgHeroImagen?.node
+        ? { node: { sourceUrl: raw.recursosBgHeroImagen.node.sourceUrl, altText: raw.recursosBgHeroImagen.node.altText ?? '' } }
+        : undefined,
       pretitulo: raw.recursosPretitulo ?? null,
       titulo: raw.recursosTitulo ?? null,
       descripcion: raw.recursosDescripcion ?? null,

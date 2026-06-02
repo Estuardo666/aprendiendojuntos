@@ -39,7 +39,9 @@ export async function getServiciosPageOptions(): Promise<WPPaginaHeroOptions | n
     const raw = data.opcionesAprendiendoJuntos?.opcionesPaginaServicios
     if (!raw) return null
     return {
-      bgHeroImagen: raw.serviciosBgHeroImagen ?? undefined,
+      bgHeroImagen: raw.serviciosBgHeroImagen?.node
+        ? { node: { sourceUrl: raw.serviciosBgHeroImagen.node.sourceUrl, altText: raw.serviciosBgHeroImagen.node.altText ?? '' } }
+        : undefined,
       pretitulo: raw.serviciosPretitulo ?? null,
       titulo: raw.serviciosTitulo ?? null,
       descripcion: raw.serviciosDescripcion ?? null,
@@ -86,7 +88,9 @@ export async function getProgramasPageOptions(): Promise<WPPaginaHeroOptions | n
     const raw = data.opcionesAprendiendoJuntos?.opcionesPaginaProgramas
     if (!raw) return null
     return {
-      bgHeroImagen: raw.programasBgHeroImagen ?? undefined,
+      bgHeroImagen: raw.programasBgHeroImagen?.node
+        ? { node: { sourceUrl: raw.programasBgHeroImagen.node.sourceUrl, altText: raw.programasBgHeroImagen.node.altText ?? '' } }
+        : undefined,
       pretitulo: raw.programasPretitulo ?? null,
       titulo: raw.programasTitulo ?? null,
       descripcion: raw.programasDescripcion ?? null,
@@ -133,7 +137,9 @@ export async function getArticulosPageOptions(): Promise<WPPaginaHeroOptions | n
     const raw = data.opcionesAprendiendoJuntos?.opcionesPaginaArticulos
     if (!raw) return null
     return {
-      bgHeroImagen: raw.articulosBgHeroImagen ?? undefined,
+      bgHeroImagen: raw.articulosBgHeroImagen?.node
+        ? { node: { sourceUrl: raw.articulosBgHeroImagen.node.sourceUrl, altText: raw.articulosBgHeroImagen.node.altText ?? '' } }
+        : undefined,
       pretitulo: raw.articulosPretitulo ?? null,
       titulo: raw.articulosTitulo ?? null,
       descripcion: raw.articulosDescripcion ?? null,

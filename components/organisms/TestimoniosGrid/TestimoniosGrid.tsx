@@ -48,7 +48,7 @@ export function TestimoniosGrid({ items }: TestimoniosGridProps) {
     return items.filter((item) => item.servicioSlug === activeFilter)
   }, [items, activeFilter])
 
-  const handleCardClick = (item: TestimonioGridItem, e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCardClick = (item: TestimonioGridItem, e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const centerX = rect.left + rect.width / 2
     const centerY = rect.top + rect.height / 2
@@ -91,7 +91,7 @@ export function TestimoniosGrid({ items }: TestimoniosGridProps) {
                 imageAlt={item.imageAlt}
                 rating={item.rating}
                 servicioNombre={item.servicioNombre}
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleCardClick(item, e)}
+                onClick={(e: React.MouseEvent<HTMLElement>) => handleCardClick(item, e)}
               />
             </motion.div>
           ))}

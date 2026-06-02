@@ -39,7 +39,9 @@ export async function getTestimoniosPageOptions(): Promise<WPPaginaTestimoniosOp
     const raw = data.opcionesAprendiendoJuntos?.opcionesPaginaTestimonios
     if (!raw) return null
     return {
-      bgHeroImagen: raw.testimoniosBgHeroImagen ?? undefined,
+      bgHeroImagen: raw.testimoniosBgHeroImagen?.node
+        ? { node: { sourceUrl: raw.testimoniosBgHeroImagen.node.sourceUrl, altText: raw.testimoniosBgHeroImagen.node.altText ?? '' } }
+        : undefined,
       pretitulo: raw.testimoniosPretitulo ?? null,
       titulo: raw.testimoniosTitulo ?? null,
       descripcion: raw.testimoniosDescripcion ?? null,

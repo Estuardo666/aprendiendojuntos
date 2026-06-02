@@ -113,7 +113,6 @@ export function ArticuloDetalleTemplate({
         <section className="px-4 pb-14 md:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <ArticleSharer
-              url={shareUrl}
               title={hero.titulo}
               description={hero.excerpt}
             />
