@@ -19,10 +19,13 @@ export function ServiceCTASection({
   imagenSrc,
   imagenAlt,
   wrapperClassName,
+  containerBgClass,
+  headingClass,
+  textClass,
 }: ServiceCTASectionProps) {
   return (
     <section className={cn('bg-brand-crema px-4 pb-14 pt-1 sm:px-6 lg:px-8 md:pb-16 md:pt-2', wrapperClassName)}>
-      <div className="group mx-auto w-full max-w-7xl overflow-hidden rounded-[2.75rem] bg-brand-azul">
+      <div className={cn('group mx-auto w-full max-w-7xl overflow-hidden rounded-[2.75rem] bg-brand-azul', containerBgClass)}>
         <div className="grid h-auto min-h-[400px] items-stretch gap-0 lg:grid-cols-2">
           <div className="flex h-full flex-col items-center justify-end px-5 py-5 text-center md:px-9 md:py-7 lg:items-start lg:px-11 lg:py-9 lg:text-left">
             {pretitulo && (
@@ -33,7 +36,7 @@ export function ServiceCTASection({
               as="h2"
               variant="h2"
               animate={true}
-              className="mx-auto max-w-[33rem] text-[clamp(2.45rem,4.8vw,3em)] leading-[0.92] text-white lg:mx-0"
+              className={cn('mx-auto max-w-[33rem] text-[clamp(2.45rem,4.8vw,3em)] leading-[0.92] text-white lg:mx-0', headingClass)}
             >
               {heading}
             </Heading>
@@ -41,7 +44,7 @@ export function ServiceCTASection({
             {descripcion && (
               <Text
                 variant="body"
-                className="mt-5 max-w-[33rem] text-[1rem] leading-[1.4] text-white md:text-[clamp(0.666rem,1.134vw,0.966rem)] md:leading-[1.22]"
+                className={cn('mt-5 max-w-[33rem] text-[1rem] leading-[1.4] text-white md:text-[clamp(0.666rem,1.134vw,0.966rem)] md:leading-[1.22]', textClass)}
               >
                 {descripcion}
               </Text>

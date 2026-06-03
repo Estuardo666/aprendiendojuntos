@@ -1,5 +1,11 @@
 import type { WPImagen } from './servicio.types'
 
+export interface WPBloqueRepetidor {
+  tituloRepetidor: string
+  tituloInterno?: string | null
+  contenidoWysiwyg?: string | null
+}
+
 export interface WPLandingBeneficio {
   icono: string
   texto: string
@@ -35,6 +41,13 @@ export interface WPLandingPageFields {
   beneficios?: WPLandingBeneficio[] | null
   faqs?: { nodes: WPLandingFAQNode[] } | null
   testimonios?: { nodes: WPLandingTestimonioNode[] } | null
+  bloquesRepetidor?: WPBloqueRepetidor[] | null
+  imagenCta?: { node: WPImagen } | null
+  ctaPretitulo?: string | null
+  ctaTitulo?: string | null
+  ctaSubtitulo?: string | null
+  ctaTextoBoton?: string | null
+  ctaLinkBoton?: string | null
 }
 
 export interface WPLandingPage {
@@ -78,4 +91,12 @@ export interface LandingPageData {
   beneficios?: LandingBeneficio[]
   faqs?: LandingFAQ[]
   testimonios?: LandingTestimonio[]
+  bloquesRepetidor?: WPBloqueRepetidor[]
+  imagenCtaSrc?: string
+  imagenCtaAlt?: string
+  ctaPretitulo?: string
+  ctaTitulo?: string
+  ctaSubtitulo?: string
+  ctaTextoBoton?: string
+  ctaLinkBoton?: string
 }

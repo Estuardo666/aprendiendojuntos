@@ -6,6 +6,8 @@ import { LandingPageForm } from '@/components/organisms/LandingPageForm'
 import { FAQServiceSection } from '@/components/organisms/FAQServiceSection'
 import { LandingBeneficios } from '@/components/organisms/LandingBeneficios/LandingBeneficios'
 import { LandingNavbar } from '@/components/organisms/LandingNavbar/LandingNavbar'
+import { LandingRepetidorSection } from '@/components/organisms/LandingRepetidorSection'
+import { ServiceCTASection } from '@/components/organisms/ServiceCTASection'
 import { Heading } from '@/components/atoms/Heading'
 import { Text } from '@/components/atoms/Text'
 
@@ -105,7 +107,8 @@ export default async function LandingPage({ params }: LandingPageProps) {
           {lp.infoEvento ? (
             <div
               className="prose prose-base max-w-none text-brand-texto
-                [&_h3]:font-heading [&_h3]:text-[1.21rem] [&_h3]:font-bold [&_h3]:text-brand-azul [&_h3]:mb-4
+                [&_h2]:font-heading [&_h2]:text-h2 [&_h2]:font-bold [&_h2]:text-brand-azul [&_h2]:mb-4
+                [&_h3]:font-heading [&_h3]:text-h3 [&_h3]:font-semibold [&_h3]:text-brand-azul [&_h3]:mb-4
                 [&_ul]:mt-3 [&_ul]:space-y-2
                 [&_li]:text-[1.07rem] [&_li]:leading-[1.55]
                 [&_p]:mt-4 [&_p]:text-[1.07rem] [&_p]:leading-[1.7] [&_p]:text-justify"
@@ -119,6 +122,10 @@ export default async function LandingPage({ params }: LandingPageProps) {
 
           {lp.beneficios && lp.beneficios.length > 0 && (
             <LandingBeneficios beneficios={lp.beneficios} />
+          )}
+
+          {lp.bloquesRepetidor && lp.bloquesRepetidor.length > 0 && (
+            <LandingRepetidorSection bloques={lp.bloquesRepetidor} />
           )}
         </div>
 
@@ -143,6 +150,20 @@ export default async function LandingPage({ params }: LandingPageProps) {
           faqs={lp.faqs}
           ctaLabel="Contáctanos"
           ctaHref="/contacto"
+        />
+      )}
+
+      {/* ── CTA LANDING ── */}
+      {lp.ctaTitulo && (
+        <ServiceCTASection
+          pretitulo={lp.ctaPretitulo}
+          heading={lp.ctaTitulo}
+          descripcion={lp.ctaSubtitulo}
+          ctaLabel={lp.ctaTextoBoton ?? 'Más información'}
+          ctaHref={lp.ctaLinkBoton ?? '#formulario'}
+          imagenSrc={lp.imagenCtaSrc}
+          imagenAlt={lp.imagenCtaAlt}
+          wrapperClassName="bg-gradient-to-b from-brand-blanco to-brand-celeste"
         />
       )}
 

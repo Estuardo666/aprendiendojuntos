@@ -100,7 +100,7 @@ export function AboutTeamSection({ pretitulo, titulo, miembros }: AboutTeamSecti
             className="mt-10 flex justify-center gap-4 overflow-x-auto px-1 py-2 scroll-smooth snap-x snap-mandatory scrollbar-hide"
           >
             {miembros.map((miembro) => (
-              <div key={miembro.id} className="snap-start flex-shrink-0 w-[82%] sm:w-[46%] lg:w-[22rem]">
+              <div key={miembro.id} className={`snap-start flex-shrink-0 ${miembros.length === 1 ? 'w-[82%] sm:w-[60%] lg:w-[33rem]' : 'w-[82%] sm:w-[46%] lg:w-[22rem]'}`}>
                 <TeamCard
                   miembro={miembro}
                   onClick={(e) => {
@@ -117,25 +117,27 @@ export function AboutTeamSection({ pretitulo, titulo, miembros }: AboutTeamSecti
             ))}
           </div>
 
-          <div className="mt-6 flex justify-center gap-3">
-            <button
-              type="button"
-              onClick={() => scroll('prev')}
-              aria-label="Anterior"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-azul text-brand-sunrise transition-colors duration-300 hover:bg-[#0c68b4]"
-            >
-              <Icon name="ChevronRightIcon" size="sm" className="rotate-180" color="naranja" />
-            </button>
+          {miembros.length > 1 && (
+            <div className="mt-6 flex justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => scroll('prev')}
+                aria-label="Anterior"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-azul text-brand-sunrise transition-colors duration-300 hover:bg-[#0c68b4]"
+              >
+                <Icon name="ChevronRightIcon" size="sm" className="rotate-180" color="naranja" />
+              </button>
 
-            <button
-              type="button"
-              onClick={() => scroll('next')}
-              aria-label="Siguiente"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-azul text-brand-sunrise transition-colors duration-300 hover:bg-[#0c68b4]"
-            >
-              <Icon name="ChevronRightIcon" size="sm" color="naranja" />
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={() => scroll('next')}
+                aria-label="Siguiente"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-azul text-brand-sunrise transition-colors duration-300 hover:bg-[#0c68b4]"
+              >
+                <Icon name="ChevronRightIcon" size="sm" color="naranja" />
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

@@ -87,8 +87,11 @@ export function FloatingDolphin() {
         >
         <AnimatePresence mode="wait">
           {bubbleText && (
-            <motion.div
+            <motion.a
               key={activeBubble}
+              href={activeBubble === 'chat' ? 'https://api.whatsapp.com/send/?phone=0985788925' : undefined}
+              target={activeBubble === 'chat' ? '_blank' : undefined}
+              rel={activeBubble === 'chat' ? 'noopener noreferrer' : undefined}
               initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 16, y: 10, scale: 0.9 }}
               animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, x: 0, y: 0, scale: 1 }}
               exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 10, y: 8, scale: 0.94 }}
@@ -108,7 +111,7 @@ export function FloatingDolphin() {
               </motion.p>
 
               <span className="absolute -bottom-[8px] right-6 block h-4 w-4 rotate-45 border-b-2 border-r-2 border-brand-azul bg-brand-crema transition-colors duration-200 group-hover:bg-brand-azul" />
-            </motion.div>
+            </motion.a>
           )}
         </AnimatePresence>
 

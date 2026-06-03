@@ -1,7 +1,6 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { Text } from '@/components/atoms/Text'
 import type { FAQItemProps } from './FAQItem.types'
 
 const springTransition = {
@@ -58,12 +57,12 @@ export function FAQItem({ pregunta, respuesta, isOpen, onToggle }: FAQItemProps)
         transition={panelTransition}
         className="overflow-hidden"
       >
-        <Text
-          variant="body"
-          className="px-6 pb-5 pt-0 text-[clamp(1rem,1.08vw,1.08rem)] leading-[1.32] text-brand-texto/90 md:px-7"
-        >
-          {respuesta}
-        </Text>
+        <div
+          className="px-6 pb-5 pt-0 font-body text-[clamp(1rem,1.08vw,1.08rem)] leading-[1.32] text-brand-texto/90 md:px-7
+            [&_h3]:font-heading [&_h3]:text-[1.1rem] [&_h3]:font-bold [&_h3]:text-brand-azul [&_h3]:mb-3
+            [&_p]:mt-2 [&_p]:leading-[1.55]"
+          dangerouslySetInnerHTML={{ __html: respuesta }}
+        />
       </motion.div>
     </motion.article>
   )

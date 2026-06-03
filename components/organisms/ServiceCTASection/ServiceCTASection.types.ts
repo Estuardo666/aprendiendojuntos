@@ -7,4 +7,7 @@ export interface ServiceCTASectionProps {
   imagenSrc?: string
   imagenAlt?: string
   wrapperClassName?: string
+  containerBgClass?: string
+  headingClass?: string
+  textClass?: string
 }

@@ -90,11 +90,12 @@ export default async function ServicioDetallePage(
 ) {
   const { slug } = await params
 
-  // Fetch en paralelo: servicio y opciones globales del centro
-  const [servicio, opciones, navbarLinks] = await Promise.all([
+  // Fetch en paralelo: servicio, opciones globales y todos los servicios (fallback para relacionados)
+  const [servicio, opciones, navbarLinks, todosServicios] = await Promise.all([
     getServicioSafe(slug),
     getOpcionesSafe(),
     getGlobalNavbarLinksSafe(),
+    getServiciosSafe(),
   ])
 
   // Si el servicio no existe en WP → 404
@@ -175,9 +176,14 @@ export default async function ServicioDetallePage(
     : undefined
 
   // ── MÁS SERVICIOS: slider con servicios relacionados (máx 4) ─────────────────
+  const relatedNodes = sf.serviciosRelacionados?.nodes ?? []
+  const fallbackNodes = relatedNodes.length > 0
+    ? []
+    : todosServicios.filter(s => s.slug !== slug).slice(0, 4)
+
   const masServicios = {
     heading: 'Más servicios',
-    slides: (sf.serviciosRelacionados?.nodes ?? []).map(s => ({
+    slides: (relatedNodes.length > 0 ? relatedNodes : fallbackNodes).map(s => ({
       titulo:    s.title,
       slug:      s.slug,
       imagenSrc: s.featuredImage?.node.sourceUrl,

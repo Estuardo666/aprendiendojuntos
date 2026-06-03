@@ -172,7 +172,17 @@ export default async function ContactoPage() {
     getOpciones().catch(() => null),
   ])
   const opciones = opcionesData ?? EMPTY_OPCIONES
-  const contacto = contactoData ?? buildFallbackContacto(opciones)
+  const fallbackContacto = buildFallbackContacto(opciones)
+  const contacto = contactoData
+    ? {
+        ...contactoData,
+        hero: {
+          pretitulo: contactoData.hero.pretitulo || fallbackContacto.hero.pretitulo,
+          titulo: contactoData.hero.titulo || fallbackContacto.hero.titulo,
+          descripcion: contactoData.hero.descripcion || fallbackContacto.hero.descripcion,
+        },
+      }
+    : fallbackContacto
   const infoSections = buildInfoSections(contacto, opciones)
   const socialLinks = buildSocialLinks(contacto, opciones)
 

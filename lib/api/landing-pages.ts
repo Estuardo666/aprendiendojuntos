@@ -44,6 +44,14 @@ function mapLandingPage(lp: WPLandingPage): LandingPageData {
         texto: n.testimonioFields!.texto,
         calificacion: n.testimonioFields!.calificacion ?? undefined,
       })) ?? undefined,
+    bloquesRepetidor: f.bloquesRepetidor ?? undefined,
+    imagenCtaSrc: f.imagenCta?.node.sourceUrl ?? undefined,
+    imagenCtaAlt: f.imagenCta?.node.altText ?? undefined,
+    ctaPretitulo: f.ctaPretitulo ?? undefined,
+    ctaTitulo: f.ctaTitulo ?? undefined,
+    ctaSubtitulo: f.ctaSubtitulo ?? undefined,
+    ctaTextoBoton: f.ctaTextoBoton ?? undefined,
+    ctaLinkBoton: f.ctaLinkBoton ?? undefined,
   }
 }
 
@@ -97,6 +105,22 @@ export async function getLandingPage(slug: string): Promise<LandingPageData | nu
                 }
               }
             }
+            bloquesRepetidor {
+              tituloRepetidor
+              tituloInterno
+              contenidoWysiwyg
+            }
+            imagenCta {
+              node {
+                sourceUrl
+                altText
+              }
+            }
+            ctaPretitulo
+            ctaTitulo
+            ctaSubtitulo
+            ctaTextoBoton
+            ctaLinkBoton
           }
         }
       }
