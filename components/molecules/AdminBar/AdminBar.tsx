@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { adminBarStore } from '@/lib/admin-bar-store'
 
 const WP_URL = process.env.NEXT_PUBLIC_WP_URL ?? ''
+const STORAGE_KEY = 'aj_admin_token'
 
 interface AdminBarUser {
   name: string
@@ -22,37 +23,107 @@ interface AdminBarData {
 interface AdminBarItem {
   label: string
   href: string
-  submenu?: { label: string; href: string }[]
 }
 
 export function AdminBar() {
   const pathname = usePathname()
   const [isVisible, setIsVisible] = useState(false)
   const [isReady, setIsReady] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
   const [user, setUser] = useState<AdminBarUser | null>(null)
   const [editUrl, setEditUrl] = useState<string | null>(null)
   const [editLabel, setEditLabel] = useState<string | null>(null)
   const [openMenu, setOpenMenu] = useState<string | null>(null)
+  const [loginError, setLoginError] = useState(false)
   const menuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const tokenInputRef = useRef<HTMLInputElement>(null)
 
   const checkAuth = useCallback(async () => {
     try {
+      // Try cookie-based auth first (production)
       const res = await fetch('/api/admin-bar/auth', {
         cache: 'no-store',
       })
 
-      if (!res.ok) return
+      if (res.ok) {
+        const data: AdminBarData = await res.json()
+        if (data.authenticated && data.user) {
+          setUser(data.user)
+          setIsVisible(true)
+          adminBarStore.setVisible(true)
+          return
+        }
+      }
+    } catch {
+      // Cookie auth failed, try token fallback
+    }
+
+    // Fallback: try token from localStorage (development)
+    const token = localStorage.getItem(STORAGE_KEY)
+    if (token) {
+      try {
+        const res = await fetch('/api/admin-bar/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+          cache: 'no-store',
+        })
+
+        if (res.ok) {
+          const data: AdminBarData = await res.json()
+          if (data.authenticated && data.user) {
+            setUser(data.user)
+            setIsVisible(true)
+            adminBarStore.setVisible(true)
+            return
+          }
+        }
+      } catch {
+        // Token auth failed
+      }
+    }
+  }, [])
+
+  const handleLogin = async () => {
+    const token = tokenInputRef.current?.value?.trim()
+    if (!token) return
+
+    setLoginError(false)
+
+    try {
+      const res = await fetch('/api/admin-bar/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+        cache: 'no-store',
+      })
+
+      if (!res.ok) {
+        setLoginError(true)
+        return
+      }
 
       const data: AdminBarData = await res.json()
       if (data.authenticated && data.user) {
+        localStorage.setItem(STORAGE_KEY, token)
         setUser(data.user)
         setIsVisible(true)
+        setShowLogin(false)
         adminBarStore.setVisible(true)
+      } else {
+        setLoginError(true)
       }
     } catch {
-      // Fail silently
+      setLoginError(true)
     }
-  }, [])
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem(STORAGE_KEY)
+    setIsVisible(false)
+    setUser(null)
+    adminBarStore.setVisible(false)
+  }
 
   const fetchEditLink = useCallback(async () => {
     try {
@@ -104,7 +175,68 @@ export function AdminBar() {
     }, 150)
   }
 
-  if (!isReady || !isVisible) return null
+  if (!isReady) return null
+
+  // Show login button if not authenticated
+  if (!isVisible && !showLogin) {
+    return (
+      <motion.button
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 1 }}
+        onClick={() => {
+          setShowLogin(true)
+          setTimeout(() => tokenInputRef.current?.focus(), 100)
+        }}
+        className="fixed bottom-4 right-4 z-[100] flex h-10 w-10 items-center justify-center rounded-full bg-brand-azul text-white shadow-lg transition-colors hover:bg-brand-azul/80"
+        title="Admin"
+      >
+        <DashboardIcon />
+      </motion.button>
+    )
+  }
+
+  // Show login form (development fallback)
+  if (showLogin && !isVisible) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="fixed bottom-4 right-4 z-[100] w-72 rounded-xl border border-brand-azul/20 bg-white p-4 shadow-xl font-body"
+      >
+        <div className="mb-3 flex items-center justify-between">
+          <span className="text-sm font-semibold text-brand-azul">Admin</span>
+          <button
+            type="button"
+            onClick={() => setShowLogin(false)}
+            className="text-brand-texto/40 hover:text-brand-texto"
+          >
+            <CloseIcon />
+          </button>
+        </div>
+        <p className="mb-2 text-xs text-brand-texto/60">
+          Ingresa el token de acceso
+        </p>
+        <input
+          ref={tokenInputRef}
+          type="password"
+          placeholder="Token de acceso"
+          onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+          className="mb-2 w-full rounded-lg border border-brand-azul/20 px-3 py-2 text-sm text-brand-texto placeholder:text-brand-texto/40 focus:border-brand-celeste focus:outline-none"
+        />
+        {loginError && (
+          <p className="mb-2 text-xs text-red-500">Token inválido</p>
+        )}
+        <button
+          type="button"
+          onClick={handleLogin}
+          className="w-full rounded-lg bg-brand-azul px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-azul/90"
+        >
+          Acceder
+        </button>
+      </motion.div>
+    )
+  }
 
   const addItems: AdminBarItem[] = [
     { label: 'Medio', href: `${WP_URL}/wp-admin/media-new.php` },
@@ -206,11 +338,19 @@ export function AdminBar() {
         {/* Spacer */}
         <div className="flex-1" />
 
-        {/* User Info */}
+        {/* User Info + Logout */}
         {user && (
           <div className="flex items-center gap-2">
             <span className="hidden text-white/70 md:inline">{user.name}</span>
             <div className="h-5 w-5 rounded-full bg-brand-naranja/80" />
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="ml-1 rounded-md px-1.5 py-1 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+              title="Cerrar sesión admin bar"
+            >
+              <LogoutIcon />
+            </button>
           </div>
         )}
       </div>
@@ -251,6 +391,25 @@ function ChevronDownIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="m6 9 6 6 6-6" />
+    </svg>
+  )
+}
+
+function CloseIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  )
+}
+
+function LogoutIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" x2="9" y1="12" y2="12" />
     </svg>
   )
 }
