@@ -177,8 +177,10 @@ export function AdminBar() {
 
   if (!isReady) return null
 
-  // Show login button if not authenticated
+  // Not authenticated — show login fallback only in development
   if (!isVisible && !showLogin) {
+    if (process.env.NODE_ENV !== 'development') return null
+
     return (
       <motion.button
         initial={{ opacity: 0, scale: 0.8 }}
@@ -196,8 +198,9 @@ export function AdminBar() {
     )
   }
 
-  // Show login form (development fallback)
+  // Show login form (development fallback only)
   if (showLogin && !isVisible) {
+    if (process.env.NODE_ENV !== 'development') return null
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
