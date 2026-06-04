@@ -35,12 +35,28 @@ export async function POST(request: NextRequest) {
   if (slug) {
     if (postType === 'aj_testimonio') {
       await revalidatePath(`/testimonios/${slug}`)
+      await revalidatePath('/testimonios')
       await revalidatePath('/')
       return NextResponse.json({ revalidated: true, slug, path: `/testimonios/${slug}` })
     }
 
+    if (postType === 'aj_articulo') {
+      await revalidatePath(`/articulos/${slug}`)
+      await revalidatePath('/articulos')
+      await revalidatePath('/')
+      return NextResponse.json({ revalidated: true, slug, path: `/articulos/${slug}` })
+    }
+
+    if (postType === 'aj_programa') {
+      await revalidatePath(`/programas/${slug}`)
+      await revalidatePath('/programas')
+      await revalidatePath('/')
+      return NextResponse.json({ revalidated: true, slug, path: `/programas/${slug}` })
+    }
+
     await revalidatePath(`/servicios/${slug}`)
     await revalidatePath('/servicios')
+    await revalidatePath('/')
     return NextResponse.json({ revalidated: true, slug })
   }
 

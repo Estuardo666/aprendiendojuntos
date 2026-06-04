@@ -141,7 +141,7 @@ export function buildConfirmacionHtml(d: LandingFormPayload): string {
       <tr>
         <td style="padding:20px 24px;text-align:center;">
           <p style="margin:0 0 12px;font-family:${FONTS.heading};font-size:14px;font-weight:700;color:${COLORS.azul};">¿Tienes dudas mientras tanto?</p>
-          <a href="https://wa.me/593979918871" style="display:inline-block;padding:12px 24px;background:linear-gradient(135deg,${COLORS.naranja} 0%,#ffc42d 100%);color:${COLORS.azul};font-family:${FONTS.body};font-size:14px;font-weight:600;text-decoration:none;border-radius:999px;">
+          <a href="https://wa.me/593985788925" style="display:inline-block;padding:12px 24px;background:linear-gradient(135deg,${COLORS.naranja} 0%,#ffc42d 100%);color:${COLORS.azul};font-family:${FONTS.body};font-size:14px;font-weight:600;text-decoration:none;border-radius:999px;">
             Escríbenos por WhatsApp
           </a>
         </td>
