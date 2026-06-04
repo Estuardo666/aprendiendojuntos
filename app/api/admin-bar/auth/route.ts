@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ authenticated: false })
   }
 
-  return verifyToken(match[1])
+  return verifyToken(decodeURIComponent(match[1]))
 }
 
 export async function POST(request: NextRequest) {
