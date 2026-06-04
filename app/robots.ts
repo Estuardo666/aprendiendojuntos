@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/'],
       },
     ],
-    sitemap: 'https://aprendiendojuntos.ec/sitemap.xml',
-    host: 'https://aprendiendojuntos.ec',
+    sitemap: 'https://www.aprendiendojuntos.ec/sitemap.xml',
+    host: 'https://www.aprendiendojuntos.ec',
   }
 }

@@ -56,7 +56,7 @@ const platforms: SharePlatform[] = [
   {
     name: 'Instagram',
     iconName: 'InstagramIcon',
-    getUrl: () => 'https://instagram.com/aprendiendojuntos.ec',
+    getUrl: () => 'https://www.instagram.com/aprendiendojuntosec/',
   },
 ]
 

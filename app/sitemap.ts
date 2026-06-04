@@ -4,7 +4,7 @@ import { getProgramas } from '@/lib/api/programas'
 import { getArticulos } from '@/lib/api/articulos'
 import { getLandingPages } from '@/lib/api/landing-pages'
 
-const BASE = 'https://aprendiendojuntos.ec'
+const BASE = 'https://www.aprendiendojuntos.ec'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [

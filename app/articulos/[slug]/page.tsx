@@ -31,7 +31,7 @@ export async function generateMetadata(
     openGraph: {
       title: articulo.title,
       description: articulo.excerpt ? stripHtml(articulo.excerpt).slice(0, 160) : undefined,
-      url: `https://aprendiendojuntos.ec/articulos/${slug}`,
+      url: `https://www.aprendiendojuntos.ec/articulos/${slug}`,
       images: articulo.featuredImage?.node?.sourceUrl
         ? [{ url: articulo.featuredImage.node.sourceUrl }]
         : [],
@@ -54,8 +54,8 @@ export default async function ArticuloDetallePage(
   const categoria = articulo.categories?.nodes?.[0]?.name ?? 'Artículo'
 
   const breadcrumbJsonLd = buildBreadcrumbSchema([
-    { name: 'Artículos', url: 'https://aprendiendojuntos.ec/articulos' },
-    { name: articulo.title, url: `https://aprendiendojuntos.ec/articulos/${slug}` },
+    { name: 'Artículos', url: 'https://www.aprendiendojuntos.ec/articulos' },
+    { name: articulo.title, url: `https://www.aprendiendojuntos.ec/articulos/${slug}` },
   ])
 
   const articleJsonLd = buildArticleSchema({

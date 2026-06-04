@@ -9,11 +9,11 @@ export function buildServiceSchema(service: {
     '@type': 'Service',
     name: service.title,
     description: service.descripcionCorta,
-    url: `https://aprendiendojuntos.ec/servicios/${service.slug}`,
+    url: `https://www.aprendiendojuntos.ec/servicios/${service.slug}`,
     provider: {
       '@type': 'MedicalBusiness',
       name: 'Centro Aprendiendo Juntos',
-      url: 'https://aprendiendojuntos.ec',
+      url: 'https://www.aprendiendojuntos.ec',
     },
     ...(service.imagenSrc && { image: service.imagenSrc }),
   }

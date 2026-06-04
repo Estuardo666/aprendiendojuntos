@@ -10,7 +10,7 @@ export function buildArticleSchema(article: {
     '@type': 'Article',
     headline: article.title,
     description: article.excerpt,
-    url: `https://aprendiendojuntos.ec/articulos/${article.slug}`,
+    url: `https://www.aprendiendojuntos.ec/articulos/${article.slug}`,
     datePublished: article.date,
     author: {
       '@type': 'Organization',

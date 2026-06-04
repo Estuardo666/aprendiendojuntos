@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { AdminBar } from "@/components/molecules/AdminBar";
 import { ConditionalNavbar } from "@/components/organisms/ConditionalNavbar/ConditionalNavbar";
 import { NavbarWrapper } from "@/components/organisms/ConditionalNavbar/NavbarWrapper";
 import { FloatingDolphin } from "@/components/organisms/FloatingDolphin/FloatingDolphin";
@@ -20,7 +21,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://aprendiendojuntos.ec"),
+  metadataBase: new URL("https://www.aprendiendojuntos.ec"),
   title: {
     default: "Centro Neuropsicopedagógico Aprendiendo Juntos",
     template: "%s | Aprendiendo Juntos",
@@ -137,6 +138,7 @@ export default async function RootLayout({
             __html: JSON.stringify(organizationJsonLd),
           }}
         />
+        <AdminBar />
         <ConditionalNavbar
           links={links}
           logoUrl={logoUrl}

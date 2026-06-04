@@ -25,7 +25,7 @@ export function ArticuloDetalleTemplate({
   archivoSize,
   masArticulos,
 }: ArticuloDetalleTemplateProps) {
-  const shareUrl = `https://aprendiendojuntos.ec/articulos/${slug}`
+  const shareUrl = `https://www.aprendiendojuntos.ec/articulos/${slug}`
 
   return (
     <>

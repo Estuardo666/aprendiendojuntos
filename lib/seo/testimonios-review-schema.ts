@@ -23,7 +23,7 @@ interface ReviewSchemaItem {
 
 export function buildTestimoniosReviewSchema(
   testimonios: WPTestimonio[],
-  siteUrl: string = 'https://aprendiendojuntos.ec',
+  siteUrl: string = 'https://www.aprendiendojuntos.ec',
 ): Array<ReviewSchemaItem> {
   return testimonios.map((t) => ({
     '@type': 'Review',

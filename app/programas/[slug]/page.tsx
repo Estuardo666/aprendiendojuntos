@@ -95,8 +95,8 @@ export default async function ProgramaPage(
   }
 
   const breadcrumbJsonLd = buildBreadcrumbSchema([
-    { name: 'Programas', url: 'https://aprendiendojuntos.ec/programas' },
-    { name: programa.title, url: `https://aprendiendojuntos.ec/programas/${slug}` },
+    { name: 'Programas', url: 'https://www.aprendiendojuntos.ec/programas' },
+    { name: programa.title, url: `https://www.aprendiendojuntos.ec/programas/${slug}` },
   ])
 
   return (

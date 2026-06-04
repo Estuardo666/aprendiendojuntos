@@ -7,7 +7,7 @@ export function buildOrganizationSchema(
     '@context': 'https://schema.org',
     '@type': 'MedicalBusiness',
     name: 'Centro Aprendiendo Juntos',
-    url: 'https://aprendiendojuntos.ec',
+    url: 'https://www.aprendiendojuntos.ec',
     telephone: opciones?.contactoTelefono ?? '(07) 261-3255',
     address: {
       '@type': 'PostalAddress',

@@ -212,8 +212,8 @@ export default async function ServicioDetallePage(
 
   // ── JSON-LD: schemas estructurados ──────────────────────────────────────────
   const breadcrumbJsonLd = buildBreadcrumbSchema([
-    { name: 'Servicios', url: 'https://aprendiendojuntos.ec/servicios' },
-    { name: servicio.title, url: `https://aprendiendojuntos.ec/servicios/${slug}` },
+    { name: 'Servicios', url: 'https://www.aprendiendojuntos.ec/servicios' },
+    { name: servicio.title, url: `https://www.aprendiendojuntos.ec/servicios/${slug}` },
   ])
 
   const serviceJsonLd = buildServiceSchema({
