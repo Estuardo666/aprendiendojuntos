@@ -17,19 +17,11 @@ export function HomeHero({
   ctaSecundarioHref,
 }: HomeHeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  useEffect(() => {
-    if (!containerRef.current || isMobile) return
+    if (!containerRef.current) return
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -41,7 +33,7 @@ export function HomeHero({
     )
     observer.observe(containerRef.current)
     return () => observer.disconnect()
-  }, [isMobile])
+  }, [])
 
   useEffect(() => {
     if (isVisible && videoRef.current) {
@@ -57,7 +49,7 @@ export function HomeHero({
     <section className="bg-brand-crema pb-12 pt-14 md:pb-16 md:pt-20">
       <div className="mx-auto w-[97vw] md:w-[95vw]">
         <div ref={containerRef} className="relative md:-mt-[3.25vh] h-[78vh] min-h-[520px] overflow-hidden rounded-[2rem] md:h-[82vh] md:rounded-[2.75rem]">
-          {videoSrc && !isMobile ? (
+          {videoSrc ? (
             <video
               ref={videoRef}
               key={videoSrc}
