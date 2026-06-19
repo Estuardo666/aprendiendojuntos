@@ -197,6 +197,10 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
               &copy; {new Date().getFullYear()} Centro Aprendiendo Juntos. Todos los derechos reservados.
             </p>
             <span className="hidden md:block text-white/20">|</span>
+            <p className="font-body text-xs text-white/40">
+              Desarrollado por: Stuart
+            </p>
+            <span className="hidden md:block text-white/20">|</span>
             <div className="flex gap-4">
               <Link
                 href="/politica-privacidad"
