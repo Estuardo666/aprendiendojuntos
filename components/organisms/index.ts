@@ -58,6 +58,9 @@ export type { HomeServicesCarouselProps } from './HomeServicesCarousel'
 export { HomeProgramsCarousel } from './HomeProgramsCarousel'
 export type { HomeProgramsCarouselProps } from './HomeProgramsCarousel'
 
+export { LogoMarquee } from './LogoMarquee'
+export type { LogoMarqueeItem, LogoMarqueeProps } from './LogoMarquee'
+
 export { HomeFAQSection } from './HomeFAQSection'
 export type { HomeFAQSectionProps } from './HomeFAQSection'
 

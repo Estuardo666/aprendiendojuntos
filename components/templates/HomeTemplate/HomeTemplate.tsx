@@ -5,6 +5,7 @@ import { KeywordsMarquee } from '@/components/organisms/KeywordsMarquee'
 import { HomeAboutSection } from '@/components/organisms/HomeAboutSection'
 import { HomeServicesCarousel } from '@/components/organisms/HomeServicesCarousel'
 import { HomeProgramsCarousel } from '@/components/organisms/HomeProgramsCarousel'
+import { LogoMarquee } from '@/components/organisms/LogoMarquee'
 import { HomeSectionHeader } from '@/components/organisms/HomeSectionHeader'
 import type { HomeTemplateProps } from './HomeTemplate.types'
 
@@ -29,6 +30,7 @@ export function HomeTemplate({
   programas,
   proceso,
   testimonios,
+  logos,
   faqs,
   cta,
 }: HomeTemplateProps) {
@@ -109,6 +111,9 @@ export function HomeTemplate({
         titulo={testimonios.titulo}
         testimonios={testimonios.items}
       />
+
+      <LogoMarquee {...logos.avalados} />
+      <LogoMarquee {...logos.aliados} direction="right" />
 
       {faqs.items.length > 0 && (
         <HomeFAQSection

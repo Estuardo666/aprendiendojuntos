@@ -34,6 +34,24 @@ export async function getPaginaHome(): Promise<WPHomeFields> {
               texto
               emoji
             }
+            avaladosPorTitulo
+            avaladosPorLogos {
+              logo {
+                node {
+                  sourceUrl
+                  altText
+                }
+              }
+            }
+            somosAliadosDeTitulo
+            somosAliadosDeLogos {
+              logo {
+                node {
+                  sourceUrl
+                  altText
+                }
+              }
+            }
             sobreImagen {
               node {
                 sourceUrl

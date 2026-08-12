@@ -13,6 +13,10 @@ export interface WPHomeKeyword {
   emoji?: string | null
 }
 
+export interface WPHomeLogoItem {
+  logo?: WPHomeMediaEdge | null
+}
+
 export interface WPHomeProcessStep {
   numero?: number | null
   titulo?: string | null
@@ -39,6 +43,10 @@ export interface WPHomeFields {
   heroCtaSecundarioLabel?: string | null
   heroCtaSecundarioHref?: string | null
   keywords?: WPHomeKeyword[] | null
+  avaladosPorTitulo?: string | null
+  avaladosPorLogos?: WPHomeLogoItem[] | null
+  somosAliadosDeTitulo?: string | null
+  somosAliadosDeLogos?: WPHomeLogoItem[] | null
   sobreImagen?: WPHomeMediaEdge | null
   sobrePretitulo?: string | null
   sobreTitulo?: string | null

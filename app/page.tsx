@@ -192,6 +192,26 @@ export default async function HomePage() {
         videoUrl: testimonio.testimonioFields.videoTestimonial?.node?.mediaItemUrl ?? null,
       })),
     },
+    logos: {
+      avalados: {
+        title: home.avaladosPorTitulo ?? 'Avalados por',
+        logos: (home.avaladosPorLogos ?? [])
+          .filter((logo) => Boolean(logo?.logo?.node?.sourceUrl))
+          .map((logo) => ({
+            src: logo.logo?.node?.sourceUrl ?? '',
+            alt: logo.logo?.node?.altText ?? 'Logo de institución avaladora',
+          })),
+      },
+      aliados: {
+        title: home.somosAliadosDeTitulo ?? 'Somos aliados de:',
+        logos: (home.somosAliadosDeLogos ?? [])
+          .filter((logo) => Boolean(logo?.logo?.node?.sourceUrl))
+          .map((logo) => ({
+            src: logo.logo?.node?.sourceUrl ?? '',
+            alt: logo.logo?.node?.altText ?? 'Logo de institución aliada',
+          })),
+      },
+    },
     faqs: {
       pretitulo: home.faqsPretitulo,
       titulo: home.faqsTitulo ?? 'Resolvemos tus dudas',

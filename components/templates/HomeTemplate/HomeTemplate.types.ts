@@ -3,6 +3,7 @@ import type { ProgramListCardProps } from '@/components/molecules/ProgramListCar
 import type { KeywordsMarqueeProps } from '@/components/organisms/KeywordsMarquee'
 import type { ProcessStep } from '@/components/organisms/ProcessStepsSection'
 import type { HomeTestimonialItem } from '@/components/organisms/HomeTestimonialsSection'
+import type { LogoMarqueeProps } from '@/components/organisms/LogoMarquee'
 
 export interface HomeTemplateProps {
   hero: {
@@ -53,6 +54,10 @@ export interface HomeTemplateProps {
     pretitulo?: string | null
     titulo: string
     items: HomeTestimonialItem[]
+  }
+  logos: {
+    avalados: LogoMarqueeProps
+    aliados: LogoMarqueeProps
   }
   faqs: {
     pretitulo?: string | null

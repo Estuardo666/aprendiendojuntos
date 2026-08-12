@@ -152,3 +152,29 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateX(-50%);
   }
 }
+
+.logo-marquee,
+.logo-marquee-reverse {
+  animation: logo-marquee-scroll 32s linear infinite;
+}
+
+.logo-marquee-reverse {
+  animation-direction: reverse;
+}
+
+@keyframes logo-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 1.25rem));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-marquee,
+  .logo-marquee-reverse {
+    animation-play-state: paused;
+  }
+}
