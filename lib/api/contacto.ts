@@ -38,7 +38,7 @@ export interface WPPaginaContacto {
   paginaContacto: WPContacto;
 }
 
-const REVALIDATE = 86400;
+const REVALIDATE = 0;
 
 function normalizeSocialIcon(icono: WPRedSocial['icono']) {
   return Array.isArray(icono) ? (icono[0] ?? 'google') : icono;

@@ -1,8 +1,7 @@
 import { fetchGraphQL } from '@/lib/graphql';
 import type { WPImagen, WPPaginaNosotrosFields } from '@/lib/types/nosotros.types';
 
-// Contenido estático: revalidar cada 24 horas
-const REVALIDATE = 86400;
+const REVALIDATE = 0;
 
 type WPImagenEdge = {
   node?: WPImagen | null;

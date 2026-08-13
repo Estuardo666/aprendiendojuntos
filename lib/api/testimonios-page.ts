@@ -1,7 +1,7 @@
 import { fetchGraphQL } from '@/lib/graphql'
 import type { WPPaginaTestimoniosOptions } from '@/lib/types/testimonios-page.types'
 
-const REVALIDATE = 86400
+const REVALIDATE = 0
 
 export async function getTestimoniosPageOptions(): Promise<WPPaginaTestimoniosOptions | null> {
   try {

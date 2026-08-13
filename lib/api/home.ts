@@ -1,7 +1,7 @@
 import { fetchGraphQL } from '@/lib/graphql'
 import type { WPHomeFields, WPHomeOptions } from '@/lib/types/home.types'
 
-const REVALIDATE = 86400
+const REVALIDATE = 0
 
 export async function getPaginaHome(): Promise<WPHomeFields> {
   const data = await fetchGraphQL<WPHomeOptions>(

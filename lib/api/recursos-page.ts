@@ -1,7 +1,7 @@
 import { fetchGraphQL } from '@/lib/graphql'
 import type { WPPaginaRecursosOptions } from '@/lib/types/recurso.types'
 
-const REVALIDATE = 86400
+const REVALIDATE = 0
 
 export async function getRecursosPageOptions(): Promise<WPPaginaRecursosOptions | null> {
   try {

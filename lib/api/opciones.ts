@@ -1,7 +1,7 @@
 import { fetchGraphQL } from '@/lib/graphql';
 import type { WPOpciones, WPOpcionesGlobales, WPEncabezadoFields } from '@/lib/types/opciones.types';
 
-const REVALIDATE = 86400;
+const REVALIDATE = 0;
 
 export async function getOpciones(): Promise<WPOpcionesGlobales & { encabezado?: WPEncabezadoFields | null }> {
   const data = await fetchGraphQL<WPOpciones>(
