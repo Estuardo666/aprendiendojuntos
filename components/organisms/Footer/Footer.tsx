@@ -30,8 +30,8 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
   const programasLinks = (programasDestacados ?? []).slice(0, 5)
 
   return (
-    <footer className="bg-brand-footer text-white pt-16 pb-6 px-6 md:px-16">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[auto_auto_1fr_1fr_auto] gap-10 lg:gap-6">
+    <footer className="bg-brand-footer bg-[radial-gradient(ellipse_at_bottom_center,_#0056A4_0%,_#117FC3_68%)] text-white pt-16 pb-6 px-6 md:px-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[minmax(220px,1.25fr)_minmax(90px,0.55fr)_minmax(130px,0.8fr)_minmax(130px,0.8fr)_minmax(220px,1.35fr)] gap-10 lg:gap-6">
 
         {/* Columna 1: Logo + descripción + redes sociales */}
         <div className="sm:col-span-2 lg:col-span-1 lg:pr-6">
@@ -157,7 +157,7 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
         </div>
 
         {/* Columna 5: Contacto */}
-        <div>
+        <div className="min-w-0 lg:max-w-72">
           <h4 className="font-heading text-[1.3rem] font-bold text-white mb-5">
             Contacto
           </h4>
@@ -167,9 +167,9 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
                 <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-acua text-brand-azul">
                   <Icon name={contactIconMap[item.type] as any} size="sm" className="[&_svg]:stroke-[2]" />
                 </span>
-                <div className="font-body text-sm text-white">
+                <div className="min-w-0 font-body text-sm text-white">
                   {item.href ? (
-                    <a href={item.href} className="hover:text-white transition-colors duration-200">
+                    <a href={item.href} className="block break-words hover:text-white transition-colors duration-200">
                       {item.value}
                     </a>
                   ) : (
