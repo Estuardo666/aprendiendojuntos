@@ -11,8 +11,9 @@ export interface ContactItem {
 }
 
 export interface SocialLinkItem {
-  platform: 'instagram' | 'facebook' | 'tiktok'
+  platform: 'instagram' | 'facebook' | 'tiktok' | 'youtube' | 'google'
   href: string
+  label?: string
 }
 
 export interface FeaturedLink {

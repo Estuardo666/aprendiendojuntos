@@ -9,6 +9,7 @@ import { getOpciones } from "@/lib/api/opciones";
 import { getPopup } from "@/lib/api/popup";
 import { getServicios } from "@/lib/api/servicios";
 import { getProgramas } from "@/lib/api/programas";
+import { getContacto } from "@/lib/api/contacto";
 import { getGlobalNavbarLinks } from "@/lib/navigation";
 import { buildOrganizationSchema } from "@/lib/seo/organization-schema";
 import "./globals.css";
@@ -100,17 +101,26 @@ async function getPopupSafe() {
   }
 }
 
+async function getContactoSafe() {
+  try {
+    return await getContacto();
+  } catch {
+    return null;
+  }
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [links, opciones, servicios, programas, popupData] = await Promise.all([
+  const [links, opciones, servicios, programas, popupData, contacto] = await Promise.all([
     getGlobalNavbarLinksSafe(),
     getOpcionesSafe(),
     getServiciosSafe(),
     getProgramasSafe(),
     getPopupSafe(),
+    getContactoSafe(),
   ]);
   const whatsappNumber = sanitizeWhatsappPhone(opciones?.ctaWhatsappNumero);
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contacto";
@@ -128,6 +138,24 @@ export default async function RootLayout({
   const ctaHref2 = enc?.boton2Url ?? "/contacto";
 
   const organizationJsonLd = buildOrganizationSchema(opciones);
+  const footerSocialLinks = contacto?.redes.length
+    ? contacto.redes.map((social) => ({
+        platform: social.icono,
+        href: social.link,
+        label: social.nombreRed,
+      }))
+    : [
+        {
+          platform: 'instagram' as const,
+          href: opciones?.redesInstagram ?? 'https://www.instagram.com/aprendiendojuntosec/',
+          label: 'Instagram',
+        },
+        {
+          platform: 'facebook' as const,
+          href: opciones?.redesFacebook ?? 'https://www.facebook.com/aprendiendojuntosec/',
+          label: 'Facebook',
+        },
+      ];
 
   return (
     <html lang="es" suppressHydrationWarning>
@@ -179,16 +207,7 @@ export default async function RootLayout({
                 href: whatsappNumber ? `https://wa.me/${whatsappNumber}` : 'https://wa.me/593985788925',
               },
             ],
-            socialLinks: [
-              {
-                platform: 'instagram' as const,
-                href: opciones?.redesInstagram ?? 'https://www.instagram.com/aprendiendojuntosec/',
-              },
-              {
-                platform: 'facebook' as const,
-                href: opciones?.redesFacebook ?? 'https://www.facebook.com/aprendiendojuntosec/',
-              },
-            ],
+            socialLinks: footerSocialLinks,
             serviciosDestacados: servicios.slice(0, 5).map(s => ({
               label: s.title,
               href: `/servicios/${s.slug}`,

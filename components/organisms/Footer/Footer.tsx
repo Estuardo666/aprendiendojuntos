@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Icon } from '@/components/atoms/Icon'
 import { VisitCounter } from '@/components/atoms/VisitCounter'
+import type { IconName } from '@/lib/icons'
 import type { ContactItem, FeaturedLink, FooterProps, SocialLinkItem } from './Footer.types'
 
 const contactIconMap: Record<ContactItem['type'], string> = {
@@ -14,10 +15,12 @@ const contactIconMap: Record<ContactItem['type'], string> = {
   email: 'MailIcon',
 }
 
-const socialIconMap: Record<SocialLinkItem['platform'], string> = {
+const socialIconMap: Record<SocialLinkItem['platform'], IconName> = {
   instagram: 'InstagramIcon',
   facebook: 'FacebookIcon',
   tiktok: 'TiktokIcon',
+  youtube: 'YoutubeIcon',
+  google: 'GlobeIcon',
 }
 
 /**
@@ -52,10 +55,11 @@ export function Footer({ logoUrl, logoAlt, description, links, contactItems, soc
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={social.platform}
+                    aria-label={social.label ?? social.platform}
+                    title={social.label ?? social.platform}
                     className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-brand-crema text-brand-azul hover:bg-brand-naranja hover:text-brand-azul transition-colors duration-200"
                   >
-                    <Icon name={socialIconMap[social.platform] as any} size="sm" />
+                    <Icon name={socialIconMap[social.platform]} size="sm" />
                   </a>
                 </li>
               ))}
