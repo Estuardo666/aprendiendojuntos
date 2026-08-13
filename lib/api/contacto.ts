@@ -26,8 +26,6 @@ export interface WPContacto {
     descripcion: string;
   };
   contactoDatosFields: {
-    direccion: string;
-    horarios: string;
     numeros?: WPNumero[] | null;
     correos?: WPCorreo[] | null;
     redesSociales?: WPRedSocial[] | null;
@@ -52,8 +50,8 @@ function mapContactoData(contacto: WPContacto): ContactoPageData {
       descripcion: contacto.contactoPageFields.descripcion,
     },
     ubicacion: {
-      direccion: contacto.contactoDatosFields.direccion,
-      horarios: contacto.contactoDatosFields.horarios,
+      direccion: '',
+      horarios: '',
     },
     numeros: (contacto.contactoDatosFields.numeros ?? []).map((numero) => ({
       nombre: numero.nombre,
@@ -83,8 +81,6 @@ export async function getContacto(): Promise<ContactoPageData | null> {
             descripcion
           }
           contactoDatosFields {
-            direccion
-            horarios
             numeros {
               nombre
               numero

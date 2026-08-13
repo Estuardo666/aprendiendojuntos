@@ -184,6 +184,13 @@ export default async function ContactoPage() {
           titulo: contactoData.hero.titulo || fallbackContacto.hero.titulo,
           descripcion: contactoData.hero.descripcion || fallbackContacto.hero.descripcion,
         },
+        ubicacion: {
+          direccion:
+            contactoData.ubicacion.direccion ||
+            opciones.contactoDireccion ||
+            fallbackContacto.ubicacion.direccion,
+          horarios: contactoData.ubicacion.horarios || fallbackContacto.ubicacion.horarios,
+        },
       }
     : fallbackContacto
   const infoSections = buildInfoSections(contacto, opciones)
