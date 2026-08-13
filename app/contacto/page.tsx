@@ -9,6 +9,9 @@ import type {
 } from '@/lib/types/contacto.types'
 import type { WPOpcionesGlobales } from '@/lib/types/opciones.types'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 const EMPTY_OPCIONES: WPOpcionesGlobales = {
   heroTitulo: '',
   heroSubtitulo: null,
