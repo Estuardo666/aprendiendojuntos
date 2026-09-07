@@ -1,9 +1,10 @@
+import { cache } from 'react'
 import { fetchGraphQL } from '@/lib/graphql';
 import type { WPOpciones, WPOpcionesGlobales, WPEncabezadoFields } from '@/lib/types/opciones.types';
 
-const REVALIDATE = 0;
+const REVALIDATE = 3600;
 
-export async function getOpciones(): Promise<WPOpcionesGlobales & { encabezado?: WPEncabezadoFields | null }> {
+async function getOpcionesUncached(): Promise<WPOpcionesGlobales & { encabezado?: WPEncabezadoFields | null }> {
   const data = await fetchGraphQL<WPOpciones>(
     `
       query GetOpciones {
@@ -50,3 +51,5 @@ export async function getOpciones(): Promise<WPOpcionesGlobales & { encabezado?:
     encabezado: data.paginaEncabezado?.encabezadoFields ?? null,
   };
 }
+
+export const getOpciones = cache(getOpcionesUncached)

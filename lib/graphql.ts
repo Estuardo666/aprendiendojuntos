@@ -56,6 +56,80 @@ function buildCandidateUrls(rawUrl: string) {
   return Array.from(candidates);
 }
 
+const REQUEST_TIMEOUT_MS = 7000;
+
+const NETWORK_ERROR_CODES = new Set([
+  'UND_ERR_CONNECT_TIMEOUT',
+  'UND_ERR_HEADERS_TIMEOUT',
+  'UND_ERR_BODY_TIMEOUT',
+  'UND_ERR_SOCKET',
+  'ETIMEDOUT',
+  'ECONNRESET',
+  'ECONNREFUSED',
+  'EHOSTUNREACH',
+  'ENETUNREACH',
+  'ENOTFOUND',
+  'EAI_AGAIN',
+  'EPIPE',
+  'CERT_HAS_EXPIRED',
+  'DEPTH_ZERO_SELF_SIGNED_CERT',
+]);
+
+export function isNetworkFailure(error: unknown): boolean {
+  let current: unknown = error;
+
+  for (let depth = 0; depth < 5 && current; depth += 1) {
+    if (current instanceof Error) {
+      const code = (current as NodeJS.ErrnoException).code;
+      if (code && NETWORK_ERROR_CODES.has(code)) {
+        return true;
+      }
+      if (current.name === 'TimeoutError' || current.name === 'AbortError') {
+        return true;
+      }
+      current = current.cause;
+      continue;
+    }
+    break;
+  }
+
+  return false;
+}
+
+function isFrameworkSignal(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  const digest = (error as Error & { digest?: unknown }).digest;
+
+  return (
+    error.name === 'DynamicServerError' ||
+    (typeof digest === 'string' && digest.startsWith('DYNAMIC_SERVER_USAGE')) ||
+    (typeof digest === 'string' && digest.startsWith('BAILOUT_TO_CLIENT_SIDE_RENDERING')) ||
+    digest === 'NEXT_NOT_FOUND' ||
+    digest === 'NEXT_REDIRECT'
+  );
+}
+
+function describeError(error: unknown): string {
+  if (!(error instanceof Error)) {
+    return 'Unknown GraphQL request failure';
+  }
+
+  const code = (error as NodeJS.ErrnoException).code;
+  const cause =
+    error.cause instanceof Error
+      ? ` (cause: ${error.cause.name}: ${error.cause.message}${
+          (error.cause as NodeJS.ErrnoException).code
+            ? ` [${(error.cause as NodeJS.ErrnoException).code}]`
+            : ''
+        })`
+      : '';
+
+  return `${error.message}${code ? ` [${code}]` : ''}${cause}`;
+}
+
 export async function fetchGraphQL<T>(
   query: string,
   variables?: Record<string, unknown>,
@@ -80,12 +154,22 @@ export async function fetchGraphQL<T>(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ query, variables }),
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
         next: { revalidate, tags: tags && tags.length > 0 ? tags : ['wp-content'] },
       });
 
       if (!response.ok) {
-        lastError = new Error(`GraphQL request failed with status ${response.status} for ${candidateUrl}`);
-        continue;
+        lastError = new Error(
+          `GraphQL request failed with status ${response.status} for ${candidateUrl}`,
+        );
+
+        // Only a missing endpoint justifies trying the alternate URL. Any other
+        // status means the server answered, so retrying just doubles the load.
+        if (response.status === 404 || response.status === 405) {
+          continue;
+        }
+
+        throw lastError;
       }
 
       const json: GraphQLResponse<T> = await response.json();
@@ -97,13 +181,25 @@ export async function fetchGraphQL<T>(
       resolvedGraphqlUrl = candidateUrl;
       return json.data;
     } catch (error) {
-      const baseMessage = error instanceof Error ? error.message : 'Unknown GraphQL request failure';
-      const cause = error instanceof Error && 'cause' in error && error.cause instanceof Error
-        ? error.cause.message
-        : '';
-      lastError = new Error(
-        `GraphQL request failed for ${candidateUrl}: ${baseMessage}${cause ? ` (${cause})` : ''}`,
+      // Next.js control-flow errors (dynamic bailout, notFound, redirect) must
+      // propagate untouched so the framework can handle them.
+      if (isFrameworkSignal(error)) {
+        throw error;
+      }
+
+      const wrapped = new Error(
+        `GraphQL request failed for ${candidateUrl}: ${describeError(error)}`,
+        { cause: error },
       );
+
+      // A network-level failure (connect timeout, reset, DNS) means WordPress is
+      // unreachable or saturated. Retrying another path on the same host would
+      // only add another connection, so fail fast instead.
+      if (isNetworkFailure(error)) {
+        throw wrapped;
+      }
+
+      lastError = wrapped;
     }
   }
 

@@ -1,9 +1,10 @@
+import { cache } from 'react'
 import { fetchGraphQL } from '@/lib/graphql'
 import type { WPHomeFields, WPHomeOptions } from '@/lib/types/home.types'
 
-const REVALIDATE = 0
+const REVALIDATE = 300
 
-export async function getPaginaHome(): Promise<WPHomeFields> {
+async function getPaginaHomeUncached(): Promise<WPHomeFields> {
   const data = await fetchGraphQL<WPHomeOptions>(
     `
       query GetPaginaHome {
@@ -134,3 +135,5 @@ export async function getPaginaHome(): Promise<WPHomeFields> {
     heroTitulo: 'Potenciamos el aprendizaje de cada persona',
   }
 }
+
+export const getPaginaHome = cache(getPaginaHomeUncached)

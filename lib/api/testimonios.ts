@@ -1,4 +1,5 @@
-import { fetchGraphQL } from '@/lib/graphql'
+import { cache } from 'react'
+import { fetchGraphQL, isNetworkFailure } from '@/lib/graphql'
 import type { WPTestimonio } from '@/lib/types/testimonio.types'
 
 interface GetTestimoniosData {
@@ -9,7 +10,7 @@ interface GetTestimoniosData {
 
 const REVALIDATE = 3600
 
-export async function getTestimonios(): Promise<WPTestimonio[]> {
+async function getTestimoniosUncached(): Promise<WPTestimonio[]> {
   try {
     const data = await fetchGraphQL<GetTestimoniosData>(
       `
@@ -66,6 +67,11 @@ export async function getTestimonios(): Promise<WPTestimonio[]> {
 
     return data.testimonios.nodes
   } catch (err) {
+    if (isNetworkFailure(err)) {
+      // WordPress is unreachable; a second query would only add load.
+      throw err
+    }
+
     console.error('[getTestimonios] Error con campos nuevos, fallback:', err)
     // Fallback: query sin campos nuevos para aislar el problema
     const data = await fetchGraphQL<GetTestimoniosData>(
@@ -99,3 +105,5 @@ export async function getTestimonios(): Promise<WPTestimonio[]> {
     return data.testimonios.nodes
   }
 }
+
+export const getTestimonios = cache(getTestimoniosUncached)

@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { fetchGraphQL } from '@/lib/graphql';
 import type { ContactoPageData } from '@/lib/types/contacto.types';
 
@@ -36,7 +37,7 @@ export interface WPPaginaContacto {
   paginaContacto: WPContacto;
 }
 
-const REVALIDATE = 0;
+const REVALIDATE = 3600;
 
 function normalizeSocialIcon(icono: WPRedSocial['icono']) {
   return Array.isArray(icono) ? (icono[0] ?? 'google') : icono;
@@ -70,7 +71,7 @@ function mapContactoData(contacto: WPContacto): ContactoPageData {
   };
 }
 
-export async function getContacto(): Promise<ContactoPageData | null> {
+async function getContactoUncached(): Promise<ContactoPageData | null> {
   const data = await fetchGraphQL<WPPaginaContacto>(
     `
       query GetContacto {
@@ -106,3 +107,5 @@ export async function getContacto(): Promise<ContactoPageData | null> {
 
   return data.paginaContacto ? mapContactoData(data.paginaContacto) : null;
 }
+
+export const getContacto = cache(getContactoUncached)

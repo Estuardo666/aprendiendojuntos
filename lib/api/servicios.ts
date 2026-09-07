@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { fetchGraphQL } from '@/lib/graphql'
 import type { WPServicio, WPServicioResumen } from '@/lib/types/servicio.types'
 
@@ -139,7 +140,7 @@ const GET_SERVICIOS_BY_CATEGORIA = `
 // ─── Funciones fetch ──────────────────────────────────────────
 
 // Lista completa para generateStaticParams y listados
-export const getServicios = () =>
+const getServiciosUncached = () =>
   fetchGraphQL<{ servicios: { nodes: WPServicioResumen[] } }>(
     GET_SERVICIOS,
     {},
@@ -161,3 +162,5 @@ export const getServiciosByCategoria = (categoria: string) =>
     { categoria },
     3600
   ).then(d => d.servicios.nodes)
+
+export const getServicios = cache(getServiciosUncached)

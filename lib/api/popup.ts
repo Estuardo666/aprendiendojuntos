@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { fetchGraphQL } from '@/lib/graphql';
 
 const REVALIDATE = 3600;
@@ -22,7 +23,7 @@ interface PopupQueryResponse {
   };
 }
 
-export async function getPopup(): Promise<PopupData | null> {
+async function getPopupUncached(): Promise<PopupData | null> {
   try {
     const data = await fetchGraphQL<PopupQueryResponse>(
       `
@@ -51,3 +52,5 @@ export async function getPopup(): Promise<PopupData | null> {
     return null;
   }
 }
+
+export const getPopup = cache(getPopupUncached)

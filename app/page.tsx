@@ -68,13 +68,49 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+async function getServiciosSafe() {
+  try {
+    return await getServicios()
+  } catch (error) {
+    console.error('[HomePage] getServicios failed:', error)
+    return []
+  }
+}
+
+async function getProgramasSafe() {
+  try {
+    return await getProgramas()
+  } catch (error) {
+    console.error('[HomePage] getProgramas failed:', error)
+    return []
+  }
+}
+
+async function getTestimoniosSafe() {
+  try {
+    return await getTestimonios()
+  } catch (error) {
+    console.error('[HomePage] getTestimonios failed:', error)
+    return []
+  }
+}
+
+async function getFAQsSafe() {
+  try {
+    return await getFAQs()
+  } catch (error) {
+    console.error('[HomePage] getFAQs failed:', error)
+    return []
+  }
+}
+
 export default async function HomePage() {
   const [home, servicios, programas, testimonios, faqs] = await Promise.all([
     getPaginaHome(),
-    getServicios(),
-    getProgramas(),
-    getTestimonios().catch(() => []),
-    getFAQs(),
+    getServiciosSafe(),
+    getProgramasSafe(),
+    getTestimoniosSafe(),
+    getFAQsSafe(),
   ])
 
   const serviciosDestacados = servicios

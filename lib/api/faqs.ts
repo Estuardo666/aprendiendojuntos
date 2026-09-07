@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { fetchGraphQL } from '@/lib/graphql';
 import type { WPFaq } from '@/lib/types/faq.types';
 
@@ -9,11 +10,11 @@ interface GetFAQsData {
 
 const REVALIDATE = 3600;
 
-export async function getFAQs(): Promise<WPFaq[]> {
+async function getFAQsUncached(): Promise<WPFaq[]> {
   const data = await fetchGraphQL<GetFAQsData>(
     `
       query GetFAQs {
-        faqs(first: 100, where: { orderby: { field: DATE, order: ASC } }) {
+        faqs(first: 12, where: { orderby: { field: DATE, order: ASC } }) {
           nodes {
             id
             faqFields {
@@ -31,3 +32,5 @@ export async function getFAQs(): Promise<WPFaq[]> {
 
   return data.faqs.nodes;
 }
+
+export const getFAQs = cache(getFAQsUncached)

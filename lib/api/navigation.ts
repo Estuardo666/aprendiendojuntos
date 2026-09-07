@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { fetchGraphQL } from '@/lib/graphql'
 import type { NavItem } from '@/lib/types/navigation.types'
 
@@ -30,7 +31,7 @@ interface GetNavigationResponse {
   ajNavigation: NavItem[]
 }
 
-export async function getNavigationConfig(): Promise<NavItem[]> {
+async function getNavigationConfigUncached(): Promise<NavItem[]> {
   const data = await fetchGraphQL<GetNavigationResponse>(
     NAVIGATION_QUERY,
     undefined,
@@ -38,3 +39,5 @@ export async function getNavigationConfig(): Promise<NavItem[]> {
   )
   return data.ajNavigation ?? []
 }
+
+export const getNavigationConfig = cache(getNavigationConfigUncached)

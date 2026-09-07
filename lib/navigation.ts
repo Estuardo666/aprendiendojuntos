@@ -1,7 +1,8 @@
+import { cache } from 'react'
 import type { NavLink, NavbarSubmenuItem } from '@/components/organisms/Navbar'
 import { getNavigationConfig } from '@/lib/api/navigation'
 
-export async function getGlobalNavbarLinks(): Promise<NavLink[]> {
+async function getGlobalNavbarLinksUncached(): Promise<NavLink[]> {
   const items = await getNavigationConfig()
 
   return items
@@ -19,3 +20,5 @@ export async function getGlobalNavbarLinks(): Promise<NavLink[]> {
         })),
     }))
 }
+
+export const getGlobalNavbarLinks = cache(getGlobalNavbarLinksUncached)

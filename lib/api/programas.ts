@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { fetchGraphQL } from '@/lib/graphql';
 import type { WPPrograma } from '@/lib/types/programa.types';
 
@@ -15,7 +16,7 @@ interface GetProgramaData {
 
 const REVALIDATE = 86400;
 
-export async function getProgramas(): Promise<WPPrograma[]> {
+async function getProgramasUncached(): Promise<WPPrograma[]> {
   const data = await fetchGraphQL<GetProgramasData>(
     `
       query GetProgramas {
@@ -150,3 +151,5 @@ export async function getPrograma(slug: string): Promise<WPPrograma | null> {
 
   return data.programas.nodes[0] ?? null;
 }
+
+export const getProgramas = cache(getProgramasUncached)
